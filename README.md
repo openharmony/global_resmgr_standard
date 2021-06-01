@@ -1,37 +1,67 @@
-# global_resmgr_standard
+# Resmgr<a name="EN-US_TOPIC_0000001162518223"></a>
 
-#### 介绍
-Providing resource loading, parsing, and reading capabilities | 提供资源加载、解析、读取的能力
+-   [Introduction](#section11660541593)
+-   [Directory Structure](#section1464106163817)
+-   [Constraints](#section1718733212019)
+-   [Usage](#section894511013511)
+-   [Repositories Involved](#section15583142420413)
 
-#### 软件架构
-软件架构说明
+## Introduction<a name="section11660541593"></a>
 
+The resource management module, namely, Resmgr, provides the function of loading multi-language GUI resources for applications, for example, displaying the application names or icons specific to a certain language.
 
-#### 安装教程
+## Directory Structure<a name="section1464106163817"></a>
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+The directory structure of the Resmgr module is as follows:
 
-#### 使用说明
+```
+/base/global/
+├── resmgr_standard         # Code repository for the Resmgr module
+│   ├── frameworks          # Core code
+│   │   ├── resmgr          # Resource parsing code
+│   │   │   ├── include     # Header files
+│   │   │   ├── src         # Implementation code
+│   │   │   └── test        # Test code
+│   ├── interfaces          # APIs
+│   │   ├── innerkits       # APIs for internal subsystems
+│   │   └── js              # JavaScript APIs
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Constraints<a name="section1718733212019"></a>
 
-#### 参与贡献
+**Development language**: JavaScript
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+## Usage<a name="section894511013511"></a>
 
+Call the  **getString**  API to obtain the resource information of the application.
 
-#### 特技
+```
+import resmgr from '@ohos.resmgr'
+.....
+    resmgr.getResourceManager((error,mgr) => {
+        // callback
+        mgr.getString(0x1000000, (error, value) => {
+            if (error != null) {
+                console.log(error);
+            } else {
+                console.log(value);
+            }
+        });
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+        // promise
+        mgr.getString(0x1000000).then(value => {
+            console.log(value);
+        }).catch(error => {
+            console.log("getstring promise " + error);
+        });
+    });
+```
+
+## Repositories Involved<a name="section15583142420413"></a>
+
+Globalization subsystem
+
+global\_i18n\_standard
+
+**global\_resmgr\_standard**
+
