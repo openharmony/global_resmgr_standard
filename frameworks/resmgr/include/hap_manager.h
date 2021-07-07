@@ -20,8 +20,7 @@
 #include "res_desc.h"
 #include "lock.h"
 
-#include <locale_info.h>
-#include <plural_format.h>
+#include <unicode/plurrule.h>
 #include <vector>
 
 namespace OHOS {
@@ -63,6 +62,10 @@ private:
     // when resConfig_ updated we must call ReloadAll()
     RState ReloadAll();
 
+    static bool Init();
+
+    static bool icuInitialized;
+
     // app res config
     ResConfigImpl *resConfig_;
 
@@ -73,7 +76,7 @@ private:
     std::vector<std::string> loadedHapPaths_;
 
     // key is language
-    std::vector<std::pair<std::string, OHOS::I18N::PluralFormat *>> plurRulesCache_;
+    std::vector<std::pair<std::string, icu::PluralRules *>> plurRulesCache_;
 
     Lock lock_;
 };

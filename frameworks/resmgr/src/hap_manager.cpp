@@ -15,7 +15,7 @@
 #include "hap_manager.h"
 
 #include <algorithm>
-#include <types.h>
+#include <ohos/init_data.h>
 
 #include "auto_mutex.h"
 #include "hilog_wrapper.h"
@@ -31,23 +31,12 @@ HapManager::HapManager(ResConfigImpl *resConfig)
 {
 }
 
-std::string ConvertToPluralStr(int idxRet)
+bool HapManager::icuInitialized = HapManager::Init();
+
+bool HapManager::Init()
 {
-    switch (idxRet) {
-        case OHOS::I18N::PluralRuleType::ZERO:
-            return "zero";
-        case OHOS::I18N::PluralRuleType::ONE:
-            return "one";
-        case OHOS::I18N::PluralRuleType::TWO:
-            return "two";
-        case OHOS::I18N::PluralRuleType::FEW:
-            return "few";
-        case OHOS::I18N::PluralRuleType::MANY:
-            return "many";
-        case OHOS::I18N::PluralRuleType::OTHER:
-        default:
-            return "other";
-    }
+    SetHwIcuDirectory();
+    return true;
 }
 
 std::string HapManager::GetPluralRulesAndSelect(int quantity)
@@ -61,41 +50,42 @@ std::string HapManager::GetPluralRulesAndSelect(int quantity)
     }
     std::string language = this->resConfig_->GetResLocale()->GetLanguage();
 
-    OHOS::I18N::PluralFormat *pluralFormat = nullptr;
+    icu::PluralRules *pluralRules = nullptr;
     for (uint32_t i = 0; i < plurRulesCache_.size(); i++) {
         auto pair = plurRulesCache_[i];
         if (language == pair.first) {
             // cache hit
-            pluralFormat = pair.second;
+            pluralRules = pair.second;
             break;
         }
     }
 
-    OHOS::I18N::I18nStatus status = OHOS::I18N::I18nStatus::ISUCCESS;
-    if (pluralFormat == nullptr) {
+    if (pluralRules == nullptr) {
         // no cache hit
-        OHOS::I18N::LocaleInfo locale(language.c_str(), "", "");
-        pluralFormat = new(std::nothrow) OHOS::I18N::PluralFormat(locale, status);
-        if (pluralFormat == nullptr) {
-            HILOG_ERROR("new PluralFormat failed");
+        icu::Locale locale(language.c_str());
+        if (locale.isBogus()) {
+            HILOG_ERROR("icu::Locale init error : %s", language.c_str());
             return defaultRet;
         }
-        if (status != OHOS::I18N::I18nStatus::ISUCCESS) {
-            HILOG_ERROR("PluralFormat init failed");
-            delete pluralFormat;
+        UErrorCode status = U_ZERO_ERROR;
+        pluralRules = icu::PluralRules::forLocale(locale, status);
+        if (status != U_ZERO_ERROR) {
+            HILOG_ERROR("icu::PluralRules::forLocale error : %d", status);
             return defaultRet;
         }
-        // after pluralFormat created, we add it to cache, if > 3 delete oldest one
+        // after PluralRules created, we add it to cache, if > 3 delete oldest one
         if (plurRulesCache_.size() >= PLURAL_CACHE_MAX_COUNT) {
             HILOG_DEBUG("cache rotate delete plurRulesMap_ %s", plurRulesCache_[0].first.c_str());
             delete (plurRulesCache_[0].second);
             plurRulesCache_.erase(plurRulesCache_.begin());
         }
-        auto plPair = std::make_pair(language, pluralFormat);
+        auto plPair = std::make_pair(language, pluralRules);
         plurRulesCache_.push_back(plPair);
     }
-    int idxRet = pluralFormat->GetPluralRuleIndex(quantity, status);
-    return ConvertToPluralStr(idxRet);
+    std::string converted;
+    icu::UnicodeString us = pluralRules->select(quantity);
+    us.toUTF8String(converted);
+    return converted;
 }
 
 const IdItem *HapManager::FindResourceById(uint32_t id)
