@@ -14,8 +14,9 @@
  */
 #include "res_config_impl.h"
 
-#include <unicode/locid.h>
 #include <unicode/localebuilder.h>
+#include <unicode/locid.h>
+
 #include "locale_matcher.h"
 #include "res_locale.h"
 #include "utils/utils.h"
