@@ -17,11 +17,11 @@ ohos_shared_library("global_resmgr") {
   sources = [
     "src/hap_manager.cpp",
     "src/hap_resource.cpp",
-    "src/res_locale.cpp",
     "src/locale_matcher.cpp",
     "src/lock.cpp",
     "src/res_config_impl.cpp",
     "src/res_desc.cpp",
+    "src/res_locale.cpp",
     "src/resource_manager_impl.cpp",
     "src/utils/hap_parser.cpp",
     "src/utils/string_utils.cpp",

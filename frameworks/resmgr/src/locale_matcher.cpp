@@ -319,8 +319,8 @@ bool CompareScript(const ResLocale *current, const ResLocale *other)
         }
     }
     bool compareRegion = false;
-    if ((currentEncodedScript == LocaleMatcher::NULL_SCRIPT) || (otherEncodedScript== LocaleMatcher::NULL_SCRIPT)) {
-    // if request script is null, region must be same
+    if ((currentEncodedScript == LocaleMatcher::NULL_SCRIPT) || (otherEncodedScript == LocaleMatcher::NULL_SCRIPT)) {
+        // if request script is null, region must be same
         compareRegion = true;
     }
     if (compareRegion) {

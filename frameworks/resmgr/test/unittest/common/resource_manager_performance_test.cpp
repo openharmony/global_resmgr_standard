@@ -139,7 +139,7 @@ int TestLoadFromIndex(const char *filePath)
     auto readFilecost = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
     g_logLevel = LOG_DEBUG;
-    HILOG_DEBUG("read index file cost 001: %d us", readFilecost);
+    HILOG_DEBUG("read index file cost 001: %lld us", readFilecost);
     g_logLevel = LOG_INFO;
 
     for (int k = 0; k < 1000; ++k) {
