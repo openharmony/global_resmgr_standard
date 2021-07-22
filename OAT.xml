@@ -16,7 +16,7 @@
     <oatconfig>
         <filefilterlist>
             <filefilter name="binaryFileTypePolicyFilter" desc="Filters for binary file policies">
-                <filteritem type="filepath" name="test/resource/.*" desc="For license see the license of this project (hmf/global/resmgr_standard)."/>
+                <filteritem type="filepath" name="test/resource/.*" desc="For license see the license of this project."/>
             </filefilter>
             <filefilter name="defaultPolicyFilter" desc="Filters for license header policies">
                 <filteritem type="filepath" name="test/resource/.*" desc="License header could not be added to binary resource files."/>
