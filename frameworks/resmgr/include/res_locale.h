@@ -15,11 +15,13 @@
 
 #ifndef OHOS_RESOURCE_MANAGER_RES_LOCALE_H
 #define OHOS_RESOURCE_MANAGER_RES_LOCALE_H
+
 #include <cstdint>
 #include <cstddef>
 #include <unicode/locid.h>
 #include "rstate.h"
 #include "lock.h"
+
 using icu::Locale;
 namespace OHOS {
 namespace Global {
@@ -32,13 +34,14 @@ struct ParseResult {
     int16_t scriptTagLen = 0;
     int16_t regionTagLen = 0;
 };
-class ResLocale  {
+
+class ResLocale {
 public:
-    const char* GetLanguage() const;
+    const char *GetLanguage() const;
 
-    const char* GetRegion() const;
+    const char *GetRegion() const;
 
-    const char* GetScript() const;
+    const char *GetScript() const;
 
     ResLocale();
 
@@ -46,13 +49,13 @@ public:
 
     RState Copy(const ResLocale *other);
 
-    static const Locale* GetDefault();
+    static const Locale *GetDefault();
 
-    static bool UpdateDefault(const Locale& localeInfo, bool needNotify);
+    static bool UpdateDefault(const Locale &localeInfo, bool needNotify);
 
-    static ResLocale* BuildFromString(const char *bcp47String, char sep, RState& rState);
+    static ResLocale *BuildFromString(const char *bcp47String, char sep, RState &rState);
 
-    static ResLocale* BuildFromParts(const char *language, const char *script, const char *region, RState& rState);
+    static ResLocale *BuildFromParts(const char *language, const char *script, const char *region, RState &rState);
 
     ~ResLocale();
 
@@ -73,9 +76,9 @@ private:
 
     RState SetRegion(const char *region, size_t len);
 
-    static ResLocale* DoParse(const char *bcp47String, char sep, RState& rState);
+    static ResLocale *DoParse(const char *bcp47String, char sep, RState &rState);
 
-    static ResLocale* CreateResLocale(ParseResult& parseResult, RState& rState);
+    static ResLocale *CreateResLocale(ParseResult &parseResult, RState &rState);
 
     RState Init(const char *language, size_t languageLen, const char *script, size_t scriptLen,
         const char *region, size_t regionLen);

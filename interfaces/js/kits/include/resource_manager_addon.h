@@ -30,30 +30,42 @@ namespace Resource {
 class ResourceManagerAddon {
 public:
     static napi_value Init(napi_env env, napi_value exports);
-    static void Destructor(napi_env env, void* nativeObject, void* finalize_hint);
+
+    static void Destructor(napi_env env, void *nativeObject, void *finalize_hint);
 
     ResourceManagerAddon();
+
     ~ResourceManagerAddon();
 
-    bool InitContext(napi_env env, const std::string bundleName, AppExecFwk::Ability* ability);
+    bool InitContext(napi_env env, const std::string bundleName, AppExecFwk::Ability *ability);
 
     inline std::shared_ptr<ResourceManager> GetResMgr();
+
     std::string GetLocale(std::unique_ptr<ResConfig> &cfg);
+
 private:
     static napi_async_execute_callback GetResMgrExecute();
+
     static napi_value GetResourceManager(napi_env env, napi_callback_info info);
+
     static int GetResId(napi_env env, size_t argc, napi_value *argv);
 
     static napi_value ProcessOnlyIdParam(napi_env env, napi_callback_info info, const std::string &name,
         napi_async_execute_callback execute);
+
     static napi_value GetString(napi_env env, napi_callback_info info);
+
     static napi_value GetStringArray(napi_env env, napi_callback_info info);
+
     static napi_value GetMedia(napi_env env, napi_callback_info info);
+
     static napi_value GetMediaBase64(napi_env env, napi_callback_info info);
 
     static napi_value ProcessNoParam(napi_env env, napi_callback_info info, const std::string &name,
         napi_async_execute_callback execute);
+
     static napi_value GetConfiguration(napi_env env, napi_callback_info info);
+
     static napi_value GetDeviceCapability(napi_env env, napi_callback_info info);
 
     static napi_value GetPluralString(napi_env env, napi_callback_info info);
@@ -73,7 +85,7 @@ struct ResMgrAsyncContext {
     int32_t resId_;
     int32_t param_;
 
-    typedef napi_value (*CreateNapiValue)(napi_env env, ResMgrAsyncContext& context);
+    typedef napi_value (*CreateNapiValue)(napi_env env, ResMgrAsyncContext &context);
     CreateNapiValue createValueFunc_;
     std::string value_;
     std::vector<std::string> arrayValue_;
@@ -88,12 +100,12 @@ struct ResMgrAsyncContext {
     int success_;
 
     std::shared_ptr<ResourceManagerAddon> addon_;
-    AppExecFwk::Ability* ability_;
+    AppExecFwk::Ability *ability_;
 
     ResMgrAsyncContext() : work_(nullptr), resId_(0), param_(0), createValueFunc_(nullptr), len_(0), deferred_(nullptr),
         callbackRef_(nullptr), success_(true), addon_(nullptr), ability_(nullptr) {}
 
-    void SetErrorMsg(const std::string& msg, bool withResId = false);
+    void SetErrorMsg(const std::string &msg, bool withResId = false);
 };
 } // namespace Resource
 } // namespace Global

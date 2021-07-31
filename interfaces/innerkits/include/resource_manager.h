@@ -40,15 +40,15 @@ public:
 
     virtual RState GetStringFormatById(std::string &outValue, uint32_t id, ...) = 0;
 
-    virtual RState GetStringFormatByName(std::string& outValue, const char *name, ...) = 0;
+    virtual RState GetStringFormatByName(std::string &outValue, const char *name, ...) = 0;
 
-    virtual RState GetStringArrayById(uint32_t id, std::vector<std::string>& outValue) = 0;
+    virtual RState GetStringArrayById(uint32_t id, std::vector<std::string> &outValue) = 0;
 
-    virtual RState GetStringArrayByName(const char *name, std::vector<std::string>& outValue) = 0;
+    virtual RState GetStringArrayByName(const char *name, std::vector<std::string> &outValue) = 0;
 
-    virtual RState GetPatternById(uint32_t id, std::map<std::string, std::string>& outValue) = 0;
+    virtual RState GetPatternById(uint32_t id, std::map<std::string, std::string> &outValue) = 0;
 
-    virtual RState GetPatternByName(const char* name, std::map<std::string, std::string>& outValue) = 0;
+    virtual RState GetPatternByName(const char *name, std::map<std::string, std::string> &outValue) = 0;
 
     virtual RState GetPluralStringById(uint32_t id, int quantity, std::string &outValue) = 0;
 
@@ -62,25 +62,25 @@ public:
 
     virtual RState GetThemeByName(const char *name, std::map<std::string, std::string> &outValue) = 0;
 
-    virtual RState GetBooleanById(uint32_t id, bool& outValue) = 0;
+    virtual RState GetBooleanById(uint32_t id, bool &outValue) = 0;
 
-    virtual RState GetBooleanByName(const char *name, bool& outValue) = 0;
+    virtual RState GetBooleanByName(const char *name, bool &outValue) = 0;
 
-    virtual RState GetIntegerById(uint32_t id, int& outValue) = 0;
+    virtual RState GetIntegerById(uint32_t id, int &outValue) = 0;
 
-    virtual RState GetIntegerByName(const char* name, int& outValue) = 0;
+    virtual RState GetIntegerByName(const char *name, int &outValue) = 0;
 
-    virtual RState GetFloatById(uint32_t id, float& outValue) = 0;
+    virtual RState GetFloatById(uint32_t id, float &outValue) = 0;
 
-    virtual RState GetFloatByName(const char *name, float& outValue) = 0;
+    virtual RState GetFloatByName(const char *name, float &outValue) = 0;
 
-    virtual RState GetIntArrayById(uint32_t id, std::vector<int>& outValue) = 0;
+    virtual RState GetIntArrayById(uint32_t id, std::vector<int> &outValue) = 0;
 
-    virtual RState GetIntArrayByName(const char *name, std::vector<int>& outValue) = 0;
+    virtual RState GetIntArrayByName(const char *name, std::vector<int> &outValue) = 0;
 
-    virtual RState GetColorById(uint32_t id, uint32_t& outValue) = 0;
+    virtual RState GetColorById(uint32_t id, uint32_t &outValue) = 0;
 
-    virtual RState GetColorByName(const char* name, uint32_t& outValue) = 0;
+    virtual RState GetColorByName(const char *name, uint32_t &outValue) = 0;
 
     virtual RState GetProfileById(uint32_t id, std::string &outValue) = 0;
 

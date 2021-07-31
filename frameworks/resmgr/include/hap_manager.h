@@ -32,9 +32,9 @@ public:
 
     ~HapManager();
 
-    RState UpdateResConfig(ResConfig& resConfig);
+    RState UpdateResConfig(ResConfig &resConfig);
 
-    void GetResConfig(ResConfig& resConfig);
+    void GetResConfig(ResConfig &resConfig);
 
     bool AddResource(const char *path);
 
@@ -49,9 +49,9 @@ public:
     std::string GetPluralRulesAndSelect(int quantity);
 
 private:
-    void UpdateResConfigImpl(ResConfigImpl& resConfig);
+    void UpdateResConfigImpl(ResConfigImpl &resConfig);
 
-    void GetResConfigImpl(ResConfigImpl& resConfig);
+    void GetResConfigImpl(ResConfigImpl &resConfig);
 
     const HapResource::IdValues *GetResourceList(uint32_t ident) const;
 

@@ -416,7 +416,7 @@ void FindAndSort(std::string localeStr, std::vector<std::string> &candidateLocal
     if (candidateLocale.size() == 0) {
         return;
     }
-    std::vector<ResLocale*> tempCandidate;
+    std::vector<ResLocale *> tempCandidate;
     RState state = SUCCESS;
     ResLocale *currentLocale = ResLocale::BuildFromString(localeStr.c_str(), DASH_SEP, state);
     LocaleMatcher::Normalize(currentLocale);

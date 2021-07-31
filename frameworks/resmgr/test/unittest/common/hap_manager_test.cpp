@@ -127,7 +127,7 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest002, TestSize.Level1)
 
     // reload
 
-    ResConfig* rc2 = CreateResConfig();
+    ResConfig *rc2 = CreateResConfig();
     if (rc2 == nullptr) {
         delete (hapManager);
         delete (rc);

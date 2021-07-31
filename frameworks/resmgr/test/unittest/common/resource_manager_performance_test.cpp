@@ -116,10 +116,9 @@ int TestLoadFromIndex(const char *filePath)
     unsigned long long total = 0;
     double average = 0;
     std::string pstr = FormatFullPath(filePath);
-    const char *path = pstr.c_str();
 
     auto start = std::chrono::high_resolution_clock::now();
-    std::ifstream inFile(path, std::ios::binary | std::ios::in);
+    std::ifstream inFile(pstr.c_str(), std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return -1;
     }
@@ -155,7 +154,7 @@ int TestLoadFromIndex(const char *filePath)
             free(buf);
             return -1;
         }
-        int32_t out = HapParser::ParseResHex((char *) buf, bufLen, *resDesc, nullptr);
+        int32_t out = HapParser::ParseResHex((char *)buf, bufLen, *resDesc, nullptr);
         if (out != OK) {
             delete (resDesc);
             free(buf);
@@ -165,7 +164,7 @@ int TestLoadFromIndex(const char *filePath)
             HILOG_DEBUG("ParseResHex success:\n%s", resDesc->ToString().c_str());
         }
 
-        HapResource *pResource = new(std::nothrow) HapResource(std::string(path), 0, nullptr, resDesc);
+        HapResource *pResource = new(std::nothrow) HapResource(pstr, 0, nullptr, resDesc);
         if (pResource == nullptr) {
             HILOG_ERROR("new HapResource failed when LoadFromIndex");
             delete (resDesc);
