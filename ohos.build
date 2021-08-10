@@ -3,7 +3,7 @@
   "parts": {
     "resmgr_standard": {
       "module_list": [
-        "//base/global/resmgr_standard/interfaces/js/kits:resmgr",
+        "//base/global/resmgr_standard/interfaces/js/kits:resourcemanager",
         "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr"
       ],
       "inner_kits": [

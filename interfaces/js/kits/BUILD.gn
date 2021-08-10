@@ -13,7 +13,7 @@
 
 import("//build/ohos.gni")
 
-ohos_shared_library("resmgr") {
+ohos_shared_library("resourcemanager") {
   include_dirs = [
     "//base/global/resmgr_standard/interfaces/innerkits/include",
     "//base/global/resmgr_standard/interfaces/js/kits/include",
