@@ -49,10 +49,9 @@ typedef enum KeyType {
     DIRECTION       = 3,
     DEVICETYPE      = 4,
     SCRIPT          = 5,
-    NIGHTMODE       = 6, // DARK = 0, LIGHT = 1
-    UNKNOWN         = 7,
-    MCC             = 8,
-    MNC             = 9,
+    COLORMODE       = 6, // DARK = 0, LIGHT = 1
+    MCC             = 7,
+    MNC             = 8,
     KEY_TYPE_MAX,
 } KeyType;
 
@@ -95,7 +94,7 @@ enum DeviceType {
     DEVICE_WEARABLE = 6,
 };
 
-enum NightMode {
+enum ColorMode {
     DARK     = 0,
     LIGHT    = 1,
 };
