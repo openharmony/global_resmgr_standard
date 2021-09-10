@@ -340,9 +340,20 @@ bool ResLocale::UpdateDefault(const Locale &localeInfo, bool needNotify)
 
 ResLocale::~ResLocale()
 {
-    delete this->language_;
-    delete this->script_;
-    delete this->region_;
+    if (this->language_ != nullptr) {
+        delete[] this->language_;
+        this->language_ = nullptr;
+    }
+
+    if (this->script_ != nullptr) {
+        delete[] this->script_;
+        this->script_ = nullptr;
+    }
+
+    if (this->region_ != nullptr) {
+        delete[] this->region_;
+        this->region_ = nullptr;
+    }
 }
 
 Locale *BuildFromString(const char *str, char sep, RState &rState)

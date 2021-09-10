@@ -160,7 +160,7 @@ uint32_t Utils::EncodeScript(const char *script)
     if (Utils::IsStrEmpty(script)) {
         return NULL_SCRIPT;
     }
-    return (script[0] << 24) | (script[1] << 16) | (script[2] << 8) | script[3];
+    return ((uint8_t)script[0] << 24) | ((uint8_t)script[1] << 16) | ((uint8_t)script[2] << 8) | (uint8_t)script[3];
 }
 
 /**
@@ -189,9 +189,9 @@ uint16_t Utils::EncodeLanguageOrRegion(const char *str, char base)
     if (str[2] == 0 || str[2] == '-' || str[2] == '_') {
         return (str[0] << 8) | str[1];
     }
-    uint8_t first = (str[0] - base) & 0x7f;
-    uint8_t second = (str[1] - base) & 0x7f;
-    uint8_t third = (str[2] - base) & 0x7f;
+    uint8_t first = ((uint8_t)(str[0] - base)) & 0x7f;
+    uint8_t second = ((uint8_t)(str[1] - base)) & 0x7f;
+    uint8_t third = ((uint8_t)(str[2] - base)) & 0x7f;
     return ((0x80 | (first << 2) | (second >> 3)) << 8) | ((second << 5) | third);
 };
 
