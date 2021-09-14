@@ -111,6 +111,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
     ResDesc *resDesc = new (std::nothrow) ResDesc();
     if (resDesc == nullptr) {
         HILOG_ERROR("new ResDesc failed when LoadFromIndex");
+        free(buf);
         return nullptr;
     }
     int32_t out = HapParser::ParseResHex((char *)buf, bufLen, *resDesc, defaultConfig);
