@@ -302,4 +302,3 @@ HWTEST_F(HapResourceTest, HapResourceFuncTest004, TestSize.Level1)
     resDesc = LoadFromHap(FormatFullPath("err-config.json-2.hap").c_str(), nullptr);
     ASSERT_TRUE(resDesc == nullptr);
 }
-
