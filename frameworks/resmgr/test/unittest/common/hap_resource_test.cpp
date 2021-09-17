@@ -68,7 +68,7 @@ void HapResourceTest::TearDown()
  * @tc.desc: Test Load & GetIdValues & GetIdValuesByName function, file case.
  * @tc.type: FUNC
  */
-HWTEST_F(HapResourceTest, HapResourceFuncTest001, TestSize.Level1)
+HWTEST_F(HapResourceTest, HapResourceFuncTest001, TestSize.Level0)
 {
     auto start = CurrentTimeUsec();
     const HapResource *pResource = HapResource::LoadFromIndex(FormatFullPath(g_resFilePath).c_str(), nullptr);
@@ -302,3 +302,4 @@ HWTEST_F(HapResourceTest, HapResourceFuncTest004, TestSize.Level1)
     resDesc = LoadFromHap(FormatFullPath("err-config.json-2.hap").c_str(), nullptr);
     ASSERT_TRUE(resDesc == nullptr);
 }
+
