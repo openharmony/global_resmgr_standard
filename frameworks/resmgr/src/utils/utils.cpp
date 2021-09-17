@@ -187,7 +187,7 @@ uint32_t Utils::EncodeScript(const char *script)
 uint16_t Utils::EncodeLanguageOrRegion(const char *str, char base)
 {
     if (str[2] == 0 || str[2] == '-' || str[2] == '_') {
-        return (str[0] << 8) | str[1];
+        return ((uint8_t)str[0] << 8) | ((uint8_t)str[1]);
     }
     uint8_t first = ((uint8_t)(str[0] - base)) & 0x7f;
     uint8_t second = ((uint8_t)(str[1] - base)) & 0x7f;
