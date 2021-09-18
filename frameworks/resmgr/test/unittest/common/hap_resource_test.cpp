@@ -68,7 +68,7 @@ void HapResourceTest::TearDown()
  * @tc.desc: Test Load & GetIdValues & GetIdValuesByName function, file case.
  * @tc.type: FUNC
  */
-HWTEST_F(HapResourceTest, HapResourceFuncTest001, TestSize.Level1)
+HWTEST_F(HapResourceTest, HapResourceFuncTest001, TestSize.Level0)
 {
     auto start = CurrentTimeUsec();
     const HapResource *pResource = HapResource::LoadFromIndex(FormatFullPath(g_resFilePath).c_str(), nullptr);
