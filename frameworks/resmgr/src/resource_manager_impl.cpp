@@ -18,6 +18,8 @@
 #include <cstdarg>
 #include <cstdlib>
 #include <cstring>
+#include <regex>
+#include <sstream>
 
 #include "hilog_wrapper.h"
 #include "res_config.h"
@@ -409,16 +411,73 @@ RState ResourceManagerImpl::GetBoolean(const IdItem *idItem, bool &outValue)
 RState ResourceManagerImpl::GetFloatById(uint32_t id, float &outValue)
 {
     const IdItem *idItem = hapManager_->FindResourceById(id);
-    return GetFloat(idItem, outValue);
+    std::string unit;
+    RState state = GetFloat(idItem, outValue, unit);
+    if (state == SUCCESS) {
+        return RecalculateFloat(unit, outValue);
+    }
+    return state;
+}
+
+RState ResourceManagerImpl::GetFloatById(uint32_t id, float &outValue, std::string &unit)
+{
+    const IdItem *idItem = hapManager_->FindResourceById(id);
+    return GetFloat(idItem, outValue, unit);
 }
 
 RState ResourceManagerImpl::GetFloatByName(const char *name, float &outValue)
 {
     const IdItem *idItem = hapManager_->FindResourceByName(name, ResType::FLOAT);
-    return GetFloat(idItem, outValue);
+    std::string unit;
+    RState state = GetFloat(idItem, outValue, unit);
+    if (state == SUCCESS) {
+        return RecalculateFloat(unit, outValue);
+    }
+    return state;
 }
 
-RState ResourceManagerImpl::GetFloat(const IdItem *idItem, float &outValue)
+RState ResourceManagerImpl::GetFloatByName(const char *name, float &outValue, std::string &unit)
+{
+    const IdItem *idItem = hapManager_->FindResourceByName(name, ResType::FLOAT);
+    return GetFloat(idItem, outValue, unit);
+}
+
+RState ResourceManagerImpl::RecalculateFloat(const std::string &unit, float &result)
+{
+    ResConfigImpl rc;
+    GetResConfig(rc);
+    ScreenDensity srcDensity = rc.GetScreenDensity();
+    if (srcDensity == SCREEN_DENSITY_NOT_SET) {
+        return SUCCESS;
+    }
+    float density = srcDensity / DEFAULT_DENSITY;
+    if (unit == VIRTUAL_PIXEL) {
+        result = result * density;
+    } else if (unit == FONT_SIZE_PIXEL) {
+        float fontSizeDensity = density * ((fabs(fontRatio_) <= 1E-6) ? 1.0f : fontRatio_);
+        result = result * fontSizeDensity;
+    } else {
+        // no unit
+    }
+    return SUCCESS;
+}
+
+RState ResourceManagerImpl::ParseFloat(const std::string &strValue, float &result, std::string &unit)
+{
+    std::regex reg("(\\+|-)?\\d+(\\.\\d+)? *(px|vp|fp)?");
+    std::smatch floatMatch;
+    if (!regex_search(strValue, floatMatch, reg)) {
+        HILOG_ERROR("not valid float value %{public}s", strValue.c_str());
+        return ERROR;
+    }
+    std::string matchString(floatMatch.str());
+    unit = floatMatch[floatMatch.size() - 1];
+    std::istringstream stream(matchString.substr(0, matchString.length() - unit.length()));
+    stream >> result;
+    return SUCCESS;
+}
+
+RState ResourceManagerImpl::GetFloat(const IdItem *idItem, float &outValue, std::string &unit)
 {
     if (idItem == nullptr || idItem->resType_ != ResType::FLOAT) {
         return NOT_FOUND;
@@ -426,8 +485,7 @@ RState ResourceManagerImpl::GetFloat(const IdItem *idItem, float &outValue)
     std::string temp;
     RState state = ResolveReference(idItem->value_, temp);
     if (state == SUCCESS) {
-        outValue = strtof(temp.c_str(), nullptr);
-        return SUCCESS;
+        return ParseFloat(temp.c_str(), outValue, unit);
     }
     return state;
 }

@@ -62,7 +62,7 @@ public:
 
     void TestPluralStringByName(int quantity, const char *cmp, bool format = false) const;
 
-    void TestGetRawFilePathByName(const std::string &name, const std::string cmp) const;
+    void TestGetRawFilePathByName(const std::string &name, const std::string &cmp) const;
 
     void AddResource(const char *language, const char *script, const char *region);
 };
@@ -148,7 +148,7 @@ void ResourceManagerTest::TestPluralStringByName(int quantity, const char *cmp, 
     ASSERT_EQ(std::string(cmp), outValue);
 }
 
-void ResourceManagerTest::TestGetRawFilePathByName(const std::string &name, const std::string cmp) const
+void ResourceManagerTest::TestGetRawFilePathByName(const std::string &name, const std::string &cmp) const
 {
     std::string outValue;
     rm->GetRawFilePathByName(name, outValue);
@@ -1188,13 +1188,19 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByIdTest001, TestSize.Level
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
-    EXPECT_EQ(48, outValue); // 50vp
+    EXPECT_EQ(48, outValue); // 48vp
+
+    std::string unit;
+    state = rm->GetFloatById(id, outValue, unit);
+    ASSERT_EQ(SUCCESS, state);
+    EXPECT_EQ(48, outValue); // 48vp
+    EXPECT_EQ("vp", unit);
 
     id = GetResId("float_ref", ResType::FLOAT);
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
-    EXPECT_EQ(707, outValue); // 48vp
+    EXPECT_EQ(707, outValue); // 707vp
 }
 
 /*
@@ -1225,11 +1231,17 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByNameTest001, TestSize.Lev
     RState state;
     state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue);
     ASSERT_EQ(SUCCESS, state);
-    EXPECT_EQ(48, outValue); // 50vp
+    EXPECT_EQ(48, outValue); // 48vp
+
+    std::string unit;
+    state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue, unit);
+    ASSERT_EQ(SUCCESS, state);
+    EXPECT_EQ(48, outValue); // 48vp
+    EXPECT_EQ("vp", unit);
 
     state = rm->GetFloatByName("float_ref", outValue);
     ASSERT_EQ(SUCCESS, state);
-    EXPECT_EQ(707, outValue); // 48vp
+    EXPECT_EQ(707, outValue); // 707vp
 }
 
 /*

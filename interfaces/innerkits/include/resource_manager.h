@@ -72,7 +72,11 @@ public:
 
     virtual RState GetFloatById(uint32_t id, float &outValue) = 0;
 
+    virtual RState GetFloatById(uint32_t id, float &outValue, std::string &unit) = 0;
+
     virtual RState GetFloatByName(const char *name, float &outValue) = 0;
+
+    virtual RState GetFloatByName(const char *name, float &outValue, std::string &unit) = 0;
 
     virtual RState GetIntArrayById(uint32_t id, std::vector<int> &outValue) = 0;
 

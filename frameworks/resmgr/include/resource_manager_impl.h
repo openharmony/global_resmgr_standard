@@ -76,7 +76,11 @@ public:
 
     virtual RState GetFloatById(uint32_t id, float &outValue);
 
+    virtual RState GetFloatById(uint32_t id, float &outValue, std::string &unit);
+
     virtual RState GetFloatByName(const char *name, float &outValue);
+
+    virtual RState GetFloatByName(const char *name, float &outValue, std::string &unit);
 
     virtual RState GetIntArrayById(uint32_t id, std::vector<int> &outValue);
 
@@ -111,7 +115,11 @@ private:
 
     RState GetBoolean(const IdItem *idItem, bool &outValue);
 
-    RState GetFloat(const IdItem *idItem, float &outValue);
+    RState ParseFloat(const std::string &strValue, float &result, std::string &unit);
+
+    RState RecalculateFloat(const std::string &unit, float &result);
+
+    RState GetFloat(const IdItem *idItem, float &outValue, std::string &unit);
 
     RState GetInteger(const IdItem *idItem, int &outValue);
 
@@ -124,6 +132,14 @@ private:
     RState ResolveParentReference(const IdItem *idItem, std::map<std::string, std::string> &outValue);
 
     HapManager *hapManager_;
+
+    float fontRatio_ = 0.0f;
+
+    const std::string VIRTUAL_PIXEL = "vp";
+
+    const std::string FONT_SIZE_PIXEL = "fp";
+
+    const float DEFAULT_DENSITY = 160.0f;
 };
 } // namespace Resource
 } // namespace Global
