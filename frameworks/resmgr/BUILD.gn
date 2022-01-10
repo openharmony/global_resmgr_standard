@@ -63,7 +63,10 @@ ohos_shared_library("global_resmgr") {
     "//third_party/icu/icu4c:shared_icuuc",
     "//third_party/zlib:libz",
   ]
-  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+  external_deps = [
+    "bytrace_standard:bytrace_core",
+    "hiviewdfx_hilog_native:libhilog",
+  ]
 
   subsystem_name = "global"
   part_name = "resmgr_standard"

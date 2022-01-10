@@ -21,6 +21,9 @@
 #include <regex>
 #include <sstream>
 
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+#include "bytrace.h"
+#endif
 #include "hilog_wrapper.h"
 #include "res_config.h"
 #include "utils/common.h"
@@ -667,11 +670,17 @@ ResourceManagerImpl::~ResourceManagerImpl()
 
 bool ResourceManagerImpl::AddResource(const char *path)
 {
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
+#endif
     return this->hapManager_->AddResource(path);
 }
 
 RState ResourceManagerImpl::UpdateResConfig(ResConfig &resConfig)
 {
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
+#endif
     if (resConfig.GetLocaleInfo() == nullptr) {
         return LOCALEINFO_IS_NULL;
     }
