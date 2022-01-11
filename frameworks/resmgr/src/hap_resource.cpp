@@ -18,6 +18,9 @@
 #include <fstream>
 #include <iostream>
 
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+#include "bytrace.h"
+#endif
 #include "hap_parser.h"
 #include "hilog_wrapper.h"
 #include "locale_matcher.h"
@@ -85,6 +88,9 @@ HapResource::~HapResource()
 
 const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
 {
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
+#endif
     std::ifstream inFile(path, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
@@ -138,6 +144,9 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
 
 bool HapResource::Init()
 {
+#if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
+#endif
 #ifdef __WINNT__
     char seperator = '\\';
 #else
