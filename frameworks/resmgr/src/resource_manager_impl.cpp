@@ -694,6 +694,11 @@ void ResourceManagerImpl::GetResConfig(ResConfig &resConfig)
 {
     this->hapManager_->GetResConfig(resConfig);
 }
+
+std::vector<std::string> ResourceManagerImpl::GetResourcePaths()
+{
+    return this->hapManager_->GetResourcePaths();
+}
 } // namespace Resource
 } // namespace Global
 } // namespace OHOS

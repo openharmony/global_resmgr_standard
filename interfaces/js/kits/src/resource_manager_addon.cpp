@@ -52,11 +52,6 @@ ResourceManagerAddon::~ResourceManagerAddon()
     HiLog::Info(LABEL, "~ResourceManagerAddon %{public}s", bundleName_.c_str());
 }
 
-std::shared_ptr<ResourceManager> ResourceManagerAddon::GetResMgr()
-{
-    return resMgr_;
-}
-
 void ResourceManagerAddon::Destructor(napi_env env, void *nativeObject, void *hint)
 {
     std::shared_ptr<ResourceManagerAddon> *addonPtr =

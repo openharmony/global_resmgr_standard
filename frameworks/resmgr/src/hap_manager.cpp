@@ -221,8 +221,10 @@ RState HapManager::FindRawFile(const std::string &name, std::string &outValue)
         std::string resourcesIndexPath = indexPath.substr(0, index);
         char tmpPath[PATH_MAX] = {0};
         std::string tempName = name;
-        if (tempName.find("rawfile/") != 0) {
-            tempName = "rawfile/" + tempName;
+        const std::string rawFileDirName = "rawfile/";
+        if (tempName.length() <= rawFileDirName.length()
+            || (tempName.compare(0, rawFileDirName.length(), rawFileDirName) != 0)) {
+            tempName = rawFileDirName + tempName;
         }
 #ifdef __WINNT__
         if (!PathCanonicalizeA(tmpPath, (resourcesIndexPath + "/resources/" + tempName).c_str())) {
@@ -235,7 +237,8 @@ RState HapManager::FindRawFile(const std::string &name, std::string &outValue)
         }
 #endif
         const std::string realPath = tmpPath;
-        if (realPath.find(resourcesIndexPath) == 0) {
+        if (realPath.length() > resourcesIndexPath.length()
+            && (realPath.compare(0, resourcesIndexPath.length(), resourcesIndexPath) == 0)) {
             std::fstream inputFile;
             inputFile.open(realPath, std::ios::in);
             if (inputFile) {
@@ -352,6 +355,23 @@ RState HapManager::ReloadAll()
     }
     hapResources_ = newResources;
     return SUCCESS;
+}
+
+std::vector<std::string> HapManager::GetResourcePaths()
+{
+    std::vector<std::string> result;
+    for (auto iter = hapResources_.rbegin(); iter != hapResources_.rend(); iter++) {
+        std::string indexPath = (*iter)->GetIndexPath();
+        auto index = indexPath.rfind('/');
+        if (index == std::string::npos) {
+            HILOG_ERROR("index path format error, %s", indexPath.c_str());
+            continue;
+        }
+
+        result.emplace_back(indexPath.substr(0, index) + "/resources/");
+    }
+
+    return result;
 }
 } // namespace Resource
 } // namespace Global

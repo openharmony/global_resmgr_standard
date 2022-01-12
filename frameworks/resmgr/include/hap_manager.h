@@ -50,6 +50,8 @@ public:
 
     std::string GetPluralRulesAndSelect(int quantity);
 
+    std::vector<std::string> GetResourcePaths();
+
 private:
     void UpdateResConfigImpl(ResConfigImpl &resConfig);
 

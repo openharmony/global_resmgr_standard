@@ -6,7 +6,8 @@
         "//base/global/resmgr_standard/interfaces/js/kits:resourcemanager",
         "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr",
         "//base/global/resmgr_standard/frameworks/resmgr:win_resmgr",
-        "//base/global/resmgr_standard/frameworks/resmgr:mac_resmgr"
+        "//base/global/resmgr_standard/frameworks/resmgr:mac_resmgr",
+        "//base/global/resmgr_standard/interfaces/native/resource:librawfile_ndk"
       ],
       "inner_kits": [
         {

@@ -100,6 +100,8 @@ public:
 
     virtual RState GetRawFilePathByName(const std::string &name, std::string &outValue);
 
+    std::vector<std::string> GetResourcePaths();
+
 private:
     RState GetString(const IdItem *idItem, std::string &outValue);
 

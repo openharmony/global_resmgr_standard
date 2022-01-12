@@ -39,7 +39,10 @@ public:
 
     bool InitContext(napi_env env, const std::string bundleName, AppExecFwk::Ability *ability);
 
-    inline std::shared_ptr<ResourceManager> GetResMgr();
+    inline std::shared_ptr<ResourceManager> GetResMgr()
+    {
+        return resMgr_;
+    }
 
     std::string GetLocale(std::unique_ptr<ResConfig> &cfg);
 

@@ -1,0 +1,38 @@
+[
+    {
+        "name": "InitNativeResourceManager"
+    },
+    {
+        "name": "ReleaseNativeResourceManager"
+    },
+    {
+        "name": "OpenRawDir"
+    },
+    {
+        "name": "OpenRawFile"
+    },
+    {
+        "name": "GetRawFileName"
+    },
+    {
+        "name": "GetRawFileCount"
+    },
+    {
+        "name": "CloseRawDir"
+    },
+    {
+        "name": "ReadRawFile"
+    },
+    {
+        "name": "GetRawFileSize"
+    },
+    {
+        "name": "CloseRawFile"
+    },
+    {
+        "name": "GetRawFileDescriptor"
+    },
+    {
+        "name": "ReleaseRawFileDescriptor"
+    }
+]
