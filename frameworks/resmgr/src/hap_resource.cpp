@@ -269,6 +269,15 @@ int HapResource::GetIdByName(const char *name, const ResType resType) const
     }
     return ids->GetLimitPathsConst()[0]->GetIdItem()->id_;
 }
+
+const std::vector<std::string> HapResource::GetQualifiers() const
+{
+    std::vector<std::string> result;
+    for (size_t i = 0; i < resDesc_->keys_.size(); i++) {
+        result.push_back(resDesc_->keys_[i]->ToString());
+    }
+    return result;
+}
 } // namespace Resource
 } // namespace Global
 } // namespace OHOS

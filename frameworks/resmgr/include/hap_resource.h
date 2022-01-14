@@ -55,6 +55,8 @@ public:
         return resourcePath_;
     }
 
+    const std::vector<std::string> GetQualifiers() const;
+
     /**
      * describe limitpath and value under the path
      */
