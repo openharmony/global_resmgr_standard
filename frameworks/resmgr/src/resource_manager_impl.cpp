@@ -450,13 +450,11 @@ RState ResourceManagerImpl::GetFloatByName(const char *name, float &outValue, st
 
 RState ResourceManagerImpl::RecalculateFloat(const std::string &unit, float &result)
 {
-    ResConfigImpl rc;
-    GetResConfig(rc);
-    ScreenDensity srcDensity = rc.GetScreenDensity();
-    if (srcDensity == SCREEN_DENSITY_NOT_SET) {
-        return SUCCESS;
-    }
-    float density = srcDensity / DEFAULT_DENSITY;
+#ifdef PREDEFINED_DENSITY
+    float density = 1.0f;
+#else
+    float density = 2.0f;
+#endif
     if (unit == VIRTUAL_PIXEL) {
         result = result * density;
     } else if (unit == FONT_SIZE_PIXEL) {
