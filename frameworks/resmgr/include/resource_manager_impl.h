@@ -140,8 +140,6 @@ private:
     const std::string VIRTUAL_PIXEL = "vp";
 
     const std::string FONT_SIZE_PIXEL = "fp";
-
-    const float DEFAULT_DENSITY = 160.0f;
 };
 } // namespace Resource
 } // namespace Global
