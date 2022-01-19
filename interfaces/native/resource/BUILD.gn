@@ -55,7 +55,7 @@ ohos_shared_library("librawfile_ndk") {
   ]
 
   external_deps = [
-    "aafwk_standard:ability_manager",
+    "ability_runtime:ability_manager",
     "appexecfwk_standard:appexecfwk_base",
     "hiviewdfx_hilog_native:libhilog",
   ]
