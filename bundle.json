@@ -36,7 +36,7 @@
         "destPath": "base/global/resmgr_standard"
     },
     "component": {
-        "name": "global_resource_manager",
+        "name": "resmgr_standard",
         "subsystem": "global",
         "syscap": [],
         "features": [],
@@ -50,9 +50,30 @@
             "third_party": []
         },
         "build": {
-            "sub_component": [],
-            "inner_kits": [],
-            "test": []
+            "sub_component": [
+              "//base/global/resmgr_standard/interfaces/js/kits:resourcemanager",
+              "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr",
+              "//base/global/resmgr_standard/frameworks/resmgr:librawfile",
+              "//base/global/resmgr_standard/frameworks/resmgr:win_resmgr",
+              "//base/global/resmgr_standard/frameworks/resmgr:mac_resmgr"
+            ],
+            "inner_kits": [
+              {
+                "header": {
+                  "header_base": "//base/global/resmgr_standard/interfaces/innerkits/include/",
+                  "header_files": [
+                    "res_common.h",
+                    "res_config.h",
+                    "resource_manager.h",
+                    "rstate.h"
+                  ]
+                },
+                "name": "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr"
+              }
+            ],
+            "test": [
+              "//base/global/resmgr_standard/frameworks/resmgr/test:unittest"
+            ]
         }
     }
 }
