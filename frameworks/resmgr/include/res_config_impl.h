@@ -39,6 +39,8 @@ public:
 
     void SetDirection(Direction direction);
 
+    void SetColorMode(ColorMode colorMode);
+
     void SetScreenDensity(ScreenDensity screenDensity);
 
     const Locale *GetLocaleInfo() const;
@@ -48,6 +50,8 @@ public:
     Direction GetDirection() const;
 
     ScreenDensity GetScreenDensity() const;
+
+    ColorMode GetColorMode() const;
 
     DeviceType GetDeviceType() const;
 
@@ -70,6 +74,7 @@ private:
     ResLocale *resLocale_;
     Direction direction_;
     ScreenDensity screenDensity_;
+    ColorMode colorMode_;
     DeviceType deviceType_;
     bool isCompletedScript_;
     Locale *localeInfo_;

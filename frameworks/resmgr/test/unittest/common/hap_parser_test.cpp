@@ -26,7 +26,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class HapParserTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -92,6 +92,11 @@ HWTEST_F(HapParserTest, HapParserFuncTest001, TestSize.Level1)
     kp->value_ = DIRECTION_VERTICAL;
     kp->InitStr();
     keyParams.push_back(kp);
+    kp = new KeyParam();
+    kp->type_ = COLORMODE;
+    kp->value_ = DARK;
+    kp->InitStr();
+    keyParams.push_back(kp);
     auto config = HapParser::CreateResConfigFromKeyParams(keyParams);
     if (config != nullptr) {
         EXPECT_EQ(std::string("zh"), config->GetLocaleInfo()->getLanguage());
@@ -100,6 +105,7 @@ HWTEST_F(HapParserTest, HapParserFuncTest001, TestSize.Level1)
         EXPECT_EQ(DEVICE_CAR, config->GetDeviceType());
         EXPECT_EQ(DIRECTION_VERTICAL, config->GetDirection());
         EXPECT_EQ(SCREEN_DENSITY_SDPI, config->GetScreenDensity());
+        EXPECT_EQ(DARK, config->GetColorMode());
     } else {
         EXPECT_TRUE(false);
     }
@@ -175,9 +181,26 @@ HWTEST_F(HapParserTest, HapParserFuncTest004, TestSize.Level1)
     kp->value_ = DIRECTION_VERTICAL;
     kp->InitStr();
     keyParams.push_back(kp);
+    kp = new KeyParam();
+    kp->type_ = COLORMODE;
+    kp->value_ = DARK;
+    kp->InitStr();
+    keyParams.push_back(kp);
     std::string folder = HapParser::ToFolderPath(keyParams);
-    ASSERT_EQ("zh_CN-vertical-car-sdpi", folder);
+    ASSERT_EQ("zh_CN-vertical-car-dark-sdpi", folder);
     for (auto kp = keyParams.begin(); kp != keyParams.end(); kp++) {
         delete *kp;
     }
+}
+
+/*
+ * @tc.name: HapParserFuncTest005
+ * @tc.desc: Test GetColorMode
+ * @tc.type: FUNC
+ */
+HWTEST_F(HapParserTest, HapParserFuncTest005, TestSize.Level1)
+{
+    ASSERT_EQ(DARK, HapParser::GetColorMode(DARK));
+    ASSERT_EQ(LIGHT, HapParser::GetColorMode(LIGHT));
+}
 }

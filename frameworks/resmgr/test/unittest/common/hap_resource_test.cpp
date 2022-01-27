@@ -29,7 +29,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class HapResourceTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -301,4 +301,5 @@ HWTEST_F(HapResourceTest, HapResourceFuncTest004, TestSize.Level1)
     // 3. hap file exists, config.json error: missing "moduleName"
     resDesc = LoadFromHap(FormatFullPath("err-config.json-2.hap").c_str(), nullptr);
     ASSERT_TRUE(resDesc == nullptr);
+}
 }

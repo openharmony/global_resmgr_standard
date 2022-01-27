@@ -61,6 +61,8 @@ public:
     static ScreenDensity GetScreenDensity(uint32_t value);
 
     static DeviceType GetDeviceType(uint32_t value);
+
+    static ColorMode GetColorMode(uint32_t value);
 private:
     static const char *RES_FILE_NAME;
 };

@@ -23,7 +23,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class ResDescTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -124,7 +124,7 @@ void TestKeyParam(KeyType keyType, int value, std::string expectStr)
 
 /*
  * @tc.name: ResDescFuncTest002
- * @tc.desc: Test IsRef function, non file case.
+ * @tc.desc: Test InitStr function.
  * @tc.type: FUNC
  */
 HWTEST_F(ResDescTest, ResDescFuncTest002, TestSize.Level1)
@@ -153,4 +153,9 @@ HWTEST_F(ResDescTest, ResDescFuncTest002, TestSize.Level1)
     TestKeyParam(KeyType::SCREEN_DENSITY, ScreenDensity::SCREEN_DENSITY_XXLDPI, RE_480_STR);
     TestKeyParam(KeyType::SCREEN_DENSITY, ScreenDensity::SCREEN_DENSITY_XXXLDPI, RE_640_STR);
     TestKeyParam(KeyType::SCREEN_DENSITY, ScreenDensity::SCREEN_DENSITY_NOT_SET, "not_screen_density");
+
+    TestKeyParam(KeyType::COLORMODE, ColorMode::LIGHT, LIGHT_STR);
+    TestKeyParam(KeyType::COLORMODE, ColorMode::DARK, DARK_STR);
+    TestKeyParam(KeyType::COLORMODE, ColorMode::COLOR_MODE_NOT_SET, "not_color_mode");
+}
 }

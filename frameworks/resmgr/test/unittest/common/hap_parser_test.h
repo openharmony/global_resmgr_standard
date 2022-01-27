@@ -16,9 +16,10 @@
 #ifndef RESOURCE_MANAGER_HAP_RESOURCE_TEST_H
 #define RESOURCE_MANAGER_HAP_RESOURCE_TEST_H
 
-int HapParserFuncTest001();
-int HapParserFuncTest002();
-int HapParserFuncTest003();
-int HapParserFuncTest004();
+int HapParserFuncTest001(void);
+int HapParserFuncTest002(void);
+int HapParserFuncTest003(void);
+int HapParserFuncTest004(void);
+int HapParserFuncTest005(void);
 
 #endif

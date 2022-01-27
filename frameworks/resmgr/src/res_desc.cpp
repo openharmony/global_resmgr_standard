@@ -86,6 +86,25 @@ std::string KeyParam::GetDeviceTypeStr() const
     }
     return ret;
 }
+
+std::string KeyParam::GetColorModeStr() const
+{
+    std::string ret("not_color_mode");
+    if (type_ == KeyType::COLORMODE) {
+        switch (value_) {
+            case ColorMode::DARK:
+                ret = std::string(DARK_STR);
+                break;
+            case ColorMode::LIGHT:
+                ret = std::string(LIGHT_STR);
+                break;
+            default:
+                break;
+        }
+    }
+    return ret;
+}
+
 const std::string KeyParam::ConvertToStr() const
 {
     if ((type_ == KeyType::LANGUAGES) || (type_ == KeyType::REGION) || (type_ == KeyType::SCRIPT)) {
@@ -108,6 +127,9 @@ const std::string KeyParam::ConvertToStr() const
     }
     if (type_ == KeyType::DEVICETYPE) {
         return GetDeviceTypeStr();
+    }
+    if (type_ == KeyType::COLORMODE) {
+        return GetColorModeStr();
     }
     if (type_ == KeyType::SCREEN_DENSITY) {
         return GetScreenDensityStr();

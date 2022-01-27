@@ -23,7 +23,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class ResConfigImplTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -489,6 +489,105 @@ HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest029, TestSize.Level1)
     other->SetDeviceType(DeviceType::DEVICE_PHONE);
     other->SetDirection(Direction::DIRECTION_HORIZONTAL);
     EXPECT_FALSE(current->Match(other));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest030
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest030, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::LIGHT);
+    other->SetColorMode(ColorMode::DARK);
+    EXPECT_FALSE(current->Match(other));
+    EXPECT_FALSE(other->Match(current));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest031
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest031, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::LIGHT);
+    other->SetColorMode(ColorMode::LIGHT);
+    EXPECT_TRUE(current->Match(other));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest032
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest032, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::LIGHT);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->Match(other));
+    EXPECT_TRUE(other->Match(current));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest033
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest033, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::DARK);
+    other->SetColorMode(ColorMode::DARK);
+    EXPECT_TRUE(current->Match(other));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest034
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest034, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::DARK);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->Match(other));
+    EXPECT_TRUE(other->Match(current));
+    delete current;
+    delete other;
+};
+
+/*
+ * @tc.name: ResConfigImplMatchTest035
+ * @tc.desc: Test ResConfig Match
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplMatchTest035, TestSize.Level1)
+{
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, nullptr);
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, nullptr);
+    current->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->Match(other));
     delete current;
     delete other;
 };
@@ -1392,4 +1491,167 @@ HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest050, TestSize.Level1)
     delete request;
     delete current;
     delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest051
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest051, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::LIGHT);
+    current->SetColorMode(ColorMode::LIGHT);
+    other->SetColorMode(ColorMode::LIGHT);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest052
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest052, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::LIGHT);
+    current->SetColorMode(ColorMode::LIGHT);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    EXPECT_FALSE(other->IsMoreSuitable(current, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest053
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest053, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::LIGHT);
+    current->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest054
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest054, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::DARK);
+    current->SetColorMode(ColorMode::DARK);
+    other->SetColorMode(ColorMode::DARK);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest055
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest055, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::DARK);
+    current->SetColorMode(ColorMode::DARK);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    EXPECT_FALSE(other->IsMoreSuitable(current, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest056
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest056, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::DARK);
+    current->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    other->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest057
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest057, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::LIGHT);
+    request->SetDeviceType(DeviceType::DEVICE_PHONE);
+    current->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    current->SetDeviceType(DeviceType::DEVICE_PHONE);
+    other->SetColorMode(ColorMode::LIGHT);
+    other->SetDeviceType(DeviceType::DEVICE_NOT_SET);
+    EXPECT_TRUE(current->IsMoreSuitable(other, request));
+    EXPECT_FALSE(other->IsMoreSuitable(current, request));
+    delete request;
+    delete current;
+    delete other;
+}
+
+/*
+ * @tc.name: ResConfigImplIsMoreSuitableTest058
+ * @tc.desc: Test ResConfig IsMoreSuitable
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResConfigImplTest, ResConfigImplIsMoreSuitableTest058, TestSize.Level1)
+{
+    ResConfigImpl *request = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *current = CreateResConfigImpl("en", nullptr, "US");
+    ResConfigImpl *other = CreateResConfigImpl("en", nullptr, "US");
+    request->SetColorMode(ColorMode::LIGHT);
+    request->SetScreenDensity(ScreenDensity::SCREEN_DENSITY_LDPI);
+    current->SetColorMode(ColorMode::COLOR_MODE_NOT_SET);
+    current->SetScreenDensity(ScreenDensity::SCREEN_DENSITY_LDPI);
+    other->SetColorMode(ColorMode::LIGHT);
+    other->SetScreenDensity(ScreenDensity::SCREEN_DENSITY_NOT_SET);
+    EXPECT_FALSE(current->IsMoreSuitable(other, request));
+    EXPECT_TRUE(other->IsMoreSuitable(current, request));
+    delete request;
+    delete current;
+    delete other;
+}
 }

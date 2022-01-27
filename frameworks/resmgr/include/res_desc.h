@@ -149,6 +149,7 @@ private:
     const std::string ConvertToStr() const;
     std::string GetScreenDensityStr() const;
     std::string GetDeviceTypeStr() const;
+    std::string GetColorModeStr() const;
 };
 
 /**
