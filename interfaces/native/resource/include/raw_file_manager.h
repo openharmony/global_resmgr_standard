@@ -19,7 +19,7 @@
  *
  * @brief Provides native functions for the resource manager to operate raw file directories and their raw files.
  *
- * You can use the resource manager to traverse, open, read, and close raw files.
+ * You can use the resource manager to traverse, open, seek, read, and close raw files.
  *
  * @since 8
  * @version 1.0
@@ -39,7 +39,6 @@
 #define GLOBAL_NATIVE_RESOURCE_MANAGER_H
 
 #include "napi/native_api.h"
-#include "napi/native_node_api.h"
 #include "raw_dir.h"
 #include "raw_file.h"
 
@@ -53,7 +52,7 @@ struct NativeResourceManager;
  * @brief Presents the resource manager.
  *
  * This class encapsulates the native implementation of the JavaScript resource manager. The pointer to a
- * <b>ResourceManager</b> object can be obtained by calling {@link InitNativeResourceManager}.
+ * <b>ResourceManager</b> object can be obtained by calling {@link OH_ResourceManager_InitNativeResourceManager}.
  *
  * @since 8
  * @version 1.0
@@ -71,7 +70,7 @@ typedef struct NativeResourceManager NativeResourceManager;
  * @since 8
  * @version 1.0
  */
-NativeResourceManager *InitNativeResourceManager(napi_env env, napi_value jsResMgr);
+NativeResourceManager *OH_ResourceManager_InitNativeResourceManager(napi_env env, napi_value jsResMgr);
 
 /**
  * @brief Releases the native resource manager.
@@ -82,7 +81,7 @@ NativeResourceManager *InitNativeResourceManager(napi_env env, napi_value jsResM
  * @since 8
  * @version 1.0
  */
-void ReleaseNativeResourceManager(NativeResourceManager *resMgr);
+void OH_ResourceManager_ReleaseNativeResourceManager(NativeResourceManager *resMgr);
 
 /**
  * @brief Opens a raw file directory.
@@ -90,17 +89,17 @@ void ReleaseNativeResourceManager(NativeResourceManager *resMgr);
  * After it is opened, you can traverse its raw files.
  *
  * @param mgr Indicates the pointer to {@link NativeResourceManager} obtained by calling
- * {@link InitNativeResourceManager}.
+ * {@link OH_ResourceManager_InitNativeResourceManager}.
  * @param dirName Indicates the name of the raw file directory to open. You can pass an empty string to open the
  * top-level raw file directory.
- * @return Returns the pointer to {@link RawDir}. After you finish using the pointer, call {@link CloseRawDir} to
- * release it.
- * @see InitNativeResourceManager
- * @see CloseRawDir
+ * @return Returns the pointer to {@link RawDir}. After you finish using the pointer, call
+ * {@link OH_ResourceManager_CloseRawDir} to release it.
+ * @see OH_ResourceManager_InitNativeResourceManager
+ * @see OH_ResourceManager_CloseRawDir
  * @since 8
  * @version 1.0
  */
-RawDir *OpenRawDir(const NativeResourceManager *mgr, const char *dirName);
+RawDir *OH_ResourceManager_OpenRawDir(const NativeResourceManager *mgr, const char *dirName);
 
 /**
  * @brief Opens a raw file.
@@ -108,16 +107,16 @@ RawDir *OpenRawDir(const NativeResourceManager *mgr, const char *dirName);
  * After it is opened, you can read its data.
  *
  * @param mgr Indicates the pointer to {@link NativeResourceManager} obtained by calling
- * {@link InitNativeResourceManager}.
+ * {@link OH_ResourceManager_InitNativeResourceManager}.
  * @param fileName Indicates the file path relative to the top-level raw file directory.
- * @return Returns the pointer to {@link RawFile}. After you finish using the pointer, call {@link CloseRawFile} to
- * release it.
- * @see InitNativeResourceManager
- * @see CloseRawFile
+ * @return Returns the pointer to {@link RawFile}. After you finish using the pointer, call
+ * {@link OH_ResourceManager_CloseRawFile} to release it.
+ * @see OH_ResourceManager_InitNativeResourceManager
+ * @see OH_ResourceManager_CloseRawFile
  * @since 8
  * @version 1.0
  */
-RawFile *OpenRawFile(const NativeResourceManager *mgr, const char *fileName);
+RawFile *OH_ResourceManager_OpenRawFile(const NativeResourceManager *mgr, const char *fileName);
 
 #ifdef __cplusplus
 };
