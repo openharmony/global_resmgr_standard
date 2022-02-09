@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,9 +19,7 @@
 #include <memory>
 #include <vector>
 
-#include "foundation/aafwk/standard/frameworks/kits/appkit/native/ability_runtime/context/context.h"
 #include "hilog/log.h"
-#include "js_runtime_utils.h"
 #include "node_api.h"
 
 namespace OHOS {
@@ -36,7 +34,6 @@ namespace Resource {
 
 static constexpr OHOS::HiviewDFX::HiLogLabel LABEL = { LOG_CORE, 0xD001E00, "ResourceManagerJs" };
 using namespace OHOS::HiviewDFX;
-using namespace OHOS::AppExecFwk;
 static thread_local napi_ref* g_constructor = nullptr;
 std::vector<char> g_codes = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -46,19 +43,51 @@ std::vector<char> g_codes = {
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 };
 
-ResourceManagerAddon::ResourceManagerAddon() : env_(nullptr), wrapper_(nullptr) {}
+napi_value ResourceManagerAddon::Create(
+    napi_env env, const std::string& bundleName, const std::shared_ptr<ResourceManager>& resMgr)
+{
+    std::shared_ptr<ResourceManagerAddon> addon = std::make_shared<ResourceManagerAddon>(bundleName, resMgr);
+
+    if (!Init(env)) {
+        HiLog::Error(LABEL, "Failed to init resource manager addon");
+        return nullptr;
+    }
+
+    napi_value constructor;
+    napi_status status = napi_get_reference_value(env, *g_constructor, &constructor);
+    if (status != napi_ok) {
+        return nullptr;
+    }
+    napi_value result;
+    status = napi_new_instance(env, constructor, 0, nullptr, &result);
+    if (status != napi_ok) {
+        return nullptr;
+    }
+
+    auto addonPtr = std::make_unique<std::shared_ptr<ResourceManagerAddon>>(addon);
+    status = napi_wrap(env, result, reinterpret_cast<void *>(addonPtr.get()), ResourceManagerAddon::Destructor,
+        nullptr, nullptr);
+    if (status != napi_ok) {
+        return nullptr;
+    }
+    addonPtr.release();
+    return result;
+}
+
+ResourceManagerAddon::ResourceManagerAddon(
+    const std::string& bundleName, const std::shared_ptr<ResourceManager>& resMgr)
+    : bundleName_(bundleName), resMgr_(resMgr)
+{}
 
 ResourceManagerAddon::~ResourceManagerAddon()
 {
-    napi_delete_reference(env_, wrapper_);
     HiLog::Info(LABEL, "~ResourceManagerAddon %{public}s", bundleName_.c_str());
 }
 
 void ResourceManagerAddon::Destructor(napi_env env, void *nativeObject, void *hint)
 {
-    std::shared_ptr<ResourceManagerAddon> *addonPtr =
-        static_cast<std::shared_ptr<ResourceManagerAddon> *>(nativeObject);
-    delete addonPtr;
+    std::unique_ptr<std::shared_ptr<ResourceManagerAddon>> addonPtr;
+    addonPtr.reset(static_cast<std::shared_ptr<ResourceManagerAddon>*>(nativeObject));
 }
 
 void ResMgrAsyncContext::SetErrorMsg(const std::string &msg, bool withResId)
@@ -72,15 +101,10 @@ void ResMgrAsyncContext::SetErrorMsg(const std::string &msg, bool withResId)
     }
 }
 
-napi_value ResourceManagerAddon::Init(napi_env env, napi_value exports)
+bool ResourceManagerAddon::Init(napi_env env)
 {
-    napi_property_descriptor creatorProp[] = {
-        DECLARE_NAPI_FUNCTION("getResourceManager", GetResourceManager),
-    };
-    napi_status status = napi_define_properties(env, exports, 1, creatorProp);
-    if (status != napi_ok) {
-        HiLog::Error(LABEL, "Failed to set getResourceManager at init");
-        return nullptr;
+    if (g_constructor != nullptr) {
+        return true;
     }
 
     napi_property_descriptor properties[] = {
@@ -95,75 +119,28 @@ napi_value ResourceManagerAddon::Init(napi_env env, napi_value exports)
     };
 
     napi_value constructor;
-    status = napi_define_class(env, "ResourceManager", NAPI_AUTO_LENGTH, New, nullptr,
+    napi_status status = napi_define_class(env, "ResourceManager", NAPI_AUTO_LENGTH, New, nullptr,
         sizeof(properties) / sizeof(napi_property_descriptor), properties, &constructor);
     if (status != napi_ok) {
         HiLog::Error(LABEL, "Failed to define class at Init");
-        return nullptr;
-    }
-
-    status = napi_set_named_property(env, exports, "ResourceManager", constructor);
-    if (status != napi_ok) {
-        HiLog::Error(LABEL, "Failed to set property at init");
-        return nullptr;
+        return false;
     }
 
     g_constructor = new (std::nothrow) napi_ref;
     if (g_constructor == nullptr) {
         HiLog::Error(LABEL, "Failed to create ref at init");
-        return nullptr;
+        return false;
     }
     status = napi_create_reference(env, constructor, 1, g_constructor);
     if (status != napi_ok) {
         HiLog::Error(LABEL, "Failed to create reference at init");
-        return nullptr;
+        return false;
     }
-    return exports;
+    return true;
 }
 
-napi_async_execute_callback ResourceManagerAddon::GetResMgrExecute()
+void ResMgrAsyncContext::Complete(napi_env env, napi_status status, void* data)
 {
-    return [](napi_env env, void* data) {
-        ResMgrAsyncContext *asyncContext = static_cast<ResMgrAsyncContext*>(data);
-        std::shared_ptr<ResourceManagerAddon> obj = std::make_shared<ResourceManagerAddon>();
-        if (obj == nullptr) {
-            asyncContext->SetErrorMsg("Failed to create ResourceManagerAddon");
-            return;
-        }
-        if (!obj->InitContext(env, asyncContext->bundleName_, asyncContext->ability_, asyncContext->context_)) {
-            asyncContext->SetErrorMsg("InitContext failed");
-            return;
-        }
-
-        asyncContext->createValueFunc_ = [](napi_env env, ResMgrAsyncContext &context) -> napi_value {
-            napi_value constructor;
-            napi_status status = napi_get_reference_value(env, *g_constructor, &constructor);
-            if (status != napi_ok) {
-                context.SetErrorMsg("Failed to get ResourceManagerAddon");
-                return nullptr;
-            }
-            napi_value result = nullptr;
-            status = napi_new_instance(env, constructor, 0, nullptr, &result);
-            if (status != napi_ok) {
-                context.SetErrorMsg("Failed to create ResourceManagerAddon");
-                return nullptr;
-            }
-            std::shared_ptr<ResourceManagerAddon> *addonPtr = new std::shared_ptr<ResourceManagerAddon>(context.addon_);
-            status = napi_wrap(env, result, reinterpret_cast<void *>(addonPtr), ResourceManagerAddon::Destructor,
-                nullptr, &context.addon_->wrapper_);
-            if (status != napi_ok) {
-                context.SetErrorMsg("Failed to wrap ResourceManagerAddon");
-                delete addonPtr;
-                return nullptr;
-            }
-            return result;
-        };
-        asyncContext->addon_ = obj;
-    };
-}
-
-
-auto completeFunc = [](napi_env env, napi_status status, void* data) {
     ResMgrAsyncContext* asyncContext = static_cast<ResMgrAsyncContext*>(data);
 
     napi_value finalResult = nullptr;
@@ -216,105 +193,6 @@ auto completeFunc = [](napi_env env, napi_status status, void* data) {
     delete asyncContext;
 };
 
-bool GetGlobalAbility(napi_env env, ResMgrAsyncContext &context)
-{
-    napi_value global;
-    napi_status status = napi_get_global(env, &global);
-    if (status != napi_ok) {
-        HiLog::Error(LABEL, "Failed to get global");
-        return false;
-    }
-
-    napi_value abilityObj;
-    status = napi_get_named_property(env, global, "ability", &abilityObj);
-    if (status != napi_ok || abilityObj == nullptr) {
-        HiLog::Warn(LABEL, "Failed to get ability property");
-        return true;
-    }
-
-    Ability* ability = nullptr;
-    status = napi_get_value_external(env, abilityObj, (void **)&ability);
-    if (status == napi_ok && ability != nullptr) {
-        context.ability_ = ability;
-    }
-
-    return true;
-}
-
-napi_value ResourceManagerAddon::GetResourceManager(napi_env env, napi_callback_info info)
-{
-    GET_PARAMS(env, info, 3);
-
-    std::unique_ptr<ResMgrAsyncContext> asyncContext = std::make_unique<ResMgrAsyncContext>();
-    for (size_t i = 0; i < argc; i++) {
-        napi_valuetype valueType;
-        napi_typeof(env, argv[i], &valueType);
-        if (i == 0 && valueType == napi_object) {
-            using WeakContextPtr = std::weak_ptr<AbilityRuntime::Context>* ;
-            WeakContextPtr objContext;
-            napi_status status = napi_unwrap(env, argv[0], reinterpret_cast<void **>(&objContext));
-            if (status != napi_ok || objContext == nullptr) {
-                HiLog::Error(LABEL, "Failed to get objContext");
-                return nullptr;
-            }
-            auto context = objContext->lock();
-            if (context == nullptr) {
-                HiLog::Error(LABEL, "Failed to get context");
-                return nullptr;
-            }
-            asyncContext->context_ = context;
-        } else if ((i == 0 || i == 1) && valueType == napi_string) {
-            size_t len = 0;
-            napi_status status = napi_get_value_string_utf8(env, argv[i], nullptr, 0, &len);
-            if (status != napi_ok) {
-                HiLog::Error(LABEL, "Failed to get bundle name length");
-                return nullptr;
-            }
-            std::vector<char> buf(len + 1);
-            status = napi_get_value_string_utf8(env, argv[i], buf.data(), len + 1, &len);
-            if (status != napi_ok) {
-                HiLog::Error(LABEL, "Failed to get bundle name");
-                return nullptr;
-            }
-            asyncContext->bundleName_ = buf.data();
-        } else if ((i == 0 || i == 1 || i == 2) && valueType == napi_function) {
-            napi_create_reference(env, argv[i], 1, &asyncContext->callbackRef_);
-            break;
-        } else {
-            // self resourcemanager with promise
-        }
-    }
-
-    napi_value result = nullptr;
-    if (asyncContext->callbackRef_ == nullptr) {
-        napi_create_promise(env, &asyncContext->deferred_, &result);
-    } else {
-        napi_get_undefined(env, &result);
-    }
-
-    if (!GetGlobalAbility(env, *asyncContext)) {
-        HiLog::Error(LABEL, "get global ability failed");
-        return nullptr;
-    }
-
-    napi_value resource = nullptr;
-    napi_create_string_utf8(env, "getResourceManager", NAPI_AUTO_LENGTH, &resource);
-    napi_status status = napi_create_async_work(env, nullptr, resource, GetResMgrExecute(), completeFunc,
-        static_cast<void*>(asyncContext.get()), &asyncContext->work_);
-    if (status != napi_ok) {
-        HiLog::Error(LABEL, "Failed to create async work for getResourceManager %{public}d", status);
-        return result;
-    }
-    status = napi_queue_async_work(env, asyncContext->work_);
-    if (status != napi_ok) {
-        HiLog::Error(LABEL, "Failed to queue async work for getResourceManager %{public}d", status);
-        return result;
-    }
-
-    asyncContext.release();
-    return result;
-}
-
 napi_value ResourceManagerAddon::New(napi_env env, napi_callback_info info)
 {
     GET_PARAMS(env, info, 1);
@@ -326,34 +204,6 @@ napi_value ResourceManagerAddon::New(napi_env env, napi_callback_info info)
     }
 
     return nullptr;
-}
-
-bool ResourceManagerAddon::InitContext(napi_env env, const std::string bundleName, Ability* ability,
-    std::shared_ptr<AbilityRuntime::Context> context)
-{
-    env_ = env;
-    if (ability != nullptr) {
-        if (bundleName.empty()) {
-            resMgr_ = ability->GetResourceManager();
-        } else {
-            std::shared_ptr<Context> bundleContext = ability->CreateBundleContext(bundleName, 0);
-            if (bundleContext != nullptr) {
-                resMgr_ = bundleContext->GetResourceManager();
-            }
-            bundleName_ = bundleName;
-        }
-    } else if (context != nullptr) {
-        if (bundleName.empty()) {
-            resMgr_ = context->GetResourceManager();
-        } else {
-            std::shared_ptr<OHOS::AbilityRuntime::Context> bundleContext = context->CreateBundleContext(bundleName);
-            if (bundleContext != nullptr) {
-                resMgr_ = bundleContext->GetResourceManager();
-            }
-            bundleName_ = bundleName;
-        }
-    }
-    return resMgr_ != nullptr;
 }
 
 int ResourceManagerAddon::GetResId(napi_env env, size_t argc, napi_value *argv)
@@ -442,7 +292,7 @@ napi_value ResourceManagerAddon::ProcessOnlyIdParam(napi_env env, napi_callback_
 
     napi_value resource = nullptr;
     napi_create_string_utf8(env, name.c_str(), NAPI_AUTO_LENGTH, &resource);
-    if (napi_create_async_work(env, nullptr, resource, execute, completeFunc,
+    if (napi_create_async_work(env, nullptr, resource, execute, ResMgrAsyncContext::Complete,
         static_cast<void*>(asyncContext.get()), &asyncContext->work_) != napi_ok) {
         HiLog::Error(LABEL, "Failed to create async work for %{public}s", name.c_str());
         return result;
@@ -705,7 +555,7 @@ napi_value ResourceManagerAddon::ProcessNoParam(napi_env env, napi_callback_info
 
     napi_value resource = nullptr;
     napi_create_string_utf8(env, name.c_str(), NAPI_AUTO_LENGTH, &resource);
-    if (napi_create_async_work(env, nullptr, resource, execute, completeFunc,
+    if (napi_create_async_work(env, nullptr, resource, execute, ResMgrAsyncContext::Complete,
         static_cast<void*>(asyncContext.get()), &asyncContext->work_) != napi_ok) {
         HiLog::Error(LABEL, "Failed to create async work for %{public}s", name.c_str());
         return result;
@@ -864,7 +714,7 @@ napi_value ResourceManagerAddon::GetPluralString(napi_env env, napi_callback_inf
 
     napi_value resource = nullptr;
     napi_create_string_utf8(env, "getPluralString", NAPI_AUTO_LENGTH, &resource);
-    if (napi_create_async_work(env, nullptr, resource, getPluralCapFunc, completeFunc,
+    if (napi_create_async_work(env, nullptr, resource, getPluralCapFunc, ResMgrAsyncContext::Complete,
         static_cast<void*>(asyncContext.get()), &asyncContext->work_) != napi_ok) {
         HiLog::Error(LABEL, "Failed to create async work for GetPluralString");
         return result;
@@ -891,26 +741,6 @@ auto g_getRawFileFunc = [](napi_env env, void* data) {
 napi_value ResourceManagerAddon::GetRawFile(napi_env env, napi_callback_info info)
 {
     return ProcessOnlyIdParam(env, info, "getRawFile", g_getRawFileFunc);
-}
-
-static napi_value ResMgrInit(napi_env env, napi_value exports)
-{
-    return ResourceManagerAddon::Init(env, exports);
-}
-
-static napi_module g_resourceManagerModule = {
-    .nm_version = 1,
-    .nm_flags = 0,
-    .nm_filename = nullptr,
-    .nm_register_func = ResMgrInit,
-    .nm_modname = "resourceManager",
-    .nm_priv = ((void*)0),
-    .reserved = {0}
-};
-
-extern "C" __attribute__((constructor)) void ResMgrRegister()
-{
-    napi_module_register(&g_resourceManagerModule);
 }
 } // namespace Resource
 } // namespace Global

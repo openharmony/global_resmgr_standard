@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +19,6 @@
 #include <memory>
 #include <string>
 
-#include "ability.h"
 #include "napi/native_api.h"
 #include "napi/native_node_api.h"
 #include "resource_manager.h"
@@ -29,16 +28,16 @@ namespace Global {
 namespace Resource {
 class ResourceManagerAddon {
 public:
-    static napi_value Init(napi_env env, napi_value exports);
+    static napi_value Create(
+        napi_env env, const std::string& bundleName, const std::shared_ptr<ResourceManager>& resMgr);
+
+    static bool Init(napi_env env);
 
     static void Destructor(napi_env env, void *nativeObject, void *finalize_hint);
 
-    ResourceManagerAddon();
+    ResourceManagerAddon(const std::string& bundleName, const std::shared_ptr<ResourceManager>& resMgr);
 
     ~ResourceManagerAddon();
-
-    bool InitContext(napi_env env, const std::string bundleName, AppExecFwk::Ability *ability,
-        std::shared_ptr<AbilityRuntime::Context> context);
 
     inline std::shared_ptr<ResourceManager> GetResMgr()
     {
@@ -48,10 +47,6 @@ public:
     std::string GetLocale(std::unique_ptr<ResConfig> &cfg);
 
 private:
-    static napi_async_execute_callback GetResMgrExecute();
-
-    static napi_value GetResourceManager(napi_env env, napi_callback_info info);
-
     static int GetResId(napi_env env, size_t argc, napi_value *argv);
 
     static napi_value ProcessOnlyIdParam(napi_env env, napi_callback_info info, const std::string &name,
@@ -81,8 +76,6 @@ private:
     static std::string GetRawFile(napi_env env, size_t argc, napi_value *argv);
 
     std::string bundleName_;
-    napi_env env_;
-    napi_ref wrapper_;
     std::shared_ptr<ResourceManager> resMgr_;
 };
 
@@ -109,13 +102,14 @@ struct ResMgrAsyncContext {
     int success_;
 
     std::shared_ptr<ResourceManagerAddon> addon_;
-    AppExecFwk::Ability *ability_;
-    std::shared_ptr<AbilityRuntime::Context> context_;
+    std::shared_ptr<ResourceManager> resMgr_;
 
     ResMgrAsyncContext() : work_(nullptr), resId_(0), param_(0), createValueFunc_(nullptr), len_(0), deferred_(nullptr),
-        callbackRef_(nullptr), success_(true), addon_(nullptr), ability_(nullptr), context_(nullptr) {}
+        callbackRef_(nullptr), success_(true) {}
 
     void SetErrorMsg(const std::string &msg, bool withResId = false);
+
+    static void Complete(napi_env env, napi_status status, void* data);
 };
 } // namespace Resource
 } // namespace Global

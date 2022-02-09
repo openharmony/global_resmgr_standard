@@ -69,6 +69,15 @@
                   ]
                 },
                 "name": "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr"
+              },
+              {
+                "header": {
+                  "header_base": "//base/global/resmgr_standard/interfaces/js/innerkits/core/include/",
+                  "header_files": [
+                    "resource_manager_addon.h"
+                  ]
+                },
+                "name": "//base/global/resmgr_standard/interfaces/js/innerkits/core:resmgr_napi_core"
               }
             ],
             "test": [
