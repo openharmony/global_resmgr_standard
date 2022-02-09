@@ -29,6 +29,7 @@ ResConfigImpl::ResConfigImpl()
     : resLocale_(nullptr),
       direction_(DIRECTION_NOT_SET),
       screenDensity_(SCREEN_DENSITY_NOT_SET),
+      colorMode_(LIGHT),
       deviceType_(DEVICE_NOT_SET),
       isCompletedScript_(false), localeInfo_(nullptr)
 {}
@@ -90,6 +91,11 @@ void ResConfigImpl::SetDirection(Direction direction)
     this->direction_ = direction;
 }
 
+void ResConfigImpl::SetColorMode(ColorMode colorMode)
+{
+    this->colorMode_ = colorMode;
+}
+
 void ResConfigImpl::SetScreenDensity(ScreenDensity screenDensity)
 {
     this->screenDensity_ = screenDensity;
@@ -113,6 +119,11 @@ Direction ResConfigImpl::GetDirection() const
 ScreenDensity ResConfigImpl::GetScreenDensity() const
 {
     return this->screenDensity_;
+}
+
+ColorMode ResConfigImpl::GetColorMode() const
+{
+    return this->colorMode_;
 }
 
 DeviceType ResConfigImpl::GetDeviceType() const
@@ -179,6 +190,9 @@ bool ResConfigImpl::Copy(ResConfig &other)
     if (this->GetDirection() != other.GetDirection()) {
         this->SetDirection(other.GetDirection());
     }
+    if (this->GetColorMode() != other.GetColorMode()) {
+        this->SetColorMode(other.GetColorMode());
+    }
     if (this->GetScreenDensity() != other.GetScreenDensity()) {
         this->SetScreenDensity(other.GetScreenDensity());
     }
@@ -199,6 +213,12 @@ bool ResConfigImpl::Match(const ResConfigImpl *other) const
     if (this->deviceType_ != DEVICE_NOT_SET &&
         other->deviceType_ != DEVICE_NOT_SET) {
         if (this->deviceType_ != other->deviceType_) {
+            return false;
+        }
+    }
+    if (this->colorMode_ != COLOR_MODE_NOT_SET &&
+        other->colorMode_ != COLOR_MODE_NOT_SET) {
+        if (this->colorMode_ != other->colorMode_) {
             return false;
         }
     }
@@ -237,6 +257,10 @@ bool ResConfigImpl::IsMoreSuitable(const ResConfigImpl *other,
         if (this->deviceType_ != other->deviceType_ &&
             request->deviceType_ != DeviceType::DEVICE_NOT_SET) {
             return this->deviceType_ != DeviceType::DEVICE_NOT_SET;
+        }
+        if (this->colorMode_ != other->colorMode_ &&
+            request->colorMode_ != ColorMode::COLOR_MODE_NOT_SET) {
+            return this->colorMode_ != ColorMode::COLOR_MODE_NOT_SET;
         }
         if (request->screenDensity_ != ScreenDensity::SCREEN_DENSITY_NOT_SET &&
             this->screenDensity_ != other->screenDensity_) {
@@ -297,6 +321,9 @@ bool ResConfigImpl::IsMoreSpecificThan(const ResConfigImpl *other) const
     }
     if (this->deviceType_ != other->deviceType_) {
         return (this->deviceType_ != DeviceType::DEVICE_NOT_SET);
+    }
+    if (this->colorMode_ != other->colorMode_) {
+        return (this->colorMode_ != ColorMode::COLOR_MODE_NOT_SET);
     }
     if (this->screenDensity_ != other->screenDensity_) {
         return  (this->screenDensity_ != ScreenDensity::SCREEN_DENSITY_NOT_SET);

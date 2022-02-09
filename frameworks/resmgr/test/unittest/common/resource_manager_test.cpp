@@ -29,10 +29,13 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 static const int NON_EXIST_ID = 1111;
 
 static const char *g_nonExistName = "non_existent_name";
+
+static const char *g_colorModeResFilePath = "colormode/assets/entry/resources.index";
+
 class ResourceManagerTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -65,6 +68,8 @@ public:
     void TestGetRawFilePathByName(const std::string &name, const std::string &cmp) const;
 
     void AddResource(const char *language, const char *script, const char *region);
+
+    void AddColorModeResource(DeviceType deviceType, ColorMode colorMode, ScreenDensity screenDensity) const;
 };
 
 int ResourceManagerTest::GetResId(std::string name, ResType resType) const
@@ -115,6 +120,24 @@ void ResourceManagerTest::AddResource(const char *language, const char *script, 
         delete rc;
     }
     bool ret = rm->AddResource(FormatFullPath(g_resFilePath).c_str());
+    ASSERT_TRUE(ret);
+}
+
+void ResourceManagerTest::AddColorModeResource(DeviceType deviceType, ColorMode colorMode,
+                                               ScreenDensity screenDensity) const
+{
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("zh", nullptr, nullptr);
+    rc->SetDeviceType(deviceType);
+    rc->SetColorMode(colorMode);
+    rc->SetScreenDensity(screenDensity);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+    bool ret = rm->AddResource(FormatFullPath(g_colorModeResFilePath).c_str());
     ASSERT_TRUE(ret);
 }
 
@@ -1404,6 +1427,166 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest002, TestSize.Lev
 }
 
 /*
+ * @tc.name: ResourceManagerGetColorByNameTest003
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest003, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_only", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(0), outValue); // #00000000 base resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest004
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest004, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(572662306), outValue); // #22222222 light resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest005
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest005, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_dark", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(0), outValue); // #00000000 base resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest006
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest006, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light_dark", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(572662306), outValue); // #22222222 light resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest007
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest007, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, DARK, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_only", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(0), outValue); // #00000000 base resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest008
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest008, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, DARK, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(0), outValue); // #00000000 base resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest009
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest009, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, DARK, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_dark", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(286331153), outValue); // #11111111 dark resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest010
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest010, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, DARK, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light_dark", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(286331153), outValue); // #11111111 dark resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest011
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest011, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light_phone", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(858993459), outValue); // #33333333 phone resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetColorByNameTest012
+ * @tc.desc: Test GetColorByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest012, TestSize.Level1)
+{
+    AddColorModeResource(DEVICE_PHONE, LIGHT, SCREEN_DENSITY_LDPI);
+
+    uint32_t outValue;
+    RState state;
+    state = rm->GetColorByName("base_light_ldpi", outValue);
+    EXPECT_TRUE(state == SUCCESS);
+    EXPECT_EQ(static_cast<uint32_t>(572662306), outValue); // #22222222 light resource
+}
+
+/*
  * @tc.name: ResourceManagerGetProfileByIdTest001
  * @tc.desc: Test GetProfileById
  * @tc.type: FUNC
@@ -1738,4 +1921,5 @@ HWTEST_F(ResourceManagerTest, RawFileTest001, TestSize.Level1)
 
     TestGetRawFilePathByName("rawfiletest.xml",
         "/data/test/all/assets/entry/resources/rawfile/rawfiletest.xml");
+}
 }

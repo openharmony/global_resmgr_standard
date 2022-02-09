@@ -44,6 +44,7 @@
             <option name="push" value="data/all/assets/entry/resources/base/media/contents.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
             <option name="push" value="data/all/assets/entry/resources/base/media/icon.png -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
             <option name="push" value="data/all/assets/entry/resources/base/media/nodes.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
+            <option name="push" value="data/colormode/assets/entry/resources.index -> /data/test/colormode/assets/entry/" src="res"/>
         </preparer>
     </target>
 </configuration>

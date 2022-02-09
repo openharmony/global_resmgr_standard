@@ -35,7 +35,7 @@
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
 using namespace std;
-
+namespace {
 class ResourceManagerPerformanceTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -1119,3 +1119,4 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest032, 
     HILOG_DEBUG("avg cost 032: %f us", average);
     EXPECT_LT(average, 100);
 };
+}

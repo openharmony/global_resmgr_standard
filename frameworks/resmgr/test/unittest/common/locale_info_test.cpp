@@ -24,7 +24,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class LocaleInfoTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -605,3 +605,4 @@ HWTEST_F(LocaleInfoTest, LocaleInfoPerformanceFuncTest001, TestSize.Level1)
     HILOG_DEBUG("avg cost FindAndSort: %f us", average);
     EXPECT_LT(average, 500);
 };
+}

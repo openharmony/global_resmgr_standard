@@ -16,7 +16,7 @@
 #ifndef RESOURCE_MANAGER_RES_DESC_TEST_H
 #define RESOURCE_MANAGER_RES_DESC_TEST_H
 
-int ResDescFuncTest001();
-int ResDescFuncTest002();
+int ResDescFuncTest001(void);
+int ResDescFuncTest002(void);
 
 #endif

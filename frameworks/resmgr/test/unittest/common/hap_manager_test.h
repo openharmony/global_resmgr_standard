@@ -16,7 +16,7 @@
 #ifndef RESOURCE_MANAGER_HAP_MANAGER_TEST_H
 #define RESOURCE_MANAGER_HAP_MANAGER_TEST_H
 
-int HapManagerFuncTest001();
-int HapManagerFuncTest002();
+int HapManagerFuncTest001(void);
+int HapManagerFuncTest002(void);
 
 #endif

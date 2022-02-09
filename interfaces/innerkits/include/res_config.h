@@ -36,6 +36,8 @@ public:
 
     virtual void SetScreenDensity(ScreenDensity screenDensity) = 0;
 
+    virtual void SetColorMode(ColorMode colorMode) = 0;
+
     virtual const Locale *GetLocaleInfo() const = 0;
 
     virtual Direction GetDirection() const = 0;
@@ -43,6 +45,8 @@ public:
     virtual ScreenDensity GetScreenDensity() const = 0;
 
     virtual DeviceType GetDeviceType() const = 0;
+
+    virtual ColorMode GetColorMode() const = 0;
 
     virtual bool Copy(ResConfig &other) = 0;
 

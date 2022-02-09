@@ -26,7 +26,7 @@
 
 using namespace OHOS::Global::Resource;
 using namespace testing::ext;
-
+namespace {
 class HapManagerTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -151,4 +151,5 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest002, TestSize.Level1)
     delete (hapManager);
     delete (rc2);
     delete (rc);
+}
 }

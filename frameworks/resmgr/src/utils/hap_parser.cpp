@@ -407,6 +407,7 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
     size_t len = keyParams.size();
     // default path
     if (len == 0) {
+        resConfig->SetColorMode(COLOR_MODE_NOT_SET);
         return resConfig;
     }
     size_t i = 0;
@@ -416,6 +417,7 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
     ScreenDensity screenDensity = SCREEN_DENSITY_NOT_SET;
     Direction direction = DIRECTION_NOT_SET;
     DeviceType deviceType = DEVICE_NOT_SET;
+    ColorMode colorMode = COLOR_MODE_NOT_SET;
 
     for (i = 0; i < len; ++i) {
         const KeyParam *kp = keyParams.at(i);
@@ -435,10 +437,13 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
             } else {
                 direction = DIRECTION_HORIZONTAL;
             }
+        } else if (kp->type_ == COLORMODE) {
+            colorMode = GetColorMode(kp->value_);
         }
     }
     resConfig->SetDeviceType(deviceType);
     resConfig->SetDirection(direction);
+    resConfig->SetColorMode(colorMode);
     resConfig->SetScreenDensity(screenDensity);
     RState r = resConfig->SetLocaleInfo(language, script, region);
     if (r != SUCCESS) {
@@ -466,6 +471,17 @@ DeviceType HapParser::GetDeviceType(uint32_t value)
         deviceType = DEVICE_WEARABLE;
     }
     return deviceType;
+}
+
+ColorMode HapParser::GetColorMode(uint32_t value)
+{
+    ColorMode colorMode = COLOR_MODE_NOT_SET;
+    if (value == DARK) {
+        colorMode = DARK;
+    } else {
+        colorMode = LIGHT;
+    }
+    return colorMode;
 }
 
 ScreenDensity HapParser::GetScreenDensity(uint32_t value)
@@ -502,12 +518,13 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
     if (keyParams.size() == 0) {
         return std::string("default");
     }
-    // language_script_region-direction-deviceType-screenDensity
+    // language_script_region-direction-deviceType-colorMode-screenDensity
     std::string language;
     std::string script;
     std::string region;
     std::string direction;
     std::string deviceType;
+    std::string colorMode;
     std::string screenDensity;
     for (size_t i = 0; i < keyParams.size(); ++i) {
         KeyParam *keyParam = keyParams[i];
@@ -527,6 +544,9 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
             case KeyType::DEVICETYPE:
                 deviceType = keyParam->GetStr();
                 break;
+            case KeyType::COLORMODE:
+                colorMode = keyParam->GetStr();
+                break;
             case KeyType::SCREEN_DENSITY:
                 screenDensity = keyParam->GetStr();
                 break;
@@ -543,6 +563,7 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
     PathAppend(path, region, c1);
     PathAppend(path, direction, c2);
     PathAppend(path, deviceType, c2);
+    PathAppend(path, colorMode, c2);
     PathAppend(path, screenDensity, c2);
 
     return path;

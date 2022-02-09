@@ -39,6 +39,10 @@ static const char *PAD_STR = "pad";
 static const char *TV_STR = "tv";
 static const char *WEARABLE_STR = "wearable";
 
+// ColorMode
+static const char *DARK_STR = "dark";
+static const char *LIGHT_STR = "light";
+
 // ScreenDensity
 static const char *RE_120_STR = "sdpi";
 static const char *RE_160_STR = "mdpi";
@@ -101,8 +105,9 @@ enum DeviceType {
 };
 
 enum ColorMode {
-    DARK     = 0,
-    LIGHT    = 1,
+    COLOR_MODE_NOT_SET = -1,
+    DARK               = 0,
+    LIGHT              = 1,
 };
 
 enum ScreenDensity {

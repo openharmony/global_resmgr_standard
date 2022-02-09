@@ -16,6 +16,6 @@
 #ifndef RESOURCE_MANAGER_RES_CONFIG_TEST_H
 #define RESOURCE_MANAGER_RES_CONFIG_TEST_H
 
-int ResConfigFuncTest001();
+int ResConfigFuncTest001(void);
 
 #endif
