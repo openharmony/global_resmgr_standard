@@ -31,11 +31,10 @@ ohos_shared_library("resourcemanager") {
   ]
 
   external_deps = [
+    "ability_base:want",
     "ability_runtime:ability_context_native",
     "ability_runtime:ability_manager",
-    "ability_runtime:app_manager",
     "ability_runtime:runtime",
-    "ability_runtime:want",
     "bundle_framework:appexecfwk_base",
     "bundle_framework:appexecfwk_core",
     "eventhandler:libeventhandler",
