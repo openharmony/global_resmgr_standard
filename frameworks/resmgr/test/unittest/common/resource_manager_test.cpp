@@ -995,7 +995,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetThemeByNameTest001, TestSize.Lev
     ASSERT_EQ(SUCCESS, state);
     PrintMapString(outValue);
 
-    state = rm->GetThemeByName("activity_theme", outValue);
+    state = rm->GetThemeByName("test_theme", outValue);
     ASSERT_EQ(SUCCESS, state);
     PrintMapString(outValue);
 }
