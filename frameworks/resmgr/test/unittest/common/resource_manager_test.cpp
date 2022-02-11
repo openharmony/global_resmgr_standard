@@ -1211,7 +1211,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByIdTest001, TestSize.Level
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
+#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(48, outValue); // 48vp
+#else
+    EXPECT_EQ(96, outValue); // 96vp
+#endif
 
     std::string unit;
     state = rm->GetFloatById(id, outValue, unit);
@@ -1223,7 +1227,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByIdTest001, TestSize.Level
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
+#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(707, outValue); // 707vp
+#else
+    EXPECT_EQ(1414, outValue); // 1414vp
+#endif
 }
 
 /*
@@ -1254,7 +1262,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByNameTest001, TestSize.Lev
     RState state;
     state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue);
     ASSERT_EQ(SUCCESS, state);
+#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(48, outValue); // 48vp
+#else
+    EXPECT_EQ(96, outValue); // 96vp
+#endif
 
     std::string unit;
     state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue, unit);
@@ -1264,7 +1276,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByNameTest001, TestSize.Lev
 
     state = rm->GetFloatByName("float_ref", outValue);
     ASSERT_EQ(SUCCESS, state);
+#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(707, outValue); // 707vp
+#else
+    EXPECT_EQ(1414, outValue); // 1414vp
+#endif
 }
 
 /*

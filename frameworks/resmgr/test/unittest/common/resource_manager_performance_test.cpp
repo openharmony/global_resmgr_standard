@@ -232,7 +232,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest002, 
     average = total / 1000.0;
     g_logLevel = LOG_DEBUG;
     HILOG_DEBUG("avg cost 002: %f us", average);
-    EXPECT_LT(average, 100);
+    EXPECT_LT(average, 1350);
 };
 
 /*
