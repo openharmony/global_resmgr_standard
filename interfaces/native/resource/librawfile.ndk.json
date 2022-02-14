@@ -1,38 +1,44 @@
 [
     {
-        "name": "InitNativeResourceManager"
+        "name": "OH_ResourceManager_InitNativeResourceManager"
     },
     {
-        "name": "ReleaseNativeResourceManager"
+        "name": "OH_ResourceManager_ReleaseNativeResourceManager"
     },
     {
-        "name": "OpenRawDir"
+        "name": "OH_ResourceManager_OpenRawDir"
     },
     {
-        "name": "OpenRawFile"
+        "name": "OH_ResourceManager_OpenRawFile"
     },
     {
-        "name": "GetRawFileName"
+        "name": "OH_ResourceManager_GetRawFileName"
     },
     {
-        "name": "GetRawFileCount"
+        "name": "OH_ResourceManager_GetRawFileCount"
     },
     {
-        "name": "CloseRawDir"
+        "name": "OH_ResourceManager_CloseRawDir"
     },
     {
-        "name": "ReadRawFile"
+        "name": "OH_ResourceManager_ReadRawFile"
     },
     {
-        "name": "GetRawFileSize"
+        "name": "OH_ResourceManager_SeekRawFile"
     },
     {
-        "name": "CloseRawFile"
+        "name": "OH_ResourceManager_GetRawFileSize"
     },
     {
-        "name": "GetRawFileDescriptor"
+        "name": "OH_ResourceManager_CloseRawFile"
     },
     {
-        "name": "ReleaseRawFileDescriptor"
+        "name": "OH_ResourceManager_GetRawFileOffset"
+    },
+    {
+        "name": "OH_ResourceManager_GetRawFileDescriptor"
+    },
+    {
+        "name": "OH_ResourceManager_ReleaseRawFileDescriptor"
     }
 ]

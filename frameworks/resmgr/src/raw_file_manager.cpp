@@ -50,10 +50,11 @@ struct RawDir {
 
 struct RawFile {
     const std::string filePath;
+    long offset;
     long length;
     FILE* pf;
 
-    explicit RawFile(const std::string &path) : filePath(path), length(0L), pf(nullptr) {}
+    explicit RawFile(const std::string &path) : filePath(path), offset(0L), length(0L), pf(nullptr) {}
 
     ~RawFile()
     {
@@ -70,7 +71,7 @@ struct RawFile {
     }
 };
 
-NativeResourceManager *InitNativeResourceManager(napi_env env, napi_value jsResMgr)
+NativeResourceManager *OH_ResourceManager_InitNativeResourceManager(napi_env env, napi_value jsResMgr)
 {
     napi_valuetype valueType;
     napi_typeof(env, jsResMgr, &valueType);
@@ -89,14 +90,14 @@ NativeResourceManager *InitNativeResourceManager(napi_env env, napi_value jsResM
     return result.release();
 }
 
-void ReleaseNativeResourceManager(NativeResourceManager *resMgr)
+void OH_ResourceManager_ReleaseNativeResourceManager(NativeResourceManager *resMgr)
 {
     if (resMgr != nullptr) {
         delete resMgr;
     }
 }
 
-RawDir *OpenRawDir(const NativeResourceManager *mgr, const char *dirName)
+RawDir *OH_ResourceManager_OpenRawDir(const NativeResourceManager *mgr, const char *dirName)
 {
     if (mgr == nullptr || dirName == nullptr) {
         return nullptr;
@@ -134,7 +135,7 @@ RawDir *OpenRawDir(const NativeResourceManager *mgr, const char *dirName)
     return result.release();
 }
 
-RawFile *OpenRawFile(const NativeResourceManager *mgr, const char *fileName)
+RawFile *OH_ResourceManager_OpenRawFile(const NativeResourceManager *mgr, const char *fileName)
 {
     if (mgr == nullptr || fileName == nullptr) {
         return nullptr;
@@ -156,7 +157,7 @@ RawFile *OpenRawFile(const NativeResourceManager *mgr, const char *fileName)
     return result.release();
 }
 
-int GetRawFileCount(RawDir *rawDir)
+int OH_ResourceManager_GetRawFileCount(RawDir *rawDir)
 {
     if (rawDir == nullptr) {
         return 0;
@@ -164,7 +165,7 @@ int GetRawFileCount(RawDir *rawDir)
     return rawDir->fileNameCache.names.size();
 }
 
-const char *GetRawFileName(RawDir *rawDir, int index)
+const char *OH_ResourceManager_GetRawFileName(RawDir *rawDir, int index)
 {
     if (rawDir == nullptr || index < 0) {
         return nullptr;
@@ -176,14 +177,14 @@ const char *GetRawFileName(RawDir *rawDir, int index)
     return rawDir->fileNameCache.names[index].c_str();
 }
 
-void CloseRawDir(RawDir *rawDir)
+void OH_ResourceManager_CloseRawDir(RawDir *rawDir)
 {
     if (rawDir != nullptr) {
         delete rawDir;
     }
 }
 
-int ReadRawFile(const RawFile *rawFile, void *buf, int length)
+int OH_ResourceManager_ReadRawFile(const RawFile *rawFile, void *buf, int length)
 {
     if (rawFile == nullptr || buf == nullptr || length == 0) {
         return 0;
@@ -191,7 +192,35 @@ int ReadRawFile(const RawFile *rawFile, void *buf, int length)
     return std::fread(buf, 1, length, rawFile->pf);
 }
 
-long GetRawFileSize(RawFile *rawFile)
+int OH_ResourceManager_SeekRawFile(const RawFile *rawFile, long offset, int whence)
+{
+    if (rawFile == nullptr) {
+        return 0;
+    }
+
+    int origin = 0;
+    int start = 0;
+    switch (whence) {
+        case SEEK_SET:
+            origin = SEEK_SET;
+            start = rawFile->offset + offset;
+            break;
+        case SEEK_CUR:
+            origin = SEEK_CUR;
+            start = offset;
+            break;
+        case SEEK_END:
+            start = rawFile->offset + rawFile->length + offset;
+            origin = SEEK_SET;
+            break;
+        default:
+            return -1;
+    }
+
+    return std::fseek(rawFile->pf, start, origin);
+}
+
+long OH_ResourceManager_GetRawFileSize(RawFile *rawFile)
 {
     if (rawFile == nullptr) {
         return 0;
@@ -200,14 +229,22 @@ long GetRawFileSize(RawFile *rawFile)
     return rawFile->length;
 }
 
-void CloseRawFile(RawFile *rawFile)
+void OH_ResourceManager_CloseRawFile(RawFile *rawFile)
 {
     if (rawFile != nullptr) {
         delete rawFile;
     }
 }
 
-bool GetRawFileDescriptor(const RawFile *rawFile, RawFileDescriptor &descriptor)
+long OH_ResourceManager_GetRawFileOffset(const RawFile *rawFile)
+{
+    if (rawFile == nullptr) {
+        return 0;
+    }
+    return ftell(rawFile->pf) - rawFile->offset;
+}
+
+bool OH_ResourceManager_GetRawFileDescriptor(const RawFile *rawFile, RawFileDescriptor &descriptor)
 {
     if (rawFile == nullptr) {
         return false;
@@ -216,13 +253,14 @@ bool GetRawFileDescriptor(const RawFile *rawFile, RawFileDescriptor &descriptor)
     if (fd > 0) {
         descriptor.fd = fd;
         descriptor.length = rawFile->length;
+        descriptor.start = rawFile->offset;
     } else {
         return false;
     }
     return true;
 }
 
-bool ReleaseRawFileDescriptor(const RawFileDescriptor &descriptor)
+bool OH_ResourceManager_ReleaseRawFileDescriptor(const RawFileDescriptor &descriptor)
 {
     if (descriptor.fd > 0) {
         return close(descriptor.fd) == 0;

@@ -19,7 +19,7 @@
  *
  * @brief Provides native functions for the resource manager to operate raw file directories and their raw files.
  *
- * You can use the resource manager to traverse, open, read, and close raw files.
+ * You can use the resource manager to traverse, open, seek, read, and close raw files.
  *
  * @since 8
  * @version 1.0
@@ -62,25 +62,25 @@ typedef struct RawDir RawDir;
  * @param rawDir Indicates the pointer to {@link RawDir}.
  * @param index Indicates the file index in {@link RawDir}.
  * @return Returns the name of the file according to the index,
- * which can be passed to {@link OpenRawFile} as an input parameter;
+ * which can be passed to {@link OH_ResourceManager_OpenRawFile} as an input parameter;
  * returns <b>NULL</b> if all files are returned.
- * @see OpenRawFile
+ * @see OH_ResourceManager_OpenRawFile
  * @since 8
  * @version 1.0
  */
-const char *GetRawFileName(RawDir *rawDir, int index);
+const char *OH_ResourceManager_GetRawFileName(RawDir *rawDir, int index);
 
 /**
  * @brief get the count of the raw files in {@link RawDir}.
  *
- * You can use this method to get the valid index of {@link GetRawFileName}.
+ * You can use this method to get the valid index of {@link OH_ResourceManager_GetRawFileName}.
  *
  * @param rawDir Indicates the pointer to {@link RawDir}.
- * @see GetRawFileName
+ * @see OH_ResourceManager_GetRawFileName
  * @since 8
  * @version 1.0
  */
-int GetRawFileCount(RawDir *rawDir);
+int OH_ResourceManager_GetRawFileCount(RawDir *rawDir);
 
 /**
  * @brief Closes an opened {@link RawDir} and releases all associated resources.
@@ -88,11 +88,11 @@ int GetRawFileCount(RawDir *rawDir);
  *
  *
  * @param rawDir Indicates the pointer to {@link RawDir}.
- * @see OpenRawDir
+ * @see OH_ResourceManager_OpenRawDir
  * @since 8
  * @version 1.0
  */
-void CloseRawDir(RawDir *rawDir);
+void OH_ResourceManager_CloseRawDir(RawDir *rawDir);
 
 #ifdef __cplusplus
 };
