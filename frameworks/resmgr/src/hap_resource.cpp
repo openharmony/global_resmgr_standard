@@ -35,11 +35,12 @@ namespace OHOS {
 namespace Global {
 namespace Resource {
 HapResource::ValueUnderQualifierDir::ValueUnderQualifierDir(const std::vector<KeyParam *> &keyParams, IdItem *idItem,
-    HapResource *hapResource) : hapResource_(hapResource)
+    HapResource *hapResource, bool isOverlay) : hapResource_(hapResource)
 {
     keyParams_ = keyParams;
     folder_ = HapParser::ToFolderPath(keyParams_);
     idItem_ = idItem;
+    isOverlay_ = isOverlay;
     InitResConfig();
 }
 
@@ -142,6 +143,88 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
     return pResource;
 }
 
+const std::unordered_map<std::string, HapResource *> HapResource::LoadOverlays(const std::string &path,
+    const std::vector<std::string> &overlayPaths, const ResConfigImpl *defaultConfig)
+{
+    std::unordered_map<std::string, HapResource *> result;
+    do {
+        const HapResource *targetResource = LoadFromIndex(path.c_str(), defaultConfig);
+        if (targetResource == nullptr) {
+            HILOG_ERROR("load target failed");
+            break;
+        }
+        result[path] = const_cast<HapResource*>(targetResource);
+        bool success = true;
+        std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> mapping =
+            targetResource->BuildNameTypeIdMapping();
+        for (auto iter = overlayPaths.begin(); iter != overlayPaths.end(); iter++) {
+            const HapResource *overlayResource = LoadFromIndex(iter->c_str(), defaultConfig);
+            if (overlayResource == nullptr) {
+                HILOG_ERROR("load overlay failed");
+                success = false;
+                break;
+            }
+            result[*iter] = const_cast<HapResource*>(overlayResource);
+        }
+
+        if (success) {
+            for (auto iter = result.begin(); iter != result.end(); iter++) {
+                auto index = iter->first.find(path);
+                if (index == std::string::npos) {
+                    iter->second->UpdateOverlayInfo(mapping);
+                }
+            }
+            return result;
+        }
+    } while (false);
+
+    for_each (result.begin(), result.end(), [](auto &iter) {
+        delete iter.second;
+    });
+    return std::unordered_map<std::string, HapResource *>();
+}
+
+std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> HapResource::BuildNameTypeIdMapping() const
+{
+    std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> result;
+    for (auto iter = idValuesMap_.begin(); iter != idValuesMap_.end(); iter++) {
+        const std::vector<ValueUnderQualifierDir *> &limitPaths = iter->second->GetLimitPathsConst();
+        if (limitPaths.size() > 0) {
+            ValueUnderQualifierDir* value = limitPaths[0];
+            result[value->idItem_->name_][value->idItem_->resType_] = value->idItem_->id_;
+        }
+    }
+    return result;
+}
+
+void HapResource::UpdateOverlayInfo(std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> &nameTypeId)
+{
+    std::map<uint32_t, IdValues *> newIdValuesMap;
+    for (auto iter = idValuesMap_.begin(); iter != idValuesMap_.end(); iter++) {
+        const std::vector<ValueUnderQualifierDir *> &limitPaths = iter->second->GetLimitPathsConst();
+        uint32_t newId = 0;
+        if (limitPaths.size() > 0) {
+            ValueUnderQualifierDir *value = limitPaths[0];
+            std::string name = value->idItem_->name_;
+            ResType type = value->idItem_->resType_;
+            if (nameTypeId.find(name) == nameTypeId.end()) {
+                continue;
+            }
+            auto &typeId = nameTypeId[name];
+            if (typeId.find(type) == typeId.end()) {
+                continue;
+            }
+            newId = typeId[type];
+            for_each(limitPaths.begin(), limitPaths.end(), [&](auto &item) {
+                item->idItem_->id_ = newId;
+                item->isOverlay_ = true;
+            });
+            newIdValuesMap[newId] = iter->second;
+        }
+    }
+    idValuesMap_.swap(newIdValuesMap);
+}
+
 bool HapResource::Init()
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
@@ -197,8 +280,8 @@ bool HapResource::InitIdList()
                     HILOG_ERROR("new IdValues failed in HapResource::InitIdList");
                     return false;
                 }
-                auto limitPath =
-                    new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_, idParam->idItem_, this);
+                auto limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_,
+                    idParam->idItem_, this, false);
                 if (limitPath == nullptr) {
                     HILOG_ERROR("new ValueUnderQualifierDir failed in HapResource::InitIdList");
                     delete (idValues);
@@ -210,8 +293,8 @@ bool HapResource::InitIdList()
                 idValuesNameMap_[idParam->idItem_->resType_]->insert(std::make_pair(name, idValues));
             } else {
                 HapResource::IdValues *idValues = iter->second;
-                auto limitPath =
-                    new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_, idParam->idItem_, this);
+                auto limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_,
+                    idParam->idItem_, this, false);
                 if (limitPath == nullptr) {
                     HILOG_ERROR("new ValueUnderQualifierDir failed in HapResource::InitIdList");
                     return false;

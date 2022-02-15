@@ -34,6 +34,8 @@ public:
 
     virtual bool AddResource(const char *path);
 
+    virtual bool AddResource(const std::string &path, const std::vector<std::string> &overlayPaths);
+
     virtual RState UpdateResConfig(ResConfig &resConfig);
 
     virtual void GetResConfig(ResConfig &resConfig);

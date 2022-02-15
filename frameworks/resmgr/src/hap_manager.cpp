@@ -142,66 +142,78 @@ const IdItem *HapManager::FindResourceByName(const char *name, const ResType res
 const HapResource::ValueUnderQualifierDir *HapManager::FindQualifierValueByName(
     const char *name, const ResType resType)
 {
-    const HapResource::IdValues *idValues = this->GetResourceListByName(name, resType);
-    if (idValues == nullptr) {
+    std::vector<const HapResource::IdValues *> candidates = this->GetResourceListByName(name, resType);
+    if (candidates.size() == 0) {
         return nullptr;
     }
-    const std::vector<HapResource::ValueUnderQualifierDir *> paths = idValues->GetLimitPathsConst();
-
-    size_t len = paths.size();
-    size_t i = 0;
-    size_t bestIndex = -1;
     const ResConfigImpl *bestResConfig = nullptr;
-    const ResConfigImpl *currentResConfig = this->resConfig_;
-    for (i = 0; i < len; i++) {
-        HapResource::ValueUnderQualifierDir *path = paths[i];
-        const ResConfigImpl *resConfig = path->GetResConfig();
-        if (this->resConfig_->Match(resConfig)) {
-            if (bestResConfig == nullptr) {
-                bestIndex = i;
-                bestResConfig = resConfig;
-            } else if (bestResConfig->IsMoreSuitable(resConfig, currentResConfig)) {
+    const HapResource::ValueUnderQualifierDir *result = nullptr;
+    for (auto iter = candidates.begin(); iter != candidates.end(); iter++) {
+        const std::vector<HapResource::ValueUnderQualifierDir *> paths = (*iter)->GetLimitPathsConst();
+        size_t len = paths.size();
+        size_t i = 0;
+        const ResConfigImpl *currentResConfig = this->resConfig_;
+        for (i = 0; i < len; i++) {
+            HapResource::ValueUnderQualifierDir *path = paths[i];
+            const ResConfigImpl *resConfig = path->GetResConfig();
+            if (!this->resConfig_->Match(resConfig)) {
                 continue;
-            } else {
+            }
+            if (bestResConfig == nullptr) {
                 bestResConfig = resConfig;
-                bestIndex = i;
+                result = paths[i];
+                continue;
+            }
+            if (!bestResConfig->IsMoreSuitable(resConfig, currentResConfig)) {
+                bestResConfig = resConfig;
+                result = paths[i];
             }
         }
     }
-    return paths[bestIndex];
+    return result;
 }
 
 const HapResource::ValueUnderQualifierDir *HapManager::FindQualifierValueById(uint32_t id)
 {
-    const HapResource::IdValues *idValues = this->GetResourceList(id);
-    if (idValues == nullptr) {
+    std::vector<const HapResource::IdValues *> candidates = this->GetResourceList(id);
+    if (candidates.size() == 0) {
         return nullptr;
     }
-    const std::vector<HapResource::ValueUnderQualifierDir *> paths = idValues->GetLimitPathsConst();
-
-    size_t len = paths.size();
-    size_t i = 0;
-    size_t bestIndex = -1;
     const ResConfigImpl *bestResConfig = nullptr;
-    const ResConfigImpl *currentResConfig = this->resConfig_;
-    for (i = 0; i < len; i++) {
-        HapResource::ValueUnderQualifierDir *path = paths[i];
-        const ResConfigImpl *resConfig = path->GetResConfig();
-        if (this->resConfig_->Match(resConfig)) {
+    const HapResource::ValueUnderQualifierDir *result = nullptr;
+    bool isOverlayChange = false;
+    for (auto iter = candidates.begin(); iter != candidates.end(); iter++) {
+        const std::vector<HapResource::ValueUnderQualifierDir *> paths = (*iter)->GetLimitPathsConst();
+        size_t len = paths.size();
+        size_t i = 0;
+        const ResConfigImpl *currentResConfig = this->resConfig_;
+        if (isOverlayChange) {
+            break;
+        }
+        for (i = 0; i < len; i++) {
+            HapResource::ValueUnderQualifierDir *path = paths[i];
+            const ResConfigImpl *resConfig = path->GetResConfig();
+            if (!this->resConfig_->Match(resConfig)) {
+                continue;
+            }
             if (bestResConfig == nullptr) {
-                bestIndex = i;
                 bestResConfig = resConfig;
-            } else {
-                if (bestResConfig->IsMoreSuitable(resConfig, currentResConfig)) {
-                    continue;
-                } else {
-                    bestResConfig = resConfig;
-                    bestIndex = i;
-                }
+                result = paths[i];
+                continue;
+            }
+            if (!bestResConfig->IsMoreSuitable(resConfig, currentResConfig)) {
+                bestResConfig = resConfig;
+                result = paths[i];
+            }
+            if (path->IsOverlay()) {
+                bestResConfig = resConfig;
+                result = paths[i];
+                isOverlayChange = true;
+                break;
             }
         }
     }
-    return paths[bestIndex];
+    return result;
 }
 
 RState HapManager::FindRawFile(const std::string &name, std::string &outValue)
@@ -274,6 +286,26 @@ bool HapManager::AddResource(const char *path)
     return this->AddResourcePath(path);
 }
 
+bool HapManager::AddResource(const std::string &path, const std::vector<std::string> &overlayPaths)
+{
+    loadedHapPaths_[path] = overlayPaths;
+    std::unordered_map<std::string, HapResource *> result = HapResource::LoadOverlays(path, overlayPaths, resConfig_);
+    if (result.size() > 0) {
+        std::vector<std::string> &validOverlayPaths = loadedHapPaths_[path];
+        int i = 0;
+        for (auto iter = result.begin(); iter != result.end(); iter++) {
+            this->hapResources_.push_back(iter->second);
+            if (i > 0) {
+                // the first is the target, not the overlay
+                validOverlayPaths.push_back(iter->first);
+                i++;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 HapManager::~HapManager()
 {
     for (size_t i = 0; i < hapResources_.size(); ++i) {
@@ -290,37 +322,39 @@ HapManager::~HapManager()
     }
 }
 
-const HapResource::IdValues *HapManager::GetResourceList(uint32_t ident) const
+std::vector<const HapResource::IdValues *> HapManager::GetResourceList(uint32_t ident) const
 {
+    std::vector<const HapResource::IdValues *> result;
     // one id only exit in one hap
     for (size_t i = 0; i < hapResources_.size(); ++i) {
         HapResource *pResource = hapResources_[i];
         const HapResource::IdValues *out = pResource->GetIdValues(ident);
         if (out != nullptr) {
-            return out;
+            result.emplace_back(out);
         }
     }
-    return nullptr;
+    return result;
 }
 
-const HapResource::IdValues *HapManager::GetResourceListByName(const char *name, const ResType resType) const
+std::vector<const HapResource::IdValues *> HapManager::GetResourceListByName(const char *name,
+    const ResType resType) const
 {
-    // first match will return
+    std::vector<const HapResource::IdValues *> result;
+    // all match will return
     for (size_t i = 0; i < hapResources_.size(); ++i) {
         HapResource *pResource = hapResources_[i];
         const HapResource::IdValues *out = pResource->GetIdValuesByName(std::string(name), resType);
         if (out != nullptr) {
-            return out;
+            result.emplace_back(out);
         }
     }
-    return nullptr;
+    return result;
 }
 
 bool HapManager::AddResourcePath(const char *path)
 {
     std::string sPath(path);
-    std::vector<std::string>::iterator it = std::find(loadedHapPaths_.begin(),
-        loadedHapPaths_.end(), sPath);
+    auto it = loadedHapPaths_.find(sPath);
     if (it != loadedHapPaths_.end()) {
         HILOG_ERROR(" %s has already been loaded!", path);
         return false;
@@ -330,7 +364,7 @@ bool HapManager::AddResourcePath(const char *path)
         return false;
     }
     this->hapResources_.push_back((HapResource *)pResource);
-    this->loadedHapPaths_.push_back(sPath);
+    this->loadedHapPaths_[sPath] = std::vector<std::string>();
     return true;
 }
 
@@ -340,21 +374,27 @@ RState HapManager::ReloadAll()
         return SUCCESS;
     }
     std::vector<HapResource *> newResources;
-    for (size_t i = 0; i < hapResources_.size(); ++i) {
-        const HapResource *pResource = HapResource::LoadFromIndex(hapResources_[i]->GetIndexPath().c_str(), resConfig_);
-        if (pResource == nullptr) {
-            for (size_t i = 0; i < newResources.size(); ++i) {
-                delete (newResources[i]);
+    do {
+        for (auto iter = loadedHapPaths_.begin(); iter != loadedHapPaths_.end(); iter++) {
+            std::vector<std::string> &overlayPaths = iter->second;
+            std::unordered_map<std::string, HapResource *> result = HapResource::LoadOverlays(iter->first.c_str(),
+                overlayPaths, resConfig_);
+            if (result.size() == 0) {
+                break;
             }
-            return HAP_INIT_FAILED;
+
+            for_each(overlayPaths.begin(), overlayPaths.end(), [&](auto &path) {
+                if (result.find(path) != result.end()) {
+                    newResources.push_back(result[path]);
+                }
+            });
         }
-        newResources.push_back((HapResource *)pResource);
+        return SUCCESS;
+    } while (false);
+    for (size_t i = 0; i < newResources.size(); ++i) {
+        delete (newResources[i]);
     }
-    for (size_t i = 0; i < hapResources_.size(); ++i) {
-        delete (hapResources_[i]);
-    }
-    hapResources_ = newResources;
-    return SUCCESS;
+    return HAP_INIT_FAILED;
 }
 
 std::vector<std::string> HapManager::GetResourcePaths()

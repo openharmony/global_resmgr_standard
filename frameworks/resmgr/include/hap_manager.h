@@ -21,6 +21,7 @@
 #include "lock.h"
 
 #include <unicode/plurrule.h>
+#include <unordered_map>
 #include <vector>
 
 namespace OHOS {
@@ -37,6 +38,8 @@ public:
     void GetResConfig(ResConfig &resConfig);
 
     bool AddResource(const char *path);
+
+    bool AddResource(const std::string &path, const std::vector<std::string> &overlayPaths);
 
     const IdItem *FindResourceById(uint32_t id);
 
@@ -57,9 +60,9 @@ private:
 
     void GetResConfigImpl(ResConfigImpl &resConfig);
 
-    const HapResource::IdValues *GetResourceList(uint32_t ident) const;
+    std::vector<const HapResource::IdValues *> GetResourceList(uint32_t ident) const;
 
-    const HapResource::IdValues *GetResourceListByName(const char *name, const ResType resType) const;
+    std::vector<const HapResource::IdValues *> GetResourceListByName(const char *name, const ResType resType) const;
 
     bool AddResourcePath(const char *path);
 
@@ -77,7 +80,7 @@ private:
     std::vector<HapResource *> hapResources_;
 
     // set of loaded hap path
-    std::vector<std::string> loadedHapPaths_;
+    std::unordered_map<std::string, std::vector<std::string>> loadedHapPaths_;
 
     // key is language
     std::vector<std::pair<std::string, icu::PluralRules *>> plurRulesCache_;

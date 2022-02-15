@@ -75,13 +75,13 @@ public:
 int ResourceManagerTest::GetResId(std::string name, ResType resType) const
 {
     auto idv = ((ResourceManagerImpl *)rm)->hapManager_->GetResourceListByName(name.c_str(), resType);
-    if (idv == nullptr) {
+    if (idv.size() == 0) {
         return -1;
     }
 
-    PrintIdValues(idv);
-    if (idv->GetLimitPathsConst().size() > 0) {
-        return idv->GetLimitPathsConst()[0]->GetIdItem()->id_;
+    PrintIdValues(idv[0]);
+    if (idv[0]->GetLimitPathsConst().size() > 0) {
+        return idv[0]->GetLimitPathsConst()[0]->GetIdItem()->id_;
     }
     return OBJ_NOT_FOUND;
 }

@@ -677,6 +677,11 @@ bool ResourceManagerImpl::AddResource(const char *path)
     return this->hapManager_->AddResource(path);
 }
 
+bool ResourceManagerImpl::AddResource(const std::string &path, const std::vector<std::string> &overlayPaths)
+{
+    return this->hapManager_->AddResource(path, overlayPaths);
+}
+
 RState ResourceManagerImpl::UpdateResConfig(ResConfig &resConfig)
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)

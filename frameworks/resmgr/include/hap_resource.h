@@ -15,12 +15,13 @@
 #ifndef RESOURCE_MANAGER_HAPRESOURCE_H
 #define RESOURCE_MANAGER_HAPRESOURCE_H
 
-#include "res_desc.h"
-#include "res_config_impl.h"
 #include <map>
 #include <string>
 #include <time.h>
+#include <unordered_map>
 #include <vector>
+#include "res_desc.h"
+#include "res_config_impl.h"
 
 namespace OHOS {
 namespace Global {
@@ -42,6 +43,9 @@ public:
      * @return
      */
     static const HapResource *LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system = false);
+
+    static const std::unordered_map<std::string, HapResource *> LoadOverlays(const std::string &path,
+        const std::vector<std::string> &overlayPath, const ResConfigImpl *defaultConfig);
 
     ~HapResource();
 
@@ -87,8 +91,13 @@ public:
             return hapResource_;
         }
 
+        inline bool IsOverlay() const
+        {
+            return isOverlay_;
+        }
+
         ValueUnderQualifierDir(const std::vector<KeyParam *> &keyParams, IdItem *idItem,
-            HapResource *hapResource);
+            HapResource *hapResource, bool isOverlay = false);
 
         ~ValueUnderQualifierDir();
 
@@ -111,6 +120,10 @@ public:
 
         // indicate belong to which hapresource
         const HapResource *hapResource_;
+
+        friend class HapResource;
+
+        bool isOverlay_;
     };
 
     /**
@@ -148,6 +161,10 @@ public:
 
 private:
     HapResource(const std::string path, time_t lastModTime, const ResConfig *defaultConfig, ResDesc *resDes);
+
+    std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> BuildNameTypeIdMapping() const;
+
+    void UpdateOverlayInfo(std::unordered_map<std::string, std::unordered_map<ResType, uint32_t>> &nameTypeId);
 
     // must call Init() after constructor
     bool Init();

@@ -75,14 +75,14 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest001, TestSize.Level1)
     EXPECT_TRUE(ret);
 
     int id = 16777217;
-    const HapResource::IdValues *idValues = hapManager->GetResourceList(id);
-    if (idValues == nullptr) {
+    std::vector<const HapResource::IdValues *> idValues = hapManager->GetResourceList(id);
+    if (idValues.size() == 0) {
         delete hapManager;
         EXPECT_TRUE(false);
         return;
     }
 
-    PrintIdValues(idValues);
+    PrintIdValues(idValues[0]);
     delete hapManager;
 }
 
@@ -114,16 +114,16 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest002, TestSize.Level1)
     EXPECT_TRUE(ret);
 
     int id = 16777228;
-    const HapResource::IdValues *idValues = hapManager->GetResourceList(id);
-    if (idValues == nullptr) {
+    std::vector<const HapResource::IdValues *> idValues = hapManager->GetResourceList(id);
+    if (idValues.size() == 0) {
         delete (hapManager);
         delete (rc);
         EXPECT_TRUE(false);
         return;
     }
 
-    EXPECT_EQ(static_cast<size_t>(1), idValues->GetLimitPathsConst().size());
-    PrintIdValues(idValues);
+    EXPECT_EQ(static_cast<size_t>(1), idValues[0]->GetLimitPathsConst().size());
+    PrintIdValues(idValues[0]);
 
     // reload
 
@@ -139,14 +139,14 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest002, TestSize.Level1)
     hapManager->UpdateResConfig(*rc2);
     do {
         idValues = hapManager->GetResourceList(id);
-        if (idValues == nullptr) {
+        if (idValues.size() == 0) {
             EXPECT_TRUE(false);
             break;
         }
 
-        EXPECT_EQ(static_cast<size_t>(2), idValues->GetLimitPathsConst().size());
+        EXPECT_EQ(static_cast<size_t>(2), idValues[0]->GetLimitPathsConst().size());
 
-        PrintIdValues(idValues);
+        PrintIdValues(idValues[0]);
     } while (false);
     delete (hapManager);
     delete (rc2);
