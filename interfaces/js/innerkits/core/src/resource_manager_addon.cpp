@@ -115,7 +115,8 @@ bool ResourceManagerAddon::Init(napi_env env)
         DECLARE_NAPI_FUNCTION("getConfiguration", GetConfiguration),
         DECLARE_NAPI_FUNCTION("getDeviceCapability", GetDeviceCapability),
         DECLARE_NAPI_FUNCTION("getPluralString", GetPluralString),
-        DECLARE_NAPI_FUNCTION("getRawFile", GetRawFile)
+        DECLARE_NAPI_FUNCTION("getRawFile", GetRawFile),
+        DECLARE_NAPI_FUNCTION("release", Release)
     };
 
     napi_value constructor;
@@ -500,6 +501,15 @@ auto getMediaBase64Func = [](napi_env env, void *data) {
 napi_value ResourceManagerAddon::GetMediaBase64(napi_env env, napi_callback_info info)
 {
     return ProcessOnlyIdParam(env, info, "GetMediaBase64", getMediaBase64Func);
+}
+
+napi_value ResourceManagerAddon::Release(napi_env env, napi_callback_info info)
+{
+    napi_value undefined;
+    if (napi_get_undefined(env, &undefined) != napi_ok) {
+        return nullptr;
+    }
+    return undefined;
 }
 
 std::string ResourceManagerAddon::GetLocale(std::unique_ptr<ResConfig> &cfg)
