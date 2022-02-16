@@ -266,7 +266,7 @@ ResLocale *ResLocale::BuildFromParts(const char *language,
     const char *region,
     RState &rState)
 {
-    size_t len = Utils::StrLen(language);
+    int32_t len = Utils::StrLen(language);
     if (len == 0) {
         rState = INVALID_BCP47_LANGUAGE_SUBTAG;
         return nullptr;
@@ -359,7 +359,7 @@ ResLocale::~ResLocale()
 Locale *BuildFromString(const char *str, char sep, RState &rState)
 {
     ResLocale *resLocale = ResLocale::BuildFromString(str, sep, rState);
-    if (rState == SUCCESS) {
+    if (rState == SUCCESS && resLocale != nullptr) {
         UErrorCode errCode = U_ZERO_ERROR;
         Locale temp = icu::LocaleBuilder().setLanguage(resLocale->GetLanguage())
                                  .setRegion(resLocale->GetRegion()).setScript(resLocale->GetScript()).build(errCode);

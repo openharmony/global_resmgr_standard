@@ -584,7 +584,7 @@ HWTEST_F(LocaleInfoTest, LocaleInfoBuildFromStringTest0010, TestSize.Level1)
  */
 HWTEST_F(LocaleInfoTest, LocaleInfoPerformanceFuncTest001, TestSize.Level1)
 {
-    unsigned long long total = 0;
+    long long total = 0;
     double average = 0;
     std::vector<std::string> outValue;
     for (int k = 0; k < 1000; ++k) {

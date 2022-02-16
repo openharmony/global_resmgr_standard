@@ -53,8 +53,12 @@ struct RawFile {
     long offset;
     long length;
     FILE* pf;
-
-    explicit RawFile(const std::string &path) : filePath(path), offset(0L), length(0L), pf(nullptr) {}
+    char path[PATH_MAX] = {0};
+    explicit RawFile(const std::string &path) : filePath(path), offset(0L), length(0L), pf(nullptr) {
+        if (strLen(path) > PATH_MAX || realpath(path, filePath) == NULL) {
+            HiLog::Error(LABEL, "Failed to canonical file path");
+        }
+    }
 
     ~RawFile()
     {
@@ -170,7 +174,7 @@ const char *OH_ResourceManager_GetRawFileName(RawDir *rawDir, int index)
     if (rawDir == nullptr || index < 0) {
         return nullptr;
     }
-    int rawFileCount = rawDir->fileNameCache.names.size();
+    uint32_t rawFileCount = rawDir->fileNameCache.names.size();
     if (rawFileCount == 0 || index >= rawFileCount) {
         return nullptr;
     }
@@ -184,7 +188,7 @@ void OH_ResourceManager_CloseRawDir(RawDir *rawDir)
     }
 }
 
-int OH_ResourceManager_ReadRawFile(const RawFile *rawFile, void *buf, int length)
+int OH_ResourceManager_ReadRawFile(const RawFile *rawFile, void *buf, size_t length)
 {
     if (rawFile == nullptr || buf == nullptr || length == 0) {
         return 0;

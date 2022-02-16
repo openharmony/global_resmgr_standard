@@ -113,7 +113,7 @@ void ResourceManagerPerformanceTest::TearDown(void)
 // test HapResource::LoadFromIndex(), spilt to two parts: 1. read from file, 2. parse buf to HapResource
 int TestLoadFromIndex(const char *filePath)
 {
-    unsigned long long total = 0;
+    long long total = 0;
     double average = 0;
     std::string pstr = FormatFullPath(filePath);
 
@@ -206,7 +206,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest001, 
  */
 HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest002, TestSize.Level1)
 {
-    unsigned long long total = 0;
+    long long total = 0;
     double average = 0;
     auto tmpRm = CreateResourceManager();
     if (tmpRm == nullptr) {
@@ -569,7 +569,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest013, 
     double average = 0;
     int quantity[] = {1, 100};
     int count = 2;
-    int id = GetResId("eat_apple", ResType::PLURALS);
+    uint32_t id = GetResId("eat_apple", ResType::PLURALS);
     ASSERT_TRUE(id > 0);
 
     string outValue;

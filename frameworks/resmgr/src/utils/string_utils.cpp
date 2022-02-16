@@ -47,7 +47,7 @@ std::string FormatString(const char *fmt, va_list args)
     if (fmt != nullptr) {
         va_list tmpArgs;
         va_copy(tmpArgs, args);
-        size_t nLength = vsnprintf(nullptr, 0, fmt, tmpArgs); // compute buffer size
+        int nLength = vsnprintf(nullptr, 0, fmt, tmpArgs); // compute buffer size
         va_end(tmpArgs);
         std::vector<char> vBuffer(nLength + 1, '\0');
         int nWritten = vsnprintf_s(&vBuffer[0], nLength + 1, nLength, fmt, args);

@@ -90,9 +90,14 @@ HapResource::~HapResource()
 const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
-    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);3
+
 #endif
-    std::ifstream inFile(path, std::ios::binary | std::ios::in);
+    char paths[PATH_MAX] = {0};
+    if (strLen(path) > PATH_MAX) || realPath(path, paths) == NULL) {
+        return nullptr;
+    }
+    std::ifstream inFile(paths, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
     }
