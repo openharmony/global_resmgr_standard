@@ -91,9 +91,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
-
 #endif
-
     std::ifstream inFile(path, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
