@@ -90,7 +90,7 @@ HapResource::~HapResource()
 const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
-    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);3
+    BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 
 #endif
     char paths[PATH_MAX] = {0};
