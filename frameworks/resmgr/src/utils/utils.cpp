@@ -197,40 +197,38 @@ uint16_t Utils::EncodeLanguageOrRegion(const char *str, char base)
 
 bool Utils::StrCompare(const char *left, const char *right, size_t len, bool isCaseSensitive)
 {
-    if (left == nullptr) {
-        if (right == nullptr) {
-            return true;
-        } else {
-            return false;
-        }
-    } else if (right == nullptr) {
+    if (left == nullptr && right == nullptr) {
+        return true;
+    }
+
+    if (left == nullptr || right == nullptr) {
         return false;
-    } else {
-        int rc;
-        unsigned char c1, c2;
-        while (len--) {
-            c1 = (unsigned char)*left;
-            c2 = (unsigned char)*right;
-            if (c1 == 0) {
-                if (c2 == 0) {
-                    return true;
-                }
-                return false;
-            } else if (c2 == 0) {
-                return false;
-            } else {
-                if (isCaseSensitive) {
-                    rc = (int)(c1) - (int)(c2);
-                } else {
-                    rc = tolower(c1) - tolower(c2);
-                }
-                if (rc != 0) {
-                    return false;
-                }
+    }
+
+    int rc;
+    unsigned char c1, c2;
+    while (len--) {
+        c1 = (unsigned char)*left;
+        c2 = (unsigned char)*right;
+        if (c1 == 0) {
+            if (c2 == 0) {
+                return true;
             }
-            ++left;
-            ++right;
+            return false;
+        } else if (c2 == 0) {
+            return false;
+        } else {
+            if (isCaseSensitive) {
+                rc = (int)(c1) - (int)(c2);
+            } else {
+                rc = tolower(c1) - tolower(c2);
+            }
+            if (rc != 0) {
+                return false;
+            }
         }
+        ++left;
+        ++right;
     }
     return true;
 }

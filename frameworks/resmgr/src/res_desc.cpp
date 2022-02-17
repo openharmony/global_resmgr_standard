@@ -114,7 +114,9 @@ const std::string KeyParam::ConvertToStr() const
             HILOG_ERROR("memcpy_s error : %d", eret);
         }
         int j = 0;
+        // 4 means langauges/region/script key value max length
         for (int i = 0; i < 4; ++i) {
+            // 3 means reverse temp value to temp2
             if (tmp[3 - i]) {
                 tmp2[j++] = tmp[3 - i];
             }

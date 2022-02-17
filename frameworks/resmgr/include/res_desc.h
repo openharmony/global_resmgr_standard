@@ -16,11 +16,11 @@
 #ifndef OHOS_RESOURCE_MANAGER_RES_DESC_H
 #define OHOS_RESOURCE_MANAGER_RES_DESC_H
 
-#include "res_common.h"
 #include <cstdint>
 #include <map>
 #include <string>
 #include <vector>
+#include "res_common.h"
 
 namespace OHOS {
 namespace Global {

@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 #include "lock.h"
-#include <mutex>
 
 namespace OHOS {
 namespace Global {

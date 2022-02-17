@@ -19,7 +19,6 @@
 #include <string>
 #include <time.h>
 #include <unordered_map>
-#include <vector>
 #include "res_desc.h"
 #include "res_config_impl.h"
 

@@ -15,10 +15,10 @@
 #ifndef OHOS_RESOURCE_MANAGER_RESOURCEMANAGER_H
 #define OHOS_RESOURCE_MANAGER_RESOURCEMANAGER_H
 
-#include "res_config.h"
 #include <map>
 #include <string>
 #include <vector>
+#include "res_config.h"
 
 namespace OHOS {
 namespace Global {

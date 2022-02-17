@@ -19,7 +19,6 @@
 #include <cstdint>
 #include <cstdio>
 #include <string>
-#include <vector>
 #include "res_desc.h"
 #include "res_config_impl.h"
 
