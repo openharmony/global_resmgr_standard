@@ -17,6 +17,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <shlwapi.h>
+#include <windows.h>
 
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
 #include "bytrace.h"
@@ -92,7 +94,12 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
-    std::ifstream inFile(path, std::ios::binary | std::ios::in);
+    char paths[PATH_MAX] = {0};
+    if (!PathCanonicalize(paths, path)) {
+        HILOG_ERROR("failed the PathCanonicalize the path");
+        return nullptr;
+    }
+    std::ifstream inFile(paths, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
     }

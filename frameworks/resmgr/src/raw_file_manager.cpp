@@ -27,6 +27,9 @@
 #include "resource_manager_impl.h"
 #include "hilog/log.h"
 
+#include <shlwapi.h>
+#include <windows.h>
+
 using namespace OHOS::Global::Resource;
 using namespace OHOS::HiviewDFX;
 
@@ -249,7 +252,10 @@ bool OH_ResourceManager_GetRawFileDescriptor(const RawFile *rawFile, RawFileDesc
     if (rawFile == nullptr) {
         return false;
     }
-    int fd = open(rawFile->filePath.c_str(), O_RDONLY);
+    if (!PathCanonicalize(paths, rawFile->filePath.c_str())) {
+        return false;
+    }
+    int fd = open(paths, O_RDONLY);
     if (fd > 0) {
         descriptor.fd = fd;
         descriptor.length = rawFile->length;
