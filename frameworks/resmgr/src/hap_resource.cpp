@@ -81,7 +81,7 @@ HapResource::~HapResource()
 {
     delete (resDesc_);
     std::map<uint32_t, IdValues *>::iterator iter;
-    for (iter = idValuesMap_.begin(); iter != idValuesMap_.end(); iter++) {
+    for (iter = idValuesMap_.begin(); iter != idValuesMap_.end(); ++iter) {
         IdValues *ptr = iter->second;
         delete (ptr);
     }
@@ -100,6 +100,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
     char outPath[PATH_MAX] = {0};
+
 #ifdef __WINNT__
     if (!PathCanonicalizeA(outPath, path)) {
         HILOG_ERROR("failed to PathCanonicalize the path");
@@ -109,6 +110,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
         HILOG_ERROR("failed to realpath the path");
     }
 #endif
+
     std::ifstream inFile(outPath, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
@@ -129,7 +131,9 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
     inFile.seekg(0, std::ios::beg);
     inFile.read((char *)buf, bufLen);
     inFile.close();
+
     HILOG_DEBUG("extract success, bufLen:%zu", bufLen);
+
     ResDesc *resDesc = new (std::nothrow) ResDesc();
     if (resDesc == nullptr) {
         HILOG_ERROR("new ResDesc failed when LoadFromIndex");
@@ -144,6 +148,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
         return nullptr;
     }
     free(buf);
+
     HapResource *pResource = new (std::nothrow) HapResource(std::string(path), 0, defaultConfig, resDesc);
     if (pResource == nullptr) {
         HILOG_ERROR("new HapResource failed when LoadFromIndex");
@@ -294,8 +299,8 @@ bool HapResource::InitIdList()
                     HILOG_ERROR("new IdValues failed in HapResource::InitIdList");
                     return false;
                 }
-                ValueUnderQualifierDir* limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(
-                    resKey->keyParams_, idParam->idItem_, this, false);
+                auto limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_,
+                    idParam->idItem_, this, false);
                 if (limitPath == nullptr) {
                     HILOG_ERROR("new ValueUnderQualifierDir failed in HapResource::InitIdList");
                     delete (idValues);
@@ -307,8 +312,8 @@ bool HapResource::InitIdList()
                 idValuesNameMap_[idParam->idItem_->resType_]->insert(std::make_pair(name, idValues));
             } else {
                 HapResource::IdValues *idValues = iter->second;
-                ValueUnderQualifierDir* limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(
-                    resKey->keyParams_, idParam->idItem_, this, false);
+                auto limitPath = new (std::nothrow) HapResource::ValueUnderQualifierDir(resKey->keyParams_,
+                    idParam->idItem_, this, false);
                 if (limitPath == nullptr) {
                     HILOG_ERROR("new ValueUnderQualifierDir failed in HapResource::InitIdList");
                     return false;

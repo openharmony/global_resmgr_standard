@@ -78,7 +78,7 @@ Ability* GetGlobalAbility(napi_env env)
     return nullptr;
 }
 
-static bool InitAsyncContext(napi_env env, const std::string bundleName, Ability* ability,
+static bool InitAsyncContext(napi_env env, const std::string &bundleName, Ability* ability,
     const std::shared_ptr<AbilityRuntime::Context>& context, ResMgrAsyncContext &asyncContext)
 {
     std::shared_ptr<ResourceManager> resMgr;
@@ -145,7 +145,6 @@ static napi_value GetResourceManager(napi_env env, napi_callback_info info)
                 return nullptr;
             }
             bundleName = buf.data();
-            // 0 1 2 are the subscript of parameter array
         } else if ((i == 0 || i == 1 || i == 2) && valueType == napi_function) {
             napi_create_reference(env, argv[i], 1, &asyncContext->callbackRef_);
             break;
