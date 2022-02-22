@@ -99,10 +99,13 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
-
+    if (path == NULL) {
+        HILOG_ERROR("path is null");
+        return;
+    }
 #ifdef __WINNT__
-    if (!PathCanonicalizeA(outPath, path)) {
-        HILOG_ERROR("failed to PathCanonicalize the path");
+    if (strlen(path) >= len || !PathCanonicalizeA(outPath, path)) {
+        HILOG_ERROR("failed to canonicalize the path");
     }
 #else
     if (strlen(path) >= len || realpath(path, outPath) == NULL) {
@@ -113,7 +116,7 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
 
 const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
 {
-    char outPath[PATH_MAX] = {0};
+    char outPath[PATH_MAX + 1] = {0};
     CanonicalizePath(path, outPath, PATH_MAX);
     std::ifstream inFile(outPath, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
