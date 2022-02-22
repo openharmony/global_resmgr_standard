@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -376,6 +376,7 @@ std::unique_ptr<char[]> EncodeBase64(std::unique_ptr<char[]> &data, int srcLen)
     char *dstData = result.get();
     int j = 0;
     int i = 0;
+
     for (; i < srcLen - 3; i += 3) {
         unsigned char byte1 = static_cast<unsigned char>(srcData[i]);
         unsigned char byte2 = static_cast<unsigned char>(srcData[i + 1]);
@@ -385,6 +386,7 @@ std::unique_ptr<char[]> EncodeBase64(std::unique_ptr<char[]> &data, int srcLen)
         dstData[j++] = g_codes[((byte2 & 0xF) << 2) | (byte3 >> 6)];
         dstData[j++] = g_codes[byte3 & 0x3F];
     }
+    // Handle the case where there is one element left
     if (srcLen % 3 == 1) {
         unsigned char byte1 = static_cast<unsigned char>(srcData[i]);
         dstData[j++] = g_codes[byte1 >> 2];

@@ -81,7 +81,7 @@ HapResource::~HapResource()
 {
     delete (resDesc_);
     std::map<uint32_t, IdValues *>::iterator iter;
-    for (iter = idValuesMap_.begin(); iter != idValuesMap_.end(); iter++) {
+    for (iter = idValuesMap_.begin(); iter != idValuesMap_.end(); ++iter) {
         IdValues *ptr = iter->second;
         delete (ptr);
     }
@@ -94,23 +94,37 @@ HapResource::~HapResource()
     defaultConfig_ = nullptr;
 }
 
-const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
+void CanonicalizePath(const char *path, char *outPath, size_t len)
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
-
-    char paths[PATH_MAX] = {0};
+    if (path == nullptr) {
+        HILOG_ERROR("path is null");
+        return;
+    }
+    if (strlen(path) >= len) {
+        HILOG_ERROR("the length of path longer than len");
+        return;
+    }
 #ifdef __WINNT__
-    if (!PathCanonicalizeA(paths, path)) {
-        HILOG_ERROR("failed to PathCanonicalize the path");
+    if (!PathCanonicalizeA(outPath, path)) {
+        HILOG_ERROR("failed to canonicalize the path");
+        return;
     }
 #else
-    if (realpath(path, paths) == nullptr) {
+    if (realpath(path, outPath) == nullptr) {
         HILOG_ERROR("failed to realpath the path");
+        return;
     }
 #endif
-    std::ifstream inFile(paths, std::ios::binary | std::ios::in);
+}
+
+const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigImpl *defaultConfig, bool system)
+{
+    char outPath[PATH_MAX + 1] = {0};
+    CanonicalizePath(path, outPath, PATH_MAX);
+    std::ifstream inFile(outPath, std::ios::binary | std::ios::in);
     if (!inFile.good()) {
         return nullptr;
     }
