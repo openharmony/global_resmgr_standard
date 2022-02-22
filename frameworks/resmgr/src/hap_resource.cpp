@@ -94,7 +94,7 @@ HapResource::~HapResource()
     defaultConfig_ = nullptr;
 }
 
-void CanonicalizePath(const char *path, char *outPath, size_t len) 
+void CanonicalizePath(const char *path, char *outPath, size_t len)
 {
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
@@ -105,7 +105,7 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
         HILOG_ERROR("failed to PathCanonicalize the path");
     }
 #else
-    if (strlen(path) > (len - 1) || realpath(path, outPath) == NULL) {
+    if (strlen(path) >= len || realpath(path, outPath) == NULL) {
         HILOG_ERROR("failed to realpath the path");
     }
 #endif
