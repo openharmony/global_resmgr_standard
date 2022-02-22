@@ -113,7 +113,7 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
         return;
     }
 #else
-    if (realpath(path, outPath) == NULL) {
+    if (realpath(path, outPath) == nullptr) {
         HILOG_ERROR("failed to realpath the path");
         return;
     }
