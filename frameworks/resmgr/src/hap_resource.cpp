@@ -94,7 +94,8 @@ HapResource::~HapResource()
     defaultConfig_ = nullptr;
 }
 
-void CanonicalizePath(const char *path, char *outPath, size_t len) {
+void CanonicalizePath(const char *path, char *outPath, size_t len) 
+{
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
