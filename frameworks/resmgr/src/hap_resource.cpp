@@ -99,17 +99,19 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
-    if (path == NULL) {
+    if (path == nullptr) {
         HILOG_ERROR("path is null");
         return;
     }
 #ifdef __WINNT__
     if (strlen(path) >= len || !PathCanonicalizeA(outPath, path)) {
         HILOG_ERROR("failed to canonicalize the path");
+        return;
     }
 #else
     if (strlen(path) >= len || realpath(path, outPath) == NULL) {
         HILOG_ERROR("failed to realpath the path");
+        return;
     }
 #endif
 }
