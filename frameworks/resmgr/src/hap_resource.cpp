@@ -103,13 +103,17 @@ void CanonicalizePath(const char *path, char *outPath, size_t len)
         HILOG_ERROR("path is null");
         return;
     }
+    if (strlen(path) >= len ) {
+        HILOG_ERROR("the length of path longer than len");
+        return;
+    }
 #ifdef __WINNT__
-    if (strlen(path) >= len || !PathCanonicalizeA(outPath, path)) {
+    if (!PathCanonicalizeA(outPath, path)) {
         HILOG_ERROR("failed to canonicalize the path");
         return;
     }
 #else
-    if (strlen(path) >= len || realpath(path, outPath) == NULL) {
+    if (realpath(path, outPath) == NULL) {
         HILOG_ERROR("failed to realpath the path");
         return;
     }
