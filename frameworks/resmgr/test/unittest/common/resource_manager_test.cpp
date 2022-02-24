@@ -100,7 +100,7 @@ void ResourceManagerTest::TestStringById(const char *name, const char *cmp) cons
 {
     RState rState;
     std::string outValue;
-    uint32_t id = GetResId(name, ResType::STRING);
+    int id = GetResId(name, ResType::STRING);
     ASSERT_TRUE(id > 0);
     rState = rm->GetStringById(id, outValue);
     ASSERT_EQ(SUCCESS, rState);
@@ -145,7 +145,8 @@ void ResourceManagerTest::TestPluralStringById(int quantity, const char *cmp, bo
 {
     RState ret;
     std::string outValue;
-    uint32_t id = GetResId("eat_apple", ResType::PLURALS);
+    int id = GetResId("eat_apple", ResType::PLURALS);
+    ASSERT_TRUE(id > 0);
     if (format) {
         ret = rm->GetPluralStringByIdFormat(outValue, id, quantity, quantity);
     } else {
@@ -1309,7 +1310,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetIntArrayByIdTest001, TestSize.Le
 
     std::vector<int> outValue;
     RState state;
-    uint32_t id = GetResId("intarray_1", ResType::INTARRAY);
+    int id = GetResId("intarray_1", ResType::INTARRAY);
     EXPECT_TRUE(id > 0);
     state = rm->GetIntArrayById(id, outValue);
     EXPECT_TRUE(state == SUCCESS);
@@ -1379,7 +1380,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByIdTest001, TestSize.Level
 
     uint32_t outValue;
     RState state;
-    uint32_t id = GetResId("divider_color", ResType::COLOR);
+    int id = GetResId("divider_color", ResType::COLOR);
     EXPECT_TRUE(id > 0);
     state = rm->GetColorById(id, outValue);
     EXPECT_TRUE(state == SUCCESS);
@@ -1851,12 +1852,13 @@ HWTEST_F(ResourceManagerTest, ResourceManagerResolveReferenceTest001, TestSize.L
 HWTEST_F(ResourceManagerTest, ResourceManagerResolveParentReferenceTest001, TestSize.Level1)
 {
     rm->AddResource(FormatFullPath(g_resFilePath).c_str());
-    uint32_t id;
+    int id;
     std::map<std::string, std::string> outValue;
     const IdItem *idItem;
     RState ret;
 
     id = GetResId("base", ResType::PATTERN);
+    EXPECT_TRUE(id > 0);
     idItem = ((ResourceManagerImpl *)rm)->hapManager_->FindResourceById(id);
     ASSERT_TRUE(idItem != nullptr);
     ret = ((ResourceManagerImpl *)rm)->ResolveParentReference(idItem, outValue);

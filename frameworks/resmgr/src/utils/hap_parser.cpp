@@ -100,7 +100,10 @@ int32_t HapParser::ReadFileFromZip(const char *zipFile, const char *fileName, vo
         unzClose(uf);
         return UNKNOWN_ERROR;
     }
-
+    if ((*buffer) == nullptr) {
+        free(*buffer);
+        *buffer = nullptr;
+    }
     UnzCloseFileAndLog(uf, zipFile); // close the zipfile
     unzClose(uf);
     return OK;

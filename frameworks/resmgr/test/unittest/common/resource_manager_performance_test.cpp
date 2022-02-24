@@ -569,7 +569,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest013, 
     double average = 0;
     int quantity[] = {1, 100};
     int count = 2;
-    uint32_t id = GetResId("eat_apple", ResType::PLURALS);
+    int id = GetResId("eat_apple", ResType::PLURALS);
     ASSERT_TRUE(id > 0);
 
     string outValue;

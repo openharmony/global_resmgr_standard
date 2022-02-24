@@ -178,7 +178,7 @@ const char *OH_ResourceManager_GetRawFileName(RawDir *rawDir, int index)
         return nullptr;
     }
     uint32_t rawFileCount = rawDir->fileNameCache.names.size();
-    if (rawFileCount == 0 || index >= rawFileCount) {
+    if (rawFileCount == 0 || index >= static_cast<int>(rawFileCount)) {
         return nullptr;
     }
     return rawDir->fileNameCache.names[index].c_str();

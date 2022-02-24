@@ -129,7 +129,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
         return nullptr;
     }
     inFile.seekg(0, std::ios::end);
-    size_t bufLen = inFile.tellg();
+    int bufLen = inFile.tellg();
     if (bufLen <= 0) {
         HILOG_ERROR("file size is zero");
         inFile.close();
@@ -145,7 +145,7 @@ const HapResource *HapResource::LoadFromIndex(const char *path, const ResConfigI
     inFile.read((char *)buf, bufLen);
     inFile.close();
 
-    HILOG_DEBUG("extract success, bufLen:%zu", bufLen);
+    HILOG_DEBUG("extract success, bufLen:%d", bufLen);
 
     ResDesc *resDesc = new (std::nothrow) ResDesc();
     if (resDesc == nullptr) {
