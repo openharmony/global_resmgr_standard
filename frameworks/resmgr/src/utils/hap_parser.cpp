@@ -296,19 +296,20 @@ int32_t ParseId(const char *buffer, uint32_t &offset, ResId *id)
 
 bool IsLocaleMatch(const ResConfigImpl *defaultConfig, const std::vector<KeyParam *> &keyParams)
 {
-    if (defaultConfig != nullptr) {
-        ResConfigImpl *config = HapParser::CreateResConfigFromKeyParams(keyParams);
-        if (config == nullptr) {
-            return SYS_ERROR;
-        }
-        if (!LocaleMatcher::Match(defaultConfig->GetResLocale(), config->GetResLocale())) {
-            HILOG_DEBUG("mismatch, do not parse %s", HapParser::ToFolderPath(keyParams).c_str());
-            delete (config);
-            return false;
-        }
-        delete (config);
+    if (defaultConfig == nullptr) {
+        return true;
     }
-    return true;
+    ResConfigImpl *config = HapParser::CreateResConfigFromKeyParams(keyParams);
+    if (config == nullptr) {
+        return false;
+    }
+    if (LocaleMatcher::Match(defaultConfig->GetResLocale(), config->GetResLocale())) {
+        delete (config);
+        return true;
+    }
+    HILOG_DEBUG("mismatch, do not parse %s", HapParser::ToFolderPath(keyParams).c_str());
+    delete (config);
+    return false;
 }
 
 int32_t ParseKey(const char *buffer, uint32_t &offset,  ResKey *key,
