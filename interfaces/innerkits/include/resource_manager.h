@@ -108,6 +108,8 @@ public:
     virtual RState GetRawFilePathByName(const std::string &name, std::string &outValue) = 0;
 
     virtual RState GetRawFileDescriptor(const std::string &name, RawFileDescriptor &descriptor) = 0;
+
+    virtual RState CloseRawFileDescriptor(const std::string &name) = 0;
 };
 
 EXPORT_FUNC ResourceManager *CreateResourceManager();

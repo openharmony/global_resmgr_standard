@@ -453,11 +453,13 @@ RState ResourceManagerImpl::GetFloatByName(const char *name, float &outValue, st
 
 RState ResourceManagerImpl::RecalculateFloat(const std::string &unit, float &result)
 {
-#ifdef PREDEFINED_DENSITY
-    float density = 1.0f;
-#else
-    float density = 2.0f;
-#endif
+    ResConfigImpl rc;
+    GetResConfig(rc);
+    ScreenDensity srcDensity = rc.GetScreenDensity();
+    if (srcDensity == SCREEN_DENSITY_NOT_SET) {
+        return ERROR;
+    }
+    float density = srcDensity / DEFAULT_DENSITY;
     if (unit == VIRTUAL_PIXEL) {
         result = result * density;
     } else if (unit == FONT_SIZE_PIXEL) {
@@ -667,6 +669,13 @@ RState ResourceManagerImpl::GetRawFilePathByName(const std::string &name, std::s
 
 RState ResourceManagerImpl::GetRawFileDescriptor(const std::string &name, RawFileDescriptor &descriptor)
 {
+    auto it = rawFileDescriptor_.find(name);
+    if (it != rawFileDescriptor_.end()) {
+        descriptor.fd = rawFileDescriptor_[name].fd;
+        descriptor.length = rawFileDescriptor_[name].length;
+        descriptor.offset = rawFileDescriptor_[name].offset;
+        return SUCCESS;
+    }
     std::string paths = "";
     RState rState = GetRawFilePathByName(name, paths);
     if (rState != SUCCESS) {
@@ -687,6 +696,25 @@ RState ResourceManagerImpl::GetRawFileDescriptor(const std::string &name, RawFil
         descriptor.fd = fd;
         descriptor.length = length;
         descriptor.offset = 0;
+        rawFileDescriptor_[name] = descriptor;
+        return SUCCESS;
+    }
+    return ERROR;
+}
+
+RState ResourceManagerImpl::CloseRawFileDescriptor(const std::string &name)
+{
+    auto it = rawFileDescriptor_.find(name);
+    if (it == rawFileDescriptor_.end()) {
+        return SUCCESS;
+    }
+    int fd = rawFileDescriptor_[name].fd;
+    if (fd > 0) {
+        int result = close(fd);
+        if (result == -1) {
+            return ERROR;
+        }
+        rawFileDescriptor_.erase(name);
         return SUCCESS;
     }
     return ERROR;

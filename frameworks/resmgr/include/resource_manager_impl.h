@@ -104,6 +104,8 @@ public:
 
     virtual RState GetRawFileDescriptor(const std::string &name, RawFileDescriptor &descriptor);
 
+    virtual RState CloseRawFileDescriptor(const std::string &name);
+
     std::vector<std::string> GetResourcePaths();
 
 private:
@@ -144,6 +146,10 @@ private:
     const std::string VIRTUAL_PIXEL = "vp";
 
     const std::string FONT_SIZE_PIXEL = "fp";
+
+    const float DEFAULT_DENSITY = 160.0f;
+
+    std::unordered_map<std::string, RawFileDescriptor> rawFileDescriptor_;
 };
 } // namespace Resource
 } // namespace Global

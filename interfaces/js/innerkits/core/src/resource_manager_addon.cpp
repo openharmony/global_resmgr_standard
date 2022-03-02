@@ -117,6 +117,7 @@ bool ResourceManagerAddon::Init(napi_env env)
         DECLARE_NAPI_FUNCTION("getPluralString", GetPluralString),
         DECLARE_NAPI_FUNCTION("getRawFile", GetRawFile),
         DECLARE_NAPI_FUNCTION("getRawFileDescriptor", GetRawFileDescriptor),
+        DECLARE_NAPI_FUNCTION("closeRawFileDescriptor", CloseRawFileDescriptor),
         DECLARE_NAPI_FUNCTION("release", Release)
     };
 
@@ -814,6 +815,27 @@ auto g_getRawFileDescriptorFunc = [](napi_env env, void* data) {
 napi_value ResourceManagerAddon::GetRawFileDescriptor(napi_env env, napi_callback_info info)
 {
     return ProcessOnlyIdParam(env, info, "getRawFileDescriptor", g_getRawFileDescriptorFunc);
+}
+
+auto closeRawFileDescriptorFunc = [](napi_env env, void* data) {
+    ResMgrAsyncContext *asyncContext = static_cast<ResMgrAsyncContext*>(data);
+    asyncContext->createValueFunc_ = [](napi_env env, ResMgrAsyncContext& context) -> napi_value {
+        napi_value undefined;
+        if (napi_get_undefined(env, &undefined) != napi_ok) {
+            return nullptr;
+        }
+        RState state = context.addon_->GetResMgr()->CloseRawFileDescriptor(context.path_);
+        if (state != RState::SUCCESS) {
+            context.SetErrorMsg("CloseRawFileDescriptor failed state", true);
+            return nullptr;
+        }
+        return undefined;
+    };
+};
+
+napi_value ResourceManagerAddon::CloseRawFileDescriptor(napi_env env, napi_callback_info info)
+{
+    return ProcessOnlyIdParam(env, info, "closeRawFileDescriptor", closeRawFileDescriptorFunc);
 }
 } // namespace Resource
 } // namespace Global
