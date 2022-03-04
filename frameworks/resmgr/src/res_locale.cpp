@@ -32,7 +32,7 @@ namespace OHOS {
 namespace Global {
 namespace Resource {
 Locale *ResLocale::defaultLocale_ = nullptr;
-Lock ResLocale::lock_ = Lock();
+Lock ResLocale::lock_;
 
 ResLocale::ResLocale() : language_(nullptr), region_(nullptr), script_(nullptr)
 {
