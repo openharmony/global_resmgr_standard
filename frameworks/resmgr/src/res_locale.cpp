@@ -327,6 +327,7 @@ const Locale *ResLocale::GetDefault()
 
 bool ResLocale::UpdateDefault(const Locale &localeInfo, bool needNotify)
 {
+#ifdef SUPPORT_GRAPHICS
     AutoMutex mutex(ResLocale::lock_);
     UErrorCode errCode = U_ZERO_ERROR;
     Locale temp = icu::LocaleBuilder().setLocale(localeInfo).build(errCode);
@@ -336,6 +337,9 @@ bool ResLocale::UpdateDefault(const Locale &localeInfo, bool needNotify)
     delete ResLocale::defaultLocale_;
     ResLocale::defaultLocale_ = new Locale(temp);
     return true;
+#else
+    return false;
+#endif
 };
 
 ResLocale::~ResLocale()
@@ -358,6 +362,7 @@ ResLocale::~ResLocale()
 
 Locale *BuildFromString(const char *str, char sep, RState &rState)
 {
+#ifdef SUPPORT_GRAPHICS
     ResLocale *resLocale = ResLocale::BuildFromString(str, sep, rState);
     if (rState == SUCCESS && resLocale != nullptr) {
         UErrorCode errCode = U_ZERO_ERROR;
@@ -372,11 +377,13 @@ Locale *BuildFromString(const char *str, char sep, RState &rState)
         Locale *retLocal = new Locale(temp);
         return retLocal;
     }
+#endif
     return nullptr;
 };
 
 Locale *BuildFromParts(const char *language, const char *script, const char *region, RState &rState)
 {
+#ifdef SUPPORT_GRAPHICS
     size_t len = Utils::StrLen(language);
     if (len == 0) {
         rState = INVALID_BCP47_LANGUAGE_SUBTAG;
@@ -410,6 +417,9 @@ Locale *BuildFromParts(const char *language, const char *script, const char *reg
     }
     Locale *retLocal = new Locale(localeInfo);
     return retLocal;
+#else
+    return nullptr;
+#endif
 }
 
 const Locale *GetSysDefault()
