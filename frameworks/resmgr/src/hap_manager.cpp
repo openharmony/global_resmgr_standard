@@ -32,8 +32,9 @@
 namespace OHOS {
 namespace Global {
 namespace Resource {
+#ifdef SUPPORT_GRAPHICS
 constexpr uint32_t PLURAL_CACHE_MAX_COUNT = 3;
-
+#endif
 HapManager::HapManager(ResConfigImpl *resConfig)
     : resConfig_(resConfig)
 {
@@ -43,6 +44,7 @@ bool HapManager::icuInitialized = HapManager::Init();
 
 bool HapManager::Init()
 {
+#ifdef SUPPORT_GRAPHICS
 #ifdef __IDE_PREVIEW__
 #ifdef __WINNT__
     MEMORY_BASIC_INFORMATION mbi;
@@ -68,14 +70,15 @@ bool HapManager::Init()
 #else
     SetHwIcuDirectory();
 #endif
-
+#endif
     return true;
 }
 
 std::string HapManager::GetPluralRulesAndSelect(int quantity)
 {
-    AutoMutex mutex(this->lock_);
     std::string defaultRet("other");
+#ifdef SUPPORT_GRAPHICS
+    AutoMutex mutex(this->lock_);
     if (this->resConfig_ == nullptr || this->resConfig_->GetResLocale() == nullptr ||
         this->resConfig_->GetResLocale()->GetLanguage() == nullptr) {
         HILOG_ERROR("GetPluralRules language is null!");
@@ -119,6 +122,9 @@ std::string HapManager::GetPluralRulesAndSelect(int quantity)
     icu::UnicodeString us = pluralRules->select(quantity);
     us.toUTF8String(converted);
     return converted;
+#else
+    return defaultRet;
+#endif
 }
 
 const IdItem *HapManager::FindResourceById(uint32_t id)

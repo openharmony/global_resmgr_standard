@@ -20,8 +20,10 @@
 #include "locale_matcher.h"
 #include "res_locale.h"
 #include "utils/utils.h"
+#ifdef SUPPORT_GRAPHICS
 using icu::Locale;
 using icu::LocaleBuilder;
+#endif
 namespace OHOS {
 namespace Global {
 namespace Resource {
@@ -43,6 +45,7 @@ RState ResConfigImpl::SetLocaleInfo(const char *language,
     const char *script,
     const char *region)
 {
+#ifdef SUPPORT_GRAPHICS
     RState state = SUCCESS;
     if (Utils::IsStrEmpty(language)) {
         delete this->resLocale_;
@@ -79,6 +82,9 @@ RState ResConfigImpl::SetLocaleInfo(const char *language,
     }
 
     return state;
+#else
+    return NOT_SUPPORT_SEP;
+#endif
 }
 
 void ResConfigImpl::SetDeviceType(DeviceType deviceType)

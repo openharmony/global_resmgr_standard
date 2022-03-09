@@ -39,7 +39,7 @@
         "name": "resmgr_standard",
         "subsystem": "global",
         "syscap": [ "SystemCapability.Global.ResourceManager" ],
-        "features": [],
+        "features": ["resmgr_standard_support_icu"],
         "adapted_system_type": [
             "standard"
         ],

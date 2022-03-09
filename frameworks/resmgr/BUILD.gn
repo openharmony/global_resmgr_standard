@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//base/global/resmgr_standard/resmgr.gni")
 import("//build/ohos.gni")
 
 config("resmgr_config") {
@@ -19,10 +20,15 @@ config("resmgr_config") {
     "//third_party/zlib/contrib/minizip",
     "//base/global/resmgr_standard/interfaces/innerkits/include",
     "//third_party/bounds_checking_function/include",
-    "//third_party/icu/icu4c/source",
-    "//third_party/icu/icu4c/source/common",
-    "//third_party/icu/icu4c/source/i18n",
   ]
+
+  if (resmgr_standard_support_icu) {
+    include_dirs += [
+      "//third_party/icu/icu4c/source",
+      "//third_party/icu/icu4c/source/common",
+      "//third_party/icu/icu4c/source/i18n",
+    ]
+  }
 }
 
 manager_sources = [
@@ -42,10 +48,12 @@ manager_sources = [
 config("resmgr_public_config") {
   visibility = [ ":*" ]
 
-  include_dirs = [
-    "//base/global/resmgr_standard/interfaces/innerkits/include",
-    "//third_party/icu/icu4c/source/common",
-  ]
+  include_dirs =
+      [ "//base/global/resmgr_standard/interfaces/innerkits/include" ]
+
+  if (resmgr_standard_support_icu) {
+    include_dirs += [ "//third_party/icu/icu4c/source/common" ]
+  }
 }
 
 ohos_shared_library("global_resmgr") {
@@ -59,10 +67,17 @@ ohos_shared_library("global_resmgr") {
 
   deps = [
     "//third_party/bounds_checking_function:libsec_static",
-    "//third_party/icu/icu4c:shared_icui18n",
-    "//third_party/icu/icu4c:shared_icuuc",
     "//third_party/zlib:libz",
   ]
+
+  if (resmgr_standard_support_icu) {
+    deps += [
+      "//third_party/icu/icu4c:shared_icui18n",
+      "//third_party/icu/icu4c:shared_icuuc",
+    ]
+    defines += [ "SUPPORT_GRAPHICS" ]
+  }
+
   external_deps = [
     "bytrace_standard:bytrace_core",
     "hiviewdfx_hilog_native:libhilog",
@@ -73,70 +88,77 @@ ohos_shared_library("global_resmgr") {
 }
 
 ohos_shared_library("global_resmgr_win") {
-  defines = [
-    "__WINNT__",
-    "__EXPORT_MGR__",
-    "__IDE_PREVIEW__",
-  ]
-  cflags = [
-    "-std=c++17",
-    "-Wno-implicit-fallthrough",
-    "-Wno-ignored-attributes",
-  ]
+  if (resmgr_standard_support_icu) {
+    defines = [
+      "__WINNT__",
+      "__EXPORT_MGR__",
+      "__IDE_PREVIEW__",
+    ]
+    cflags = [
+      "-std=c++17",
+      "-Wno-implicit-fallthrough",
+      "-Wno-ignored-attributes",
+    ]
 
-  sources = manager_sources
+    sources = manager_sources
 
-  configs = [ ":resmgr_config" ]
+    configs = [ ":resmgr_config" ]
 
-  public_configs = [ ":resmgr_public_config" ]
+    public_configs = [ ":resmgr_public_config" ]
 
-  deps = [
-    "//third_party/icu/icu4c:static_icui18n(//build/toolchain/mingw:mingw_x86_64)",
-    "//third_party/icu/icu4c:static_icuuc(//build/toolchain/mingw:mingw_x86_64)",
-    "//third_party/zlib:libz(//build/toolchain/mingw:mingw_x86_64)",
-  ]
+    deps = [
+      "//third_party/icu/icu4c:static_icui18n(//build/toolchain/mingw:mingw_x86_64)",
+      "//third_party/icu/icu4c:static_icuuc(//build/toolchain/mingw:mingw_x86_64)",
+      "//third_party/zlib:libz(//build/toolchain/mingw:mingw_x86_64)",
+    ]
 
-  libs = [ "shlwapi" ]
-
+    libs = [ "shlwapi" ]
+  }
   subsystem_name = "global"
   part_name = "resmgr_standard"
 }
 
 group("win_resmgr") {
-  if (host_os != "mac") {
-    deps = [ ":global_resmgr_win(//build/toolchain/mingw:mingw_x86_64)" ]
+  if (resmgr_standard_support_icu) {
+    if (host_os != "mac") {
+      deps = [ ":global_resmgr_win(//build/toolchain/mingw:mingw_x86_64)" ]
+    }
   }
 }
 
 ohos_shared_library("global_resmgr_mac") {
-  defines = [ "__IDE_PREVIEW__" ]
-  cflags = [
-    "-std=c++17",
-    "-Wno-implicit-fallthrough",
-    "-Wno-ignored-attributes",
-  ]
-
-  sources = manager_sources
-
-  configs = [ ":resmgr_config" ]
-
-  public_configs = [ ":resmgr_public_config" ]
-
-  if (host_os == "mac") {
-    deps = [
-      "//third_party/bounds_checking_function:libsec_static(//build/toolchain/mac:clang_x64)",
-      "//third_party/icu/icu4c:static_icui18n(//build/toolchain/mac:clang_x64)",
-      "//third_party/icu/icu4c:static_icuuc(//build/toolchain/mac:clang_x64)",
-      "//third_party/zlib:libz(//build/toolchain/mac:clang_x64)",
+  if (resmgr_standard_support_icu) {
+    defines = [ "__IDE_PREVIEW__" ]
+    cflags = [
+      "-std=c++17",
+      "-Wno-implicit-fallthrough",
+      "-Wno-ignored-attributes",
     ]
+
+    sources = manager_sources
+
+    configs = [ ":resmgr_config" ]
+
+    public_configs = [ ":resmgr_public_config" ]
+
+    if (host_os == "mac") {
+      deps = [
+        "//third_party/bounds_checking_function:libsec_static(//build/toolchain/mac:clang_x64)",
+        "//third_party/icu/icu4c:static_icui18n(//build/toolchain/mac:clang_x64)",
+        "//third_party/icu/icu4c:static_icuuc(//build/toolchain/mac:clang_x64)",
+        "//third_party/zlib:libz(//build/toolchain/mac:clang_x64)",
+      ]
+    }
   }
   subsystem_name = "global"
   part_name = "resmgr_standard"
 }
 
 group("mac_resmgr") {
-  if (host_os == "mac") {
-    deps = [ ":global_resmgr_mac(//build/toolchain/mac:clang_x64)" ]
+  if (resmgr_standard_support_icu) {
+    if (host_os == "mac") {
+      deps = [ ":global_resmgr_mac(//build/toolchain/mac:clang_x64)" ]
+    }
   }
 }
 
@@ -152,6 +174,10 @@ ohos_shared_library("librawfile") {
     "//third_party/node/src",
     "//third_party/icu/icu4c/source/i18n",
   ]
+
+  if (resmgr_standard_support_icu) {
+    include_dirs += [ "//third_party/icu/icu4c/source/i18n" ]
+  }
 
   cflags = [ "-Wno-error=inconsistent-missing-override" ]
 
