@@ -194,7 +194,6 @@ ohos_shared_library("librawfile") {
 
   external_deps = [
     "ability_runtime:ability_manager",
-    "bundle_framework:appexecfwk_base",
     "hiviewdfx_hilog_native:libhilog",
   ]
 
