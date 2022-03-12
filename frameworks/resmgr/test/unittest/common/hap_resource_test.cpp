@@ -79,7 +79,7 @@ HWTEST_F(HapResourceTest, HapResourceFuncTest001, TestSize.Level0)
         EXPECT_TRUE(false);
         return;
     }
-    EXPECT_EQ(static_cast<size_t>(80), pResource->IdSize());
+    EXPECT_EQ(static_cast<size_t>(71), pResource->IdSize());
 
     int id = pResource->GetIdByName("app_name", ResType::STRING);
     start = CurrentTimeUsec();
@@ -160,7 +160,7 @@ HWTEST_F(HapResourceTest, HapResourceFuncTest002, TestSize.Level1)
         return;
     }
 
-    EXPECT_EQ(static_cast<size_t>(79), pResource->IdSize());
+    EXPECT_EQ(static_cast<size_t>(70), pResource->IdSize());
 
     int id = pResource->GetIdByName("app_name", ResType::STRING);
     start = CurrentTimeUsec();

@@ -113,7 +113,7 @@ HWTEST_F(HapManagerTest, HapManagerFuncTest002, TestSize.Level1)
 
     EXPECT_TRUE(ret);
 
-    uint32_t id = 16777228;
+    uint32_t id = 16777229; // 16777229 means string_ref
     std::vector<const HapResource::IdValues *> idValues = hapManager->GetResourceList(id);
     if (idValues.size() == 0) {
         delete (hapManager);

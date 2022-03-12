@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -147,9 +147,9 @@ private:
 
     const std::string FONT_SIZE_PIXEL = "fp";
 
-    std::unordered_map<std::string, int> rawFileDescriptor_;
+    const float DEFAULT_DENSITY = 160.0f;
 
-    std::unordered_map<std::string, long> rawFileDescriptorCache_;
+    std::unordered_map<std::string, RawFileDescriptor> rawFileDescriptor_;
 };
 } // namespace Resource
 } // namespace Global

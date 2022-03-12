@@ -64,7 +64,7 @@ typedef struct NativeResourceManager NativeResourceManager;
  *
  * You need to obtain the resource manager to process raw files as required.
  *
- * @param env Indicates the pointer to the JavaScipt Native Interface (napi) enviroment.
+ * @param env Indicates the pointer to the JavaScipt Native Interface (napi) environment.
  * @param jsResMgr Indicates the JavaScipt resource manager.
  * @return Returns the pointer to {@link NativeResourceManager}.
  * @since 8

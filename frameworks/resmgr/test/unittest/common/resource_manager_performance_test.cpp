@@ -232,7 +232,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest002, 
     average = total / 1000.0;
     g_logLevel = LOG_DEBUG;
     HILOG_DEBUG("avg cost 002: %f us", average);
-    EXPECT_LT(average, 1350);
+    EXPECT_LT(average, 2000);
 };
 
 /*
@@ -871,7 +871,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest023, 
     average = total / 1000.0;
     g_logLevel = LOG_DEBUG;
     HILOG_DEBUG("avg cost 023: %f us", average);
-    EXPECT_LT(average, 100);
+    EXPECT_LT(average, 150);
 };
 
 /*
@@ -897,7 +897,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest024, 
     average = total / 1000.0;
     g_logLevel = LOG_DEBUG;
     HILOG_DEBUG("avg cost 024: %f us", average);
-    EXPECT_LT(average, 100);
+    EXPECT_LT(average, 150);
 };
 
 /*
@@ -1023,7 +1023,7 @@ HWTEST_F(ResourceManagerPerformanceTest, ResourceManagerPerformanceFuncTest029, 
     }
     unsigned long long total = 0;
     double average = 0;
-    int id = GetResId("test_common", ResType::PROF);
+    int id = GetResId("test_profile", ResType::PROF);
     ASSERT_TRUE(id > 0);
 
     string outValue;

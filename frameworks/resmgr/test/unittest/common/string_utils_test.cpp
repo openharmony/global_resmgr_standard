@@ -99,7 +99,7 @@ HWTEST_F(StringUtilsTest, LockFuncTest001, TestSize.Level1)
     int num = 0;
     int threadNum = 3;
     int result = num + threadNum;
-    Lock lock = Lock();
+    Lock lock;
     TestThread(&num, threadNum, &lock);
     EXPECT_EQ(result, num);
 }

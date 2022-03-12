@@ -31,6 +31,8 @@ public:
 
 private:
     std::mutex* mtx_;
+
+    Lock(const Lock &src) = delete;
 };
 } // namespace Resource
 } // namespace Global

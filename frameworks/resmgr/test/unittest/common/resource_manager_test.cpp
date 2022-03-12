@@ -1213,11 +1213,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByIdTest001, TestSize.Level
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
-#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(48, outValue); // 48vp
-#else
-    EXPECT_EQ(96, outValue); // 96vp
-#endif
 
     std::string unit;
     state = rm->GetFloatById(id, outValue, unit);
@@ -1229,11 +1225,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByIdTest001, TestSize.Level
     ASSERT_TRUE(id > 0);
     state = rm->GetFloatById(id, outValue);
     ASSERT_EQ(SUCCESS, state);
-#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(707, outValue); // 707vp
-#else
-    EXPECT_EQ(1414, outValue); // 1414vp
-#endif
 }
 
 /*
@@ -1264,11 +1256,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByNameTest001, TestSize.Lev
     RState state;
     state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue);
     ASSERT_EQ(SUCCESS, state);
-#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(48, outValue); // 48vp
-#else
-    EXPECT_EQ(96, outValue); // 96vp
-#endif
 
     std::string unit;
     state = rm->GetFloatByName("width_appBar_backButton_touchTarget", outValue, unit);
@@ -1278,11 +1266,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetFloatByNameTest001, TestSize.Lev
 
     state = rm->GetFloatByName("float_ref", outValue);
     ASSERT_EQ(SUCCESS, state);
-#ifdef PREDEFINED_DENSITY
     EXPECT_EQ(707, outValue); // 707vp
-#else
-    EXPECT_EQ(1414, outValue); // 1414vp
-#endif
 }
 
 /*
@@ -1616,11 +1600,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetProfileByIdTest001, TestSize.Lev
     HapResource *tmp = new HapResource(FormatFullPath(g_resFilePath).c_str(), 0, nullptr, nullptr);
     tmp->Init();
     std::string res = tmp->GetResourcePath();
-    res.append("entry/resources/base/profile/test_common.h");
+    res.append("entry/resources/base/profile/test_profile.json");
 
     std::string outValue;
     RState state;
-    int id = GetResId("test_common", ResType::PROF);
+    int id = GetResId("test_profile", ResType::PROF);
     EXPECT_TRUE(id > 0);
     state = rm->GetProfileById(id, outValue);
     EXPECT_TRUE(state == SUCCESS);
@@ -1655,11 +1639,11 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetProfileByNameTest001, TestSize.L
     HapResource *tmp = new HapResource(FormatFullPath(g_resFilePath).c_str(), 0, nullptr, nullptr);
     tmp->Init();
     std::string res = tmp->GetResourcePath();
-    res.append("entry/resources/base/profile/test_common.h");
+    res.append("entry/resources/base/profile/test_profile.json");
 
     std::string outValue;
     RState state;
-    state = rm->GetProfileByName("test_common", outValue);
+    state = rm->GetProfileByName("test_profile", outValue);
     EXPECT_TRUE(state == SUCCESS);
     EXPECT_EQ(res, outValue);
     delete tmp;
@@ -1935,10 +1919,10 @@ HWTEST_F(ResourceManagerTest, ResourceManagerSameNameTest001, TestSize.Level1)
 HWTEST_F(ResourceManagerTest, RawFileTest001, TestSize.Level1)
 {
     rm->AddResource(FormatFullPath(g_resFilePath).c_str());
-    TestGetRawFilePathByName("rawfile/rawfiletest.xml",
-        "/data/test/all/assets/entry/resources/rawfile/rawfiletest.xml");
+    TestGetRawFilePathByName("rawfile/test_rawfile.txt",
+        "/data/test/all/assets/entry/resources/rawfile/test_rawfile.txt");
 
-    TestGetRawFilePathByName("rawfiletest.xml",
-        "/data/test/all/assets/entry/resources/rawfile/rawfiletest.xml");
+    TestGetRawFilePathByName("test_rawfile.txt",
+        "/data/test/all/assets/entry/resources/rawfile/test_rawfile.txt");
 }
 }

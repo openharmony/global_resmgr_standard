@@ -53,12 +53,6 @@ ohos_shared_library("global_resmgr") {
 
   defines = [ "CONFIG_HILOG" ]
 
-  if (defined(product_name) &&
-      (product_name == "rk3566" || product_name == "rk3568" ||
-       product_name == "Hi3516DV300" || product_name == "watchos")) {
-    defines += [ "PREDEFINED_DENSITY" ]
-  }
-
   configs = [ ":resmgr_config" ]
 
   public_configs = [ ":resmgr_public_config" ]
@@ -174,7 +168,6 @@ ohos_shared_library("librawfile") {
 
   external_deps = [
     "ability_runtime:ability_manager",
-    "bundle_framework:appexecfwk_base",
     "hiviewdfx_hilog_native:libhilog",
   ]
 
