@@ -41,6 +41,9 @@ std::string FormatFullPath(const char *fileRelativePath)
 
 void PrintIdValues(const HapResource::IdValues *idValues)
 {
+    if (idValues == nullptr) {
+        return;
+    }
     for (size_t i = 0; i < idValues->GetLimitPathsConst().size(); ++i) {
         auto limitPath = idValues->GetLimitPathsConst()[i];
         HILOG_DEBUG("%zu: folder is: %s, value: %s", i, limitPath->GetFolder().c_str(),

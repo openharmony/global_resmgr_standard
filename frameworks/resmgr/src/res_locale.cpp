@@ -128,12 +128,18 @@ RState ResLocale::Init(const char *language, size_t languageLen, const char *scr
 
 RState ResLocale::CopyFromLocaleInfo(const Locale *other)
 {
+    if (other == nullptr) {
+        return ERROR;
+    }
     return this->Init(other->getLanguage(), Utils::StrLen(other->getLanguage()), other->getScript(),
         Utils::StrLen(other->getScript()), other->getCountry(), Utils::StrLen(other->getCountry()));
 }
 
 RState ResLocale::Copy(const ResLocale *other)
 {
+    if (other == nullptr) {
+        return ERROR;
+    }
     return this->Init(other->GetLanguage(), Utils::StrLen(other->GetLanguage()), other->GetScript(),
         Utils::StrLen(other->GetScript()), other->GetRegion(), Utils::StrLen(other->GetRegion()));
 }
