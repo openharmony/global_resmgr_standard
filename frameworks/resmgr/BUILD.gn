@@ -183,7 +183,6 @@ ohos_shared_library("librawfile") {
 
   deps = [
     "//base/global/resmgr_standard/interfaces/native/resource:librawfile_ndk",
-    "//utils/native/base:utils",
   ]
 
   public_deps = [
