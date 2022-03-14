@@ -20,30 +20,9 @@
             <option name="push" value="data/err-config.json-2.hap -> /data/test/" src="res"/>
             <option name="push" value="data/all/config.json -> /data/test/all/" src="res"/>
             <option name="push" value="data/all/assets/entry/resources.index -> /data/test/all/assets/entry/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/rawfile/rawfiletest.xml -> /data/test/all/assets/entry/resources/rawfile/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/attributes.key -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/back.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/constants.key -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/contents.key -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/divider.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/icon_background.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/item_normal_background.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/item_touched_background.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/nodes.key -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/right_grey.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/graphic/stacklayout_background.sxml -> /data/test/all/assets/entry/resources/base/graphic/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/ability_main.sxml -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/ability_main_landscape.sxml -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/attributes.key -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/constants.key -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/contents.key -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/default_doubleline_list.sxml -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/layout/nodes.key -> /data/test/all/assets/entry/resources/base/layout/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/media/attributes.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/media/constants.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/media/contents.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
+            <option name="push" value="data/all/assets/entry/resources/rawfile/test_rawfile.txt -> /data/test/all/assets/entry/resources/rawfile/" src="res"/>        
             <option name="push" value="data/all/assets/entry/resources/base/media/icon.png -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
-            <option name="push" value="data/all/assets/entry/resources/base/media/nodes.key -> /data/test/all/assets/entry/resources/base/media/" src="res"/>
+            <option name="push" value="data/all/assets/entry/resources/base/profile/test_profile.json -> /data/test/all/assets/entry/resources/base/profile/" src="res"/>
             <option name="push" value="data/colormode/assets/entry/resources.index -> /data/test/colormode/assets/entry/" src="res"/>
         </preparer>
     </target>

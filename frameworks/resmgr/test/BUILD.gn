@@ -18,12 +18,6 @@ ohos_unittest("resmgr_test") {
 
   defines = [ "CONFIG_HILOG" ]
 
-  if (defined(product_name) &&
-      (product_name == "rk3566" || product_name == "rk3568" ||
-       product_name == "Hi3516DV300" || product_name == "watchos")) {
-    defines += [ "PREDEFINED_DENSITY" ]
-  }
-
   sources = [
     "unittest/common/hap_manager_test.cpp",
     "unittest/common/hap_parser_test.cpp",

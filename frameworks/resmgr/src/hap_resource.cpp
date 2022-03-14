@@ -53,7 +53,7 @@ HapResource::ValueUnderQualifierDir::ValueUnderQualifierDir(const std::vector<Ke
 
 HapResource::ValueUnderQualifierDir::~ValueUnderQualifierDir()
 {
-    // keyParams_ idItem_ was passed into this, we dont delete them because someone will do
+    // keyParams_ idItem_ was passed into this, we don't delete them because someone will do
     delete (resConfig_);
 }
 
@@ -263,11 +263,11 @@ bool HapResource::Init()
     BYTRACE_NAME(BYTRACE_TAG_APP, __PRETTY_FUNCTION__);
 #endif
 #ifdef __WINNT__
-    char seperator = '\\';
+    char separator = '\\';
 #else
-    char seperator = '/';
+    char separator = '/';
 #endif
-    auto index = indexPath_.rfind(seperator);
+    auto index = indexPath_.rfind(separator);
     if (index == std::string::npos) {
         HILOG_ERROR("index path format error, %s", indexPath_.c_str());
         return false;
@@ -275,7 +275,7 @@ bool HapResource::Init()
 #ifdef __IDE_PREVIEW__
     resourcePath_ = indexPath_.substr(0, index + 1);
 #else
-    index = indexPath_.rfind(seperator, index - 1);
+    index = indexPath_.rfind(separator, index - 1);
     if (index == std::string::npos) {
         HILOG_ERROR("index path format error, %s", indexPath_.c_str());
         return false;

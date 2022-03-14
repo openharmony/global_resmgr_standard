@@ -175,7 +175,7 @@ uint32_t FindDefaultScriptEncode(const char *language, const char *region)
 
 /**
  * @brief find the default region of language and script.
- * first search language and srcipt corresponding  region.
+ * first search language and script corresponding region.
  * if not found,search language corresponding region.
  *
  * @param language
@@ -257,7 +257,7 @@ int8_t CompareRegionWhenQaag(const ResLocale *current,
  * @brief compare language,support new/old language code
  * NEW_LANGUAGES_CODES is new language code,
  * OLD_LANGUAGES_CODES is old language code.
- * suppor iw/he,tl/fil,ji/yi,jw/jv,in/id.
+ * support iw/he,tl/fil,ji/yi,jw/jv,in/id.
  * @param current
  * @param other
  * @return true
