@@ -80,7 +80,6 @@ ohos_shared_library("global_resmgr_win") {
   ]
   cflags = [
     "-std=c++17",
-    "-Wno-implicit-fallthrough",
     "-Wno-ignored-attributes",
   ]
 
@@ -112,7 +111,6 @@ ohos_shared_library("global_resmgr_mac") {
   defines = [ "__IDE_PREVIEW__" ]
   cflags = [
     "-std=c++17",
-    "-Wno-implicit-fallthrough",
     "-Wno-ignored-attributes",
   ]
 
