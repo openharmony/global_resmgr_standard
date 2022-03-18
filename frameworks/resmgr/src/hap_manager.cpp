@@ -363,7 +363,7 @@ bool HapManager::AddResourcePath(const char *path)
     if (pResource == nullptr) {
         return false;
     }
-    this->hapResources_.push_back((HapResource *)pResource);
+    this->hapResources_.push_back(const_cast<HapResource *>(pResource));
     this->loadedHapPaths_[sPath] = std::vector<std::string>();
     return true;
 }
@@ -382,7 +382,7 @@ RState HapManager::ReloadAll()
             }
             return HAP_INIT_FAILED;
         }
-        newResources.push_back((HapResource *)pResource);
+        newResources.push_back(const_cast<HapResource *>(pResource));
         std::vector<std::string> &overlayPaths = iter->second;
         if (overlayPaths.size() == 0) {
             continue;
