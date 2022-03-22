@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,6 +25,9 @@ namespace Global {
 namespace Resource {
 bool Utils::IsAlphaString(const char *s, int32_t len)
 {
+    if (s == nullptr) {
+        return false;
+    }
     int32_t i;
     for (i = 0; i < len; i++) {
         char c = *(s + i);
@@ -37,6 +40,9 @@ bool Utils::IsAlphaString(const char *s, int32_t len)
 
 bool Utils::IsNumericString(const char *s, int32_t len)
 {
+    if (s == nullptr) {
+        return false;
+    }
     int32_t i;
     for (i = 0; i < len; i++) {
         char c = *(s + i);
@@ -60,6 +66,9 @@ bool Utils::IsNumericString(const char *s, int32_t len)
  */
 void Utils::DecodeScript(uint32_t encodeScript, char *outValue)
 {
+    if (outValue == nullptr) {
+        return;
+    }
     outValue[0] = (encodeScript & 0xFF000000) >> 24;
     outValue[1] = (encodeScript & 0x00FF0000) >> 16;
     outValue[2] = (encodeScript & 0x0000FF00) >> 8;
@@ -268,6 +277,9 @@ static uint32_t ParseHex(char c, RState &state)
  */
 RState Utils::ConvertColorToUInt32(const char *s, uint32_t &outValue)
 {
+    if (s == nullptr) {
+        return INVALID_FORMAT;
+    }
     uint32_t color = 0;
     RState parseState = SUCCESS;
     size_t len = strlen(s);

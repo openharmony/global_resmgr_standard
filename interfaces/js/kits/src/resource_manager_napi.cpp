@@ -41,6 +41,9 @@ using namespace OHOS::AppExecFwk;
 
 static void ExecuteGetResMgr(napi_env env, void* data)
 {
+    if (data == nullptr) {
+        return;
+    }
     ResMgrAsyncContext *asyncContext = static_cast<ResMgrAsyncContext*>(data);
 
     asyncContext->createValueFunc_ = [](napi_env env, ResMgrAsyncContext &context) -> napi_value {

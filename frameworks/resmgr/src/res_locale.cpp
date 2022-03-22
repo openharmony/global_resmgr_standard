@@ -369,7 +369,7 @@ Locale *BuildFromString(const char *str, char sep, RState &rState)
         UErrorCode errCode = U_ZERO_ERROR;
         Locale temp = icu::LocaleBuilder().setLanguage(resLocale->GetLanguage())
                                  .setRegion(resLocale->GetRegion()).setScript(resLocale->GetScript()).build(errCode);
-            
+
         if (!U_SUCCESS(errCode)) {
             delete resLocale;
             rState = ERROR;

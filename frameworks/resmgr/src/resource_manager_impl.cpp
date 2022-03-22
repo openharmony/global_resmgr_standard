@@ -240,7 +240,7 @@ RState ResourceManagerImpl::GetPluralStringByNameFormat(std::string &outValue, c
 RState ResourceManagerImpl::GetPluralString(const HapResource::ValueUnderQualifierDir *vuqd,
     int quantity, std::string &outValue)
 {
-// not found or type invalid
+    // not found or type invalid
     if (vuqd == nullptr) {
         return NOT_FOUND;
     }
@@ -644,6 +644,9 @@ RState ResourceManagerImpl::GetRawFile(const HapResource::ValueUnderQualifierDir
     std::string &outValue)
 {
     // not found or type invalid
+    if (vuqd == nullptr) {
+        return NOT_FOUND;
+    }
     const IdItem *idItem = vuqd->GetIdItem();
     if (idItem == nullptr || idItem->resType_ != resType) {
         return NOT_FOUND;

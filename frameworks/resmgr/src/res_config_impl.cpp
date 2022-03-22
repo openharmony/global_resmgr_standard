@@ -66,7 +66,7 @@ RState ResConfigImpl::SetLocaleInfo(const char *language,
         UErrorCode errCode = U_ZERO_ERROR;
         Locale temp = icu::LocaleBuilder().setLanguage(resLocale->GetLanguage())
                                  .setRegion(resLocale->GetRegion()).setScript(resLocale->GetScript()).build(errCode);
-            
+
         if (!U_SUCCESS(errCode)) {
             state = NOT_ENOUGH_MEM;
             delete resLocale;
@@ -166,7 +166,7 @@ bool ResConfigImpl::CopyLocale(ResConfig &other)
         }
         UErrorCode errCode = U_ZERO_ERROR;
         Locale tempLocale = icu::LocaleBuilder().setLocale(*other.GetLocaleInfo()).build(errCode);
-            
+
         if (!U_SUCCESS(errCode)) {
             delete temp;
             return false;
@@ -201,6 +201,9 @@ bool ResConfigImpl::Copy(ResConfig &other)
 
 bool ResConfigImpl::Match(const ResConfigImpl *other) const
 {
+    if (other == nullptr) {
+        return false;
+    }
     if (LocaleMatcher::Match(this->resLocale_, other->GetResLocale()) == false) {
         return false;
     }
@@ -235,7 +238,7 @@ bool ResConfigImpl::Match(const ResConfigImpl *other) const
 bool ResConfigImpl::IsMoreSuitable(const ResConfigImpl *other,
     const ResConfigImpl *request) const
 {
-    if (request != nullptr) {
+    if (request != nullptr && other != nullptr) {
         int8_t result =
             LocaleMatcher::IsMoreSuitable(this->GetResLocale(), other->GetResLocale(),
                                           request->GetResLocale());

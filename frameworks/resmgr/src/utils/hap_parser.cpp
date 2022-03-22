@@ -73,7 +73,7 @@ int32_t HapParser::ReadFileFromZip(const char *zipFile, const char *fileName, vo
         return UNKNOWN_ERROR;
     } // obtained the necessary details about file inside zip
 
-    *buffer = (void *)malloc(fileInfo.uncompressed_size); // setup buffer
+    *buffer = static_cast<void *>(malloc(fileInfo.uncompressed_size)); // setup buffer
     bufLen = fileInfo.uncompressed_size;
     if ((*buffer) == nullptr) {
         unzClose(uf);
@@ -144,7 +144,7 @@ int32_t HapParser::ReadIndexFromFile(const char *zipFile, void **buffer,
     }
 
     // parse config.json
-    std::string mName = GetModuleName((char *)tmpBuf);
+    std::string mName = GetModuleName(static_cast<char *>(tmpBuf));
     if (mName.size() == 0) {
         errInfo = "parse moduleName from config.json error";
         free(tmpBuf);
@@ -174,7 +174,7 @@ int32_t ParseString(const char *buffer, uint32_t &offset, std::string &id, bool 
         return SYS_ERROR;
     }
     offset += 2;
-    std::string tmp = std::string((char *)buffer + offset, includeTemi ? (strLen - 1) : strLen);
+    std::string tmp = std::string(const_cast<char *>(buffer) + offset, includeTemi ? (strLen - 1) : strLen);
     offset += includeTemi ? strLen : (strLen + 1);
     id = tmp;
     return OK;
