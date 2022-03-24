@@ -88,7 +88,7 @@ typedef struct {
  * @since 8
  * @version 1.0
  */
-int OH_ResourceManager_ReadRawFile(const RawFile *rawFile, void *buf, int length);
+int OH_ResourceManager_ReadRawFile(const RawFile *rawFile, void *buf, size_t length);
 
 /**
  * @brief Uses the 32-bit data type to seek a data read/write position based on the specified offset within a raw file.
