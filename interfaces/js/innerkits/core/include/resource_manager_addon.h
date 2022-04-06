@@ -73,13 +73,28 @@ private:
 
     static napi_value GetRawFile(napi_env env, napi_callback_info info);
 
-    static std::string GetRawFile(napi_env env, size_t argc, napi_value *argv);
+    static std::string GetResNameOrPath(napi_env env, size_t argc, napi_value *argv);
 
     static napi_value GetRawFileDescriptor(napi_env env, napi_callback_info info);
 
     static napi_value CloseRawFileDescriptor(napi_env env, napi_callback_info info);
 
     static napi_value Release(napi_env env, napi_callback_info info);
+
+    static std::string GetResName(napi_env env, size_t argc, napi_value *argv);
+
+    static napi_value GetMediaByName(napi_env env, napi_callback_info info);
+
+    static napi_value GetMediaBase64ByName(napi_env env, napi_callback_info info);
+
+    static napi_value GetStringByName(napi_env env, napi_callback_info info);
+
+    static napi_value GetStringArrayByName(napi_env env, napi_callback_info info);
+
+    static napi_value GetPluralStringByName(napi_env env, napi_callback_info info);
+
+    static napi_value ProcessIdNameParam(napi_env env, napi_callback_info info, const std::string& name,
+        napi_async_execute_callback execute);
 
     std::string bundleName_;
     std::shared_ptr<ResourceManager> resMgr_;
@@ -92,6 +107,7 @@ struct ResMgrAsyncContext {
     int32_t resId_;
     int32_t param_;
     std::string path_;
+    std::string resName_;
 
     typedef napi_value (*CreateNapiValue)(napi_env env, ResMgrAsyncContext &context);
     CreateNapiValue createValueFunc_;
