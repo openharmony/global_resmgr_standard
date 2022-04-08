@@ -120,6 +120,8 @@ bool ResourceManagerAddon::Init(napi_env env)
         DECLARE_NAPI_FUNCTION("getDeviceCapability", GetDeviceCapability),
         DECLARE_NAPI_FUNCTION("getPluralString", GetPluralString),
         DECLARE_NAPI_FUNCTION("getPluralStringByName", GetPluralStringByName),
+        DECLARE_NAPI_FUNCTION("getFloat", GetFloat),
+        DECLARE_NAPI_FUNCTION("getFloatByName", GetFloatByName),
         DECLARE_NAPI_FUNCTION("getRawFile", GetRawFile),
         DECLARE_NAPI_FUNCTION("getRawFileDescriptor", GetRawFileDescriptor),
         DECLARE_NAPI_FUNCTION("closeRawFileDescriptor", CloseRawFileDescriptor),
@@ -926,6 +928,39 @@ auto closeRawFileDescriptorFunc = [](napi_env env, void* data) {
 napi_value ResourceManagerAddon::CloseRawFileDescriptor(napi_env env, napi_callback_info info)
 {
     return ProcessOnlyIdParam(env, info, "closeRawFileDescriptor", closeRawFileDescriptorFunc);
+}
+
+auto getFloatFunc = [](napi_env env, void *data) {
+    ResMgrAsyncContext *asyncContext = static_cast<ResMgrAsyncContext*>(data);
+    RState state;
+    if (asyncContext->resId_ != 0) {
+        state = asyncContext->addon_->GetResMgr()->GetFloatById(asyncContext->resId_, asyncContext->fValue_);
+    } else {
+        state = asyncContext->addon_->GetResMgr()->GetFloatByName(asyncContext->resName_.c_str(),
+            asyncContext->fValue_);
+    }
+    if (state != RState::SUCCESS) {
+        asyncContext->SetErrorMsg("GetFloat failed", true);
+        return;
+    }
+    asyncContext->createValueFunc_ = [](napi_env env, ResMgrAsyncContext& context) {
+        napi_value jsValue = nullptr;
+        if (napi_create_double(env, context.fValue_, &jsValue) != napi_ok) {
+            context.SetErrorMsg("Failed to create result");
+            return jsValue;
+        }
+        return jsValue;
+    };
+};
+
+napi_value ResourceManagerAddon::GetFloat(napi_env env, napi_callback_info info)
+{
+    return ProcessOnlyIdParam(env, info, "getFloat", getFloatFunc);
+}
+
+napi_value ResourceManagerAddon::GetFloatByName(napi_env env, napi_callback_info info)
+{
+    return ProcessOnlyIdParam(env, info, "getFloatByName", getFloatFunc);
 }
 } // namespace Resource
 } // namespace Global

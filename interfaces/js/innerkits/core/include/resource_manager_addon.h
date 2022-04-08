@@ -96,6 +96,10 @@ private:
     static napi_value ProcessIdNameParam(napi_env env, napi_callback_info info, const std::string& name,
         napi_async_execute_callback execute);
 
+    static napi_value GetFloat(napi_env env, napi_callback_info info);
+
+    static napi_value GetFloatByName(napi_env env, napi_callback_info info);
+
     std::string bundleName_;
     std::shared_ptr<ResourceManager> resMgr_;
 };
@@ -108,6 +112,7 @@ struct ResMgrAsyncContext {
     int32_t param_;
     std::string path_;
     std::string resName_;
+    float fValue_;
 
     typedef napi_value (*CreateNapiValue)(napi_env env, ResMgrAsyncContext &context);
     CreateNapiValue createValueFunc_;
