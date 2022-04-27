@@ -27,7 +27,7 @@ ohos_shared_library("resmgr_napi_core") {
 
   public_deps = [
     "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr",
-    "//foundation/ace/napi:ace_napi",
+    "//foundation/arkui/napi:ace_napi",
   ]
 
   external_deps = [
