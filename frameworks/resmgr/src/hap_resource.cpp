@@ -26,7 +26,7 @@
 #endif
 
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
-#include "bytrace.h"
+#include "hitrace_meter.h"
 #endif
 #include "hap_parser.h"
 #include "hilog_wrapper.h"

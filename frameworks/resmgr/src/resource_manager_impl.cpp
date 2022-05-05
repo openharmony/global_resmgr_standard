@@ -26,7 +26,7 @@
 #include <unistd.h>
 
 #if !defined(__WINNT__) && !defined(__IDE_PREVIEW__)
-#include "bytrace.h"
+#include "hitrace_meter.h"
 #endif
 #include "hilog_wrapper.h"
 #include "res_config.h"
