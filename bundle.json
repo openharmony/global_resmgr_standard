@@ -1,10 +1,10 @@
 {
-    "name": "@ohos/global_resmgr_standard",
+    "name": "@ohos/global_resource_management",
     "version": "",
     "description": "根据当前configuration（语言，区域，横竖屏，mccmnc）和device capability（设备类型，分辨率）获取应用资源信息读取接口",
     "homePage": "https://gitee.com/openharmony",
     "license": "Apache V2",
-    "repository": "https://gitee.com/openharmony/global_resmgr_standard",
+    "repository": "https://gitee.com/openharmony/global_resource_management",
     "domain": "os",
     "language": "",
     "publishAs": "code-segment",
@@ -33,13 +33,13 @@
         }
     ],
     "segment": {
-        "destPath": "base/global/resmgr_standard"
+        "destPath": "base/global/resource_management"
     },
     "component": {
-        "name": "resmgr_standard",
+        "name": "resource_management",
         "subsystem": "global",
         "syscap": [ "SystemCapability.Global.ResourceManager" ],
-        "features": ["resmgr_standard_support_icu"],
+        "features": ["resource_management_support_icu"],
         "adapted_system_type": [
             "standard"
         ],
@@ -54,16 +54,16 @@
         },
         "build": {
             "sub_component": [
-              "//base/global/resmgr_standard/interfaces/js/kits:resourcemanager",
-              "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr",
-              "//base/global/resmgr_standard/frameworks/resmgr:librawfile",
-              "//base/global/resmgr_standard/frameworks/resmgr:win_resmgr",
-              "//base/global/resmgr_standard/frameworks/resmgr:mac_resmgr"
+              "//base/global/resource_management/interfaces/js/kits:resourcemanager",
+              "//base/global/resource_management/frameworks/resmgr:global_resmgr",
+              "//base/global/resource_management/frameworks/resmgr:librawfile",
+              "//base/global/resource_management/frameworks/resmgr:win_resmgr",
+              "//base/global/resource_management/frameworks/resmgr:mac_resmgr"
             ],
             "inner_kits": [
               {
                 "header": {
-                  "header_base": "//base/global/resmgr_standard/interfaces/innerkits/include/",
+                  "header_base": "//base/global/resource_management/interfaces/innerkits/include/",
                   "header_files": [
                     "res_common.h",
                     "res_config.h",
@@ -71,20 +71,20 @@
                     "rstate.h"
                   ]
                 },
-                "name": "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr"
+                "name": "//base/global/resource_management/frameworks/resmgr:global_resmgr"
               },
               {
                 "header": {
-                  "header_base": "//base/global/resmgr_standard/interfaces/js/innerkits/core/include/",
+                  "header_base": "//base/global/resource_management/interfaces/js/innerkits/core/include/",
                   "header_files": [
                     "resource_manager_addon.h"
                   ]
                 },
-                "name": "//base/global/resmgr_standard/interfaces/js/innerkits/core:resmgr_napi_core"
+                "name": "//base/global/resource_management/interfaces/js/innerkits/core:resmgr_napi_core"
               }
             ],
             "test": [
-              "//base/global/resmgr_standard/frameworks/resmgr/test:unittest"
+              "//base/global/resource_management/frameworks/resmgr/test:unittest"
             ]
         }
     }

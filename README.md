@@ -16,7 +16,7 @@ The directory structure of the Resmgr module is as follows:
 
 ```
 /base/global/
-├── resmgr_standard         # Code repository for the Resmgr module
+├── resource_management     # Code repository for the Resmgr module
 │   ├── frameworks          # Core code
 │   │   ├── resmgr          # Resource parsing code
 │   │   │   ├── include     # Header files

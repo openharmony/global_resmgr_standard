@@ -15,7 +15,7 @@ import("//build/ohos.gni")
 
 ohos_shared_library("resourcemanager") {
   include_dirs = [
-    "//base/global/resmgr_standard/interfaces/innerkits/include",
+    "//base/global/resource_management/interfaces/innerkits/include",
     "//base/hiviewdfx/interfaces/native/innerkits/include",
     "//foundation/aafwk/standard/frameworks/kits/appkit/native/ability_runtime/context",
     "//third_party/node/src",
@@ -24,7 +24,7 @@ ohos_shared_library("resourcemanager") {
   sources = [ "src/resource_manager_napi.cpp" ]
 
   public_deps = [
-    "//base/global/resmgr_standard/frameworks/resmgr:global_resmgr",
+    "//base/global/resource_management/frameworks/resmgr:global_resmgr",
     "//foundation/aafwk/standard/frameworks/kits/ability/native:abilitykit_native",
     "//foundation/aafwk/standard/frameworks/kits/appkit:appkit_native",
     "//foundation/arkui/napi:ace_napi",
@@ -38,10 +38,10 @@ ohos_shared_library("resourcemanager") {
     "eventhandler:libeventhandler",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "resmgr_standard:resmgr_napi_core",
+    "resource_management:resmgr_napi_core",
   ]
 
   relative_install_dir = "module"
   subsystem_name = "global"
-  part_name = "resmgr_standard"
+  part_name = "resource_management"
 }

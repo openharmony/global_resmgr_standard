@@ -16,7 +16,7 @@
 
 ```
 /base/global/
-├── resmgr_standard         # 资源管理代码仓
+├── resource_management     # 资源管理代码仓
 │   ├── frameworks          # 资源管理核心代码
 │   │   ├── resmgr          # 资源解析核心代码
 │   │   │   ├── include     # 资源管理头文件
