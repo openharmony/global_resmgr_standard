@@ -63,7 +63,7 @@
             "inner_kits": [
               {
                 "header": {
-                  "header_base": "//base/global/resource_management/interfaces/innerkits/include/",
+                  "header_base": "//base/global/resource_management/interfaces/inner_api/include/",
                   "header_files": [
                     "res_common.h",
                     "res_config.h",

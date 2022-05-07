@@ -23,7 +23,7 @@ The directory structure of the Resmgr module is as follows:
 │   │   │   ├── src         # Implementation code
 │   │   │   └── test        # Test code
 │   ├── interfaces          # APIs
-│   │   ├── innerkits       # APIs for internal subsystems
+│   │   ├── inner_api       # APIs for internal subsystems
 │   │   └── js              # JavaScript APIs
 ```
 

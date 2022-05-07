@@ -15,7 +15,7 @@ import("//build/ohos.gni")
 
 ohos_shared_library("resourcemanager") {
   include_dirs = [
-    "//base/global/resource_management/interfaces/innerkits/include",
+    "//base/global/resource_management/interfaces/inner_api/include",
     "//base/hiviewdfx/interfaces/native/innerkits/include",
     "//foundation/aafwk/standard/frameworks/kits/appkit/native/ability_runtime/context",
     "//third_party/node/src",

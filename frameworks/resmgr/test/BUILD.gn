@@ -36,7 +36,7 @@ ohos_unittest("resmgr_test") {
   include_dirs = [
     "unittest/common",
     "//base/global/resource_management/frameworks/resmgr/include",
-    "//base/global/resource_management/interfaces/innerkits/include",
+    "//base/global/resource_management/interfaces/inner_api/include",
   ]
 
   if (resource_management_support_icu) {

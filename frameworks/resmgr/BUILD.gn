@@ -18,7 +18,7 @@ config("resmgr_config") {
   include_dirs = [
     "include",
     "//third_party/zlib/contrib/minizip",
-    "//base/global/resource_management/interfaces/innerkits/include",
+    "//base/global/resource_management/interfaces/inner_api/include",
     "//third_party/bounds_checking_function/include",
   ]
 
@@ -50,7 +50,7 @@ config("resmgr_public_config") {
   visibility = [ ":*" ]
 
   include_dirs =
-      [ "//base/global/resource_management/interfaces/innerkits/include" ]
+      [ "//base/global/resource_management/interfaces/inner_api/include" ]
 
   if (resource_management_support_icu) {
     include_dirs += [ "//third_party/icu/icu4c/source/common" ]
@@ -169,7 +169,7 @@ ohos_shared_library("librawfile") {
   include_dirs = [
     "//base/global/resource_management/frameworks/resmgr/include",
     "//base/global/resource_management/interfaces/native/resource/include",
-    "//base/global/resource_management/interfaces/innerkits/include",
+    "//base/global/resource_management/interfaces/inner_api/include",
     "//base/global/resource_management/interfaces/js/innerkits/core/include",
     "//third_party/node/src",
   ]
