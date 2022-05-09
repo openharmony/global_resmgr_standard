@@ -32,6 +32,8 @@ ResConfigImpl::ResConfigImpl()
       direction_(DIRECTION_NOT_SET),
       screenDensity_(SCREEN_DENSITY_NOT_SET),
       colorMode_(LIGHT),
+      mcc_(MCC_UNDEFINED),
+      mnc_(MNC_UNDEFINED),
       deviceType_(DEVICE_NOT_SET),
 #ifdef SUPPORT_GRAPHICS
       localeInfo_(nullptr),
@@ -107,6 +109,16 @@ void ResConfigImpl::SetColorMode(ColorMode colorMode)
     this->colorMode_ = colorMode;
 }
 
+void ResConfigImpl::SetMcc(uint32_t mcc)
+{
+    this->mcc_ = mcc;
+}
+
+void ResConfigImpl::SetMnc(uint32_t mnc)
+{
+    this->mnc_ = mnc;
+}
+
 void ResConfigImpl::SetScreenDensity(ScreenDensity screenDensity)
 {
     this->screenDensity_ = screenDensity;
@@ -137,6 +149,16 @@ ScreenDensity ResConfigImpl::GetScreenDensity() const
 ColorMode ResConfigImpl::GetColorMode() const
 {
     return this->colorMode_;
+}
+
+uint32_t ResConfigImpl::GetMcc() const
+{
+    return this->mcc_;
+}
+
+uint32_t ResConfigImpl::GetMnc() const
+{
+    return this->mnc_;
 }
 
 DeviceType ResConfigImpl::GetDeviceType() const
@@ -210,6 +232,12 @@ bool ResConfigImpl::Copy(ResConfig &other)
     if (this->GetColorMode() != other.GetColorMode()) {
         this->SetColorMode(other.GetColorMode());
     }
+    if (this->GetMcc() != other.GetMcc()) {
+        this->SetMcc(other.GetMcc());
+    }
+    if (this->GetMnc() != other.GetMnc()) {
+        this->SetMnc(other.GetMnc());
+    }
     if (this->GetScreenDensity() != other.GetScreenDensity()) {
         this->SetScreenDensity(other.GetScreenDensity());
     }
@@ -220,6 +248,17 @@ bool ResConfigImpl::Match(const ResConfigImpl *other) const
 {
     if (other == nullptr) {
         return false;
+    }
+    if (this->mcc_ != MCC_UNDEFINED && this->mnc_ != MNC_UNDEFINED) {
+        if (other->mcc_ != MCC_UNDEFINED && other->mnc_ != MNC_UNDEFINED) {
+            if (this->mcc_ != other->mcc_ || this->mnc_ != other->mnc_) {
+                return false;
+            }
+        }
+    } else if (this->mcc_ != MCC_UNDEFINED && this->mnc_ == MNC_UNDEFINED) {
+        if (other->mcc_ != MCC_UNDEFINED && this->mcc_ != other->mcc_) {
+            return false;
+        }
     }
     if (!(LocaleMatcher::Match(this->resLocale_, other->GetResLocale()))) {
         return false;
@@ -256,6 +295,15 @@ bool ResConfigImpl::IsMoreSuitable(const ResConfigImpl *other,
     const ResConfigImpl *request) const
 {
     if (request != nullptr && other != nullptr) {
+        if (request->mcc_ != MCC_UNDEFINED && request->mnc_ != MNC_UNDEFINED) {
+            if (this->mcc_ != other->mcc_ || this->mnc_ != other->mnc_) {
+                return (this->mcc_ != MCC_UNDEFINED) && (this->mnc_ != MNC_UNDEFINED);
+            }
+        } else if (request->mcc_ != MCC_UNDEFINED && request->mnc_ == MNC_UNDEFINED) {
+            if (this->mcc_ != other->mcc_) {
+                return this->mcc_ != MCC_UNDEFINED;
+            }
+        }
         int8_t result =
             LocaleMatcher::IsMoreSuitable(this->GetResLocale(), other->GetResLocale(),
                                           request->GetResLocale());
@@ -328,6 +376,15 @@ bool ResConfigImpl::IsMoreSpecificThan(const ResConfigImpl *other) const
 {
     if (other == nullptr) {
         return true;
+    }
+    if (this->mcc_ != MCC_UNDEFINED && this->mnc_ != MNC_UNDEFINED) {
+        if (this->mcc_ != other->mcc_ || this->mnc_ != other->mnc_) {
+            return false;
+        }
+    } else if (this->mcc_ != MCC_UNDEFINED && this->mnc_ == MNC_UNDEFINED) {
+        if (this->mcc_ != other->mcc_) {
+            return true;
+        }
     }
     int8_t result = LocaleMatcher::IsMoreSpecificThan(
         this->GetResLocale(),

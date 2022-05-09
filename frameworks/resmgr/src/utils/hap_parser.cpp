@@ -412,6 +412,8 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
     // default path
     if (len == 0) {
         resConfig->SetColorMode(COLOR_MODE_NOT_SET);
+        resConfig->SetMcc(MCC_UNDEFINED);
+        resConfig->SetMnc(MNC_UNDEFINED);
         return resConfig;
     }
     size_t i = 0;
@@ -422,6 +424,8 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
     Direction direction = DIRECTION_NOT_SET;
     DeviceType deviceType = DEVICE_NOT_SET;
     ColorMode colorMode = COLOR_MODE_NOT_SET;
+    uint32_t mcc = MCC_UNDEFINED;
+    uint32_t mnc = MNC_UNDEFINED;
 
     for (i = 0; i < len; ++i) {
         const KeyParam *kp = keyParams.at(i);
@@ -443,11 +447,17 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
             }
         } else if (kp->type_ == COLORMODE) {
             colorMode = GetColorMode(kp->value_);
+        } else if (kp->type_ == MCC) {
+            mcc = GetMcc(kp->value_);
+        } else if (kp->type_ == MNC) {
+            mnc = GetMnc(kp->value_);
         }
     }
     resConfig->SetDeviceType(deviceType);
     resConfig->SetDirection(direction);
     resConfig->SetColorMode(colorMode);
+    resConfig->SetMcc(mcc);
+    resConfig->SetMnc(mnc);
     resConfig->SetScreenDensity(screenDensity);
     RState r = resConfig->SetLocaleInfo(language, script, region);
     if (r != SUCCESS) {
@@ -475,6 +485,16 @@ DeviceType HapParser::GetDeviceType(uint32_t value)
         deviceType = DEVICE_WEARABLE;
     }
     return deviceType;
+}
+
+uint32_t HapParser::GetMcc(uint32_t value)
+{
+    return value;
+}
+
+uint32_t HapParser::GetMnc(uint32_t value)
+{
+    return value;
 }
 
 ColorMode HapParser::GetColorMode(uint32_t value)
@@ -522,7 +542,9 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
     if (keyParams.size() == 0) {
         return std::string("default");
     }
-    // language_script_region-direction-deviceType-colorMode-screenDensity
+    // mcc-mnc-language_script_region-direction-deviceType-colorMode-screenDensity
+    std::string mcc;
+    std::string mnc;
     std::string language;
     std::string script;
     std::string region;
@@ -551,6 +573,12 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
             case KeyType::COLORMODE:
                 colorMode = keyParam->GetStr();
                 break;
+            case KeyType::MCC:
+                mcc = keyParam->GetStr();
+                break;
+            case KeyType::MNC:
+                mnc = keyParam->GetStr();
+                break;
             case KeyType::SCREEN_DENSITY:
                 screenDensity = keyParam->GetStr();
                 break;
@@ -559,10 +587,20 @@ std::string HapParser::ToFolderPath(const std::vector<KeyParam *> &keyParams)
         }
     }
     std::string path;
-    if (language.size() > 0) {
-        path.append(language);
-    }
     std::string c1("_"), c2("-");
+    if (mcc.size() > 0) {
+        path.append(mcc);
+        if (mnc.size() > 0) {
+            PathAppend(path, mnc, c1);
+        }
+        if (language.size() > 0) {
+            PathAppend(path, language, c2);
+        }
+    } else {
+        if (language.size() > 0) {
+            path.append(language);
+        }
+    }
     PathAppend(path, script, c1);
     PathAppend(path, region, c1);
     PathAppend(path, direction, c2);

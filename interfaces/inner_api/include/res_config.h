@@ -43,6 +43,10 @@ public:
 
     virtual void SetColorMode(ColorMode colorMode) = 0;
 
+    virtual void SetMcc(uint32_t mcc) = 0;
+
+    virtual void SetMnc(uint32_t mnc) = 0;
+
 #ifdef SUPPORT_GRAPHICS
     virtual const Locale *GetLocaleInfo() const = 0;
 #endif
@@ -54,6 +58,10 @@ public:
     virtual DeviceType GetDeviceType() const = 0;
 
     virtual ColorMode GetColorMode() const = 0;
+
+    virtual uint32_t GetMcc() const = 0;
+
+    virtual uint32_t GetMnc() const = 0;
 
     virtual bool Copy(ResConfig &other) = 0;
 

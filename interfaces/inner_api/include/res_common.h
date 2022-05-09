@@ -51,6 +51,9 @@ static const char *RE_320_STR = "xldpi";
 static const char *RE_480_STR = "xxldpi";
 static const char *RE_640_STR = "xxxldpi";
 
+static const uint32_t MCC_UNDEFINED = 0;
+static const uint32_t MNC_UNDEFINED = 0;
+
 // the type of qualifiers
 typedef enum KeyType {
     LANGUAGES       = 0,

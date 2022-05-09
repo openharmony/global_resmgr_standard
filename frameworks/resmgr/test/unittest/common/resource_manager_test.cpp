@@ -36,6 +36,8 @@ static const char *g_nonExistName = "non_existent_name";
 
 static const char *g_colorModeResFilePath = "colormode/assets/entry/resources.index";
 
+static const char *g_mccMncResFilePath = "mccmnc/assets/entry/resources.index";
+
 class ResourceManagerTest : public testing::Test {
 public:
     static void SetUpTestCase(void);
@@ -1590,6 +1592,298 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetColorByNameTest012, TestSize.Lev
     state = rm->GetColorByName("base_light_ldpi", outValue);
     EXPECT_TRUE(state == SUCCESS);
     EXPECT_EQ(static_cast<uint32_t>(572662306), outValue); // #22222222 light resource
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest001
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest001, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest002
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest002, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("zh", nullptr, nullptr);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_zh_cn", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest003
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest003, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest004
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest004, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(1);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc001_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest005
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest005, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(10);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc010_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest006
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest006, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(1);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc001_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest007
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest007, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(10);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc010_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest008
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest008, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest009
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest009, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(1);
+    rc->SetMnc(101);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc001_mnc101_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest010
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest010, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(10);
+    rc->SetMnc(101);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc010_mnc101_en", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest011
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest011, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("zh", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_zh", outValue);
 }
 
 /*

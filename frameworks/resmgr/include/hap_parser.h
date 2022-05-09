@@ -96,6 +96,20 @@ public:
      */
     static ColorMode GetColorMode(uint32_t value);
 
+    /**
+     * Get mcc
+     * @param value the type of mcc
+     * @return the mcc related to the value
+     */
+    static uint32_t GetMcc(uint32_t value);
+
+    /**
+     * Get mnc
+     * @param value the type of mnc
+     * @return the mnc related to the value
+     */
+    static uint32_t GetMnc(uint32_t value);
+
 private:
     static const char *RES_FILE_NAME;
 };

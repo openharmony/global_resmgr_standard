@@ -72,6 +72,18 @@ public:
     void SetColorMode(ColorMode colorMode);
 
     /**
+     * Set resConfig mcc
+     * @param mcc the resConfig mcc
+     */
+    void SetMcc(uint32_t mcc);
+
+    /**
+     * Set resConfig mnc
+     * @param mnc the resConfig mnc
+     */
+    void SetMnc(uint32_t mnc);
+
+    /**
      * Set resConfig screenDensity
      * @param screenDensity the resConfig screenDensity
      */
@@ -88,6 +100,10 @@ public:
     ScreenDensity GetScreenDensity() const;
 
     ColorMode GetColorMode() const;
+
+    uint32_t GetMcc() const;
+
+    uint32_t GetMnc() const;
 
     DeviceType GetDeviceType() const;
 
@@ -128,6 +144,8 @@ private:
     Direction direction_;
     ScreenDensity screenDensity_;
     ColorMode colorMode_;
+    uint32_t mcc_;
+    uint32_t mnc_;
     DeviceType deviceType_;
 #ifdef SUPPORT_GRAPHICS
     Locale *localeInfo_;

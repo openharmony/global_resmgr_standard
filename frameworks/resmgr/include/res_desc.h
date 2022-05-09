@@ -155,6 +155,8 @@ private:
     std::string GetScreenDensityStr() const;
     std::string GetDeviceTypeStr() const;
     std::string GetColorModeStr() const;
+    std::string GetMccStr() const;
+    std::string GetMncStr() const;
 };
 
 /**

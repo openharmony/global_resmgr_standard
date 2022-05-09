@@ -106,6 +106,24 @@ std::string KeyParam::GetColorModeStr() const
     return ret;
 }
 
+std::string KeyParam::GetMccStr() const
+{
+    std::string ret("not_mcc");
+    if (type_ == KeyType::MCC) {
+        ret = std::string("mcc");
+    }
+    return ret;
+}
+
+std::string KeyParam::GetMncStr() const
+{
+    std::string ret("not_mnc");
+    if (type_ == KeyType::MNC) {
+        ret = std::string("mnc");
+    }
+    return ret;
+}
+
 const std::string KeyParam::ConvertToStr() const
 {
     if ((type_ == KeyType::LANGUAGES) || (type_ == KeyType::REGION) || (type_ == KeyType::SCRIPT)) {
@@ -133,6 +151,12 @@ const std::string KeyParam::ConvertToStr() const
     }
     if (type_ == KeyType::COLORMODE) {
         return GetColorModeStr();
+    }
+    if (type_ == KeyType::MCC) {
+        return GetMccStr();
+    }
+    if (type_ == KeyType::MNC) {
+        return GetMncStr();
     }
     if (type_ == KeyType::SCREEN_DENSITY) {
         return GetScreenDensityStr();
