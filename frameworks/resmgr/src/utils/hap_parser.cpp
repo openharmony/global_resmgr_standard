@@ -412,8 +412,6 @@ ResConfigImpl *HapParser::CreateResConfigFromKeyParams(const std::vector<KeyPara
     // default path
     if (len == 0) {
         resConfig->SetColorMode(COLOR_MODE_NOT_SET);
-        resConfig->SetMcc(MCC_UNDEFINED);
-        resConfig->SetMnc(MNC_UNDEFINED);
         return resConfig;
     }
     size_t i = 0;

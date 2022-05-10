@@ -1609,6 +1609,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest001, Te
         return;
     }
     rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1616,7 +1619,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest001, Te
     std::string outValue;
     rState = rm->GetStringByName("mccmnc_str", outValue);
     ASSERT_EQ(SUCCESS, rState);
-    ASSERT_EQ("str_en_us", outValue);
+    ASSERT_EQ("str_en_us_light", outValue);
 }
 
 /*
@@ -1634,6 +1637,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest002, Te
         return;
     }
     rc->SetLocaleInfo("zh", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1660,6 +1666,10 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest003, Te
     }
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(460);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1667,7 +1677,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest003, Te
     std::string outValue;
     rState = rm->GetStringByName("mccmnc_str", outValue);
     ASSERT_EQ(SUCCESS, rState);
-    ASSERT_EQ("str_mcc460_en", outValue);
+    ASSERT_EQ("str_mcc460_mnc101_en_light", outValue);
 }
 
 /*
@@ -1686,6 +1696,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest004, Te
     }
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(1);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1712,6 +1725,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest005, Te
     }
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(10);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1740,6 +1756,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest006, Te
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(460);
     rc->SetMnc(1);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1768,6 +1787,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest007, Te
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(460);
     rc->SetMnc(10);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1787,6 +1809,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest008, Te
 {
     bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
     ASSERT_TRUE(ret);
+
     auto rc = CreateResConfig();
     if (rc == nullptr) {
         EXPECT_TRUE(false);
@@ -1795,6 +1818,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest008, Te
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(460);
     rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1802,7 +1828,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest008, Te
     std::string outValue;
     rState = rm->GetStringByName("mccmnc_str", outValue);
     ASSERT_EQ(SUCCESS, rState);
-    ASSERT_EQ("str_mcc460_mnc101_en", outValue);
+    ASSERT_EQ("str_mcc460_mnc101_en_light", outValue);
 }
 
 /*
@@ -1814,6 +1840,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest009, Te
 {
     bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
     ASSERT_TRUE(ret);
+
     auto rc = CreateResConfig();
     if (rc == nullptr) {
         EXPECT_TRUE(false);
@@ -1822,6 +1849,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest009, Te
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(1);
     rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1841,6 +1871,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest010, Te
 {
     bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
     ASSERT_TRUE(ret);
+
     auto rc = CreateResConfig();
     if (rc == nullptr) {
         EXPECT_TRUE(false);
@@ -1849,6 +1880,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest010, Te
     rc->SetLocaleInfo("en", nullptr, nullptr);
     rc->SetMcc(10);
     rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1868,6 +1902,7 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest011, Te
 {
     bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
     ASSERT_TRUE(ret);
+
     auto rc = CreateResConfig();
     if (rc == nullptr) {
         EXPECT_TRUE(false);
@@ -1876,6 +1911,9 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest011, Te
     rc->SetLocaleInfo("zh", nullptr, nullptr);
     rc->SetMcc(460);
     rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
     rm->UpdateResConfig(*rc);
     delete rc;
 
@@ -1884,6 +1922,384 @@ HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest011, Te
     rState = rm->GetStringByName("mccmnc_str", outValue);
     ASSERT_EQ(SUCCESS, rState);
     ASSERT_EQ("str_mcc460_mnc101_zh", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest012
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest012, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_PHONE);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_phone", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest013
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest013, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_CAR);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_car", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest014
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest014, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_PHONE);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_phone", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest015
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest015, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_CAR);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_car", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest016
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest016, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(DARK);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_dark", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest017
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest017, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest018
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest018, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(DARK);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_dark", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest019
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest019, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_SDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest020
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest020, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_LDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest021
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest021, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_XLDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_en_us_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest022
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest022, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_LDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest023
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest023, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_TV);
+    rc->SetColorMode(LIGHT);
+    rc->SetScreenDensity(SCREEN_DENSITY_XLDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_light", outValue);
+}
+
+/*
+ * @tc.name: ResourceManagerGetStringByNameForMccMncTest024
+ * @tc.desc: Test GetStringByName
+ * @tc.type: FUNC
+ */
+HWTEST_F(ResourceManagerTest, ResourceManagerGetStringByNameForMccMncTest024, TestSize.Level1)
+{
+    bool ret = rm->AddResource(FormatFullPath(g_mccMncResFilePath).c_str());
+    ASSERT_TRUE(ret);
+    auto rc = CreateResConfig();
+    if (rc == nullptr) {
+        EXPECT_TRUE(false);
+        return;
+    }
+    rc->SetLocaleInfo("en", nullptr, nullptr);
+    rc->SetMcc(460);
+    rc->SetMnc(101);
+    rc->SetDeviceType(DEVICE_PHONE);
+    rc->SetColorMode(DARK);
+    rc->SetScreenDensity(SCREEN_DENSITY_XLDPI);
+    rm->UpdateResConfig(*rc);
+    delete rc;
+
+    RState rState;
+    std::string outValue;
+    rState = rm->GetStringByName("mccmnc_str", outValue);
+    ASSERT_EQ(SUCCESS, rState);
+    ASSERT_EQ("str_mcc460_mnc101_en_phone_dark_xldpi", outValue);
 }
 
 /*
