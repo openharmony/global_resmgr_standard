@@ -228,6 +228,10 @@ int ResourceManagerAddon::GetResId(napi_env env, size_t argc, napi_value *argv)
 
     napi_valuetype valuetype;
     napi_status status = napi_typeof(env, argv[0], &valuetype);
+    if (status != napi_ok) {
+        HiLog::Error(LABEL, "Failed to get value type");
+        return 0;
+    }
     if (valuetype != napi_number) {
         HiLog::Error(LABEL, "Invalid param, not number");
         return 0;

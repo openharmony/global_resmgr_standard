@@ -216,7 +216,7 @@ ResLocale *ResLocale::DoParse(const char *str, char sep, RState &rState)
 {
     uint16_t nextType = LANG_TYPE;
     const char *nextPos = str;
-    const char *curPos = nextPos;
+    const char *curPos = nullptr;
     ParseResult r;
     while (nextPos) {
         if (nextType == END_TYPE) {
