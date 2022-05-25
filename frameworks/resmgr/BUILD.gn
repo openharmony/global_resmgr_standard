@@ -183,13 +183,13 @@ ohos_shared_library("librawfile") {
   deps = [ "//base/global/resource_management/interfaces/native/resource:librawfile_ndk" ]
 
   public_deps = [
-    "${aafwk_kits_path}/ability/native:abilitykit_native",
     "//base/global/resource_management/frameworks/resmgr:global_resmgr",
     "//foundation/arkui/napi:ace_napi",
   ]
 
   external_deps = [
     "ability_runtime:ability_manager",
+    "ability_runtime:abilitykit_native",
     "hiviewdfx_hilog_native:libhilog",
   ]
 

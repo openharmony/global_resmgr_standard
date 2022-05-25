@@ -18,15 +18,12 @@ ohos_shared_library("resourcemanager") {
   include_dirs = [
     "//base/global/resource_management/interfaces/inner_api/include",
     "//base/hiviewdfx/interfaces/native/innerkits/include",
-    "${aafwk_kits_path}/appkit/native/ability_runtime/context",
     "//third_party/node/src",
   ]
 
   sources = [ "src/resource_manager_napi.cpp" ]
 
   public_deps = [
-    "${aafwk_kits_path}/ability/native:abilitykit_native",
-    "${aafwk_kits_path}/appkit:appkit_native",
     "//base/global/resource_management/frameworks/resmgr:global_resmgr",
     "//foundation/arkui/napi:ace_napi",
   ]
@@ -35,6 +32,7 @@ ohos_shared_library("resourcemanager") {
     "ability_base:want",
     "ability_runtime:ability_context_native",
     "ability_runtime:ability_manager",
+    "ability_runtime:abilitykit_native",
     "ability_runtime:runtime",
     "eventhandler:libeventhandler",
     "hiviewdfx_hilog_native:libhilog",
